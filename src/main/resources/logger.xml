@@ -8,8 +8,8 @@
     </encoder>
   </appender>
 
-  <logger name="org.michaelahlers.presence.ApplicationController" level="INFO"/>
-  <logger name="org.michaelahlers.presence.ApplicationModule" level="INFO"/>
+  <logger name="ahlers.michael.presence.ApplicationController" level="INFO"/>
+  <logger name="ahlers.michael.presence.ApplicationModule" level="INFO"/>
 
   <root level="ERROR">
     <appender-ref ref="CONSOLE"/>

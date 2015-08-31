@@ -10,7 +10,7 @@ scalacOptions in ThisBuild ++=
   "-target:jvm-1.8" ::
     Nil
 
-organization in ThisBuild := "org.michaelahlers"
+organization in ThisBuild := "ahlers.michael"
 
 name := "michaelahlers-presence"
 
@@ -39,7 +39,7 @@ lazy val runtime =
           sbtVersion,
           "revision" -> "git rev-parse HEAD".!!.trim
         ),
-      buildInfoPackage := "org.michaelahlers.presence"
+      buildInfoPackage := "ahlers.michael.presence"
     )
 
 routesGenerator := InjectedRoutesGenerator

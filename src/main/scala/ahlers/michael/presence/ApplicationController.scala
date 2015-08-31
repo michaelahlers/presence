@@ -1,4 +1,4 @@
-package org.michaelahlers.presence
+package ahlers.michael.presence
 
 import javax.inject.Inject
 
@@ -10,6 +10,6 @@ class ApplicationController @Inject()
           with LazyLogging {
 
   def index = Action {
-    Ok(org.michaelahlers.presence.html.index())
+    Ok(ahlers.michael.presence.html.index())
   }
 }

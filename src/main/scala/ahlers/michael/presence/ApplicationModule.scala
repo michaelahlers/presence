@@ -1,4 +1,4 @@
-package org.michaelahlers.presence
+package ahlers.michael.presence
 
 import javax.inject._
 
