@@ -43,3 +43,14 @@ lazy val runtime =
     )
 
 routesGenerator := InjectedRoutesGenerator
+
+herokuJdkVersion in Compile := "1.8"
+
+herokuStack in Compile := "cedar-14"
+
+val herokuEnvironments =
+  Map(
+    "qa" -> "michaelahlers-presence-qa"
+  )
+
+herokuAppName in Compile := herokuEnvironments.getOrElse(sys.props("env"), herokuEnvironments("qa"))
