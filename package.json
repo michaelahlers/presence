@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "description": "Personal web presence for Michael Ahlers.",
   "main": "",
-  "dependencies": {},
+  "dependencies": {
+    "react": "^0.13.3"
+  },
   "devDependencies": {
     "del": "^2.0.1",
     "gulp": "^3.9.0",
