@@ -3,10 +3,13 @@
   "version": "0.0.1",
   "description": "Personal web presence for Michael Ahlers.",
   "main": "",
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
-    "gulp": "^3.9.0"
+    "del": "^2.0.1",
+    "gulp": "^3.9.0",
+    "gutil": "^1.6.4",
+    "path": "^0.11.14",
+    "webpack": "^1.12.1"
   },
   "scripts": {
     "test": ""
