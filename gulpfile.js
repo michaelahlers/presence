@@ -49,11 +49,7 @@ gulp.task('build', function (done) {
         }, {
           test: /\.less$/,
           loader: 'style!css!less'//?strictMath&noIeCompat'
-        }//,
-        //{
-        //  test: /\.html$/,
-        //  loader: 'html-loader'
-        //}
+        }
       ]
     }
   };
