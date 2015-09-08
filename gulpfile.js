@@ -7,7 +7,7 @@ var del = require('del')
   , webpack = require('webpack');
 
 var paths = {
-  assets: path.join(__dirname, 'src', 'main', 'client'),
+  src: path.join(__dirname, 'src', 'main', 'client'),
   target: path.join(__dirname, 'src', 'main', 'public')
 }
 
@@ -17,7 +17,7 @@ gulp.task('clean', function (done) {
 
 gulp.task('build', function (done) {
   var settings = {
-    entry: path.join(paths.assets, 'index.js'),
+    entry: path.join(paths.src, 'index.js'),
     //plugins: [
     //  new webpack.optimize.UglifyJsPlugin({
     //    compress: {
@@ -46,6 +46,9 @@ gulp.task('build', function (done) {
             /* Use babel-runtime dependency. */
             optional: 'runtime'
           }
+        }, {
+          test: /\.less$/,
+          loader: 'style!css!less'//?strictMath&noIeCompat'
         }//,
         //{
         //  test: /\.html$/,
@@ -64,5 +67,8 @@ gulp.task('build', function (done) {
 
 gulp.task('watch', function (done) {
   gulp.start('build');
-  gulp.watch([path.join(paths.assets, '**', '*js')], ['build']);
+  gulp.watch([
+    path.join(paths.src, '**', '*js'),
+    path.join(paths.src, '**', '*less')
+  ], ['build']);
 });

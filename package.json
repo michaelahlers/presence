@@ -2,7 +2,10 @@
   "name": "michaelahlers-presence",
   "description": "Personal web presence for Michael Ahlers.",
   "dependencies": {
-    "react": "^0.13.3"
+    "css-loader": "^0.17.0",
+    "less-loader": "^2.2.0",
+    "react": "^0.13.3",
+    "style-loader": "^0.12.3"
   },
   "devDependencies": {
     "babel-core": "^5.8.23",
@@ -11,6 +14,7 @@
     "del": "^2.0.1",
     "gulp": "^3.9.0",
     "gulp-util": "^3.0.6",
+    "less": "^2.5.1",
     "path": "^0.11.14",
     "webpack": "^1.12.1"
   },
