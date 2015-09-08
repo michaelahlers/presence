@@ -1,8 +1,6 @@
 {
   "name": "michaelahlers-presence",
-  "version": "0.0.1",
   "description": "Personal web presence for Michael Ahlers.",
-  "main": "",
   "dependencies": {
     "react": "^0.13.3"
   },
