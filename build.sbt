@@ -1,3 +1,5 @@
+import PlayGulpKeys._
+
 fork := true
 
 //parallelExecution in Test := false
@@ -43,6 +45,11 @@ lazy val runtime =
     )
 
 routesGenerator := InjectedRoutesGenerator
+
+pipelineStages := Seq(digest, gzip)
+
+/* It's preferable to not move resources in the project where this method will be applied. */
+gulpDirectory <<= (baseDirectory in Compile)
 
 herokuJdkVersion in Compile := "1.8"
 
