@@ -13,8 +13,10 @@
 
 ### Building
 
-1. `$ npm run watch`
+1. `$ npm run develop`
   - Will watch source trees for changes.
+  - Browser will automatically refresh the web application.
+  - Visit `http://localhost:8080/webpack-dev-server/` to run.
 
 ## References
 
