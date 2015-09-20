@@ -14,13 +14,12 @@ scalacOptions in ThisBuild ++=
 
 organization in ThisBuild := "ahlers.michael"
 
-name := "michaelahlers-presence"
+name := "michaelahlers-presence-server-api"
 
 version := "git describe HEAD".!!.trim.replaceAll("-[\\w]+$", "").drop(1)
 
 libraryDependencies ++=
   "com.typesafe.scala-logging" %% "scala-logging" % "3.1.0" ::
-    //"org.scaldi" %% "scaldi-play" % "0.5.8" ::
     Nil
 
 /* Testing dependencies. */
@@ -41,7 +40,7 @@ lazy val runtime =
           sbtVersion,
           "revision" -> "git rev-parse HEAD".!!.trim
         ),
-      buildInfoPackage := "ahlers.michael.presence"
+      buildInfoPackage := "ahlers.michael.presence.server.api"
     )
 
 routesGenerator := InjectedRoutesGenerator
