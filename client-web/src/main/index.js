@@ -1,3 +1,3 @@
 'use strict';
 
-import './ahlers/michael/presence/index';
+import './ahlers/michael/presence/client/web/index';
