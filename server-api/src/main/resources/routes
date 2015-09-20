@@ -1,4 +1,0 @@
-GET        /                    @ahlers.michael.presence.ApplicationController.index()
-
-# This odd path reference made necessary by using a standard SBT project layout.
-GET        /assets/*file        controllers.Assets.versioned(path="/public/main/public", file: Asset)
