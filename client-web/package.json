@@ -9,17 +9,26 @@
   },
   "devDependencies": {
     "babel-core": "^5.8.23",
+    "babel-eslint": "^4.1.3",
     "babel-loader": "^5.3.2",
-    "babel-runtime": "^5.8.20",
+    "babel-runtime": "^5.8.24",
     "del": "^2.0.1",
-    "gulp": "^3.9.0",
-    "gulp-util": "^3.0.6",
+    "eslint": "^1.5.0",
+    "eslint-loader": "^1.0.0",
+    "eslint-plugin-react": "^3.4.2",
+    "file-loader": "^0.8.4",
+    "glob": "^5.0.14",
     "less": "^2.5.1",
     "path": "^0.11.14",
-    "webpack": "^1.12.1"
+    "rimraf": "^2.4.3",
+    "webpack": "^1.12.2",
+    "webpack-dev-server": "^1.11.0"
   },
   "scripts": {
-    "test": ""
+    "clean": "rimraf build dist",
+    "build": "webpack --config webpack.development.config.js --devtool source-map --progress --color",
+    "develop": "webpack-dev-server --config webpack.development.config.js --devtool source-map --progress --color --hot --content-base build",
+    "deploy": "NODE_ENV=production webpack  --config webpack.production.config.js -p --progress --color"
   },
   "repository": {
     "type": "git",
