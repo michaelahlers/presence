@@ -15,7 +15,6 @@ module.exports = {
   entry: {
     index: [
       'webpack/hot/dev-server'
-      , 'webpack-dev-server/client?http://localhost:8080'
       , path.resolve(sourcePath, 'index.html')
       , path.resolve(sourcePath, 'index.js')
     ],
