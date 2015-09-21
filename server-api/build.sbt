@@ -28,7 +28,7 @@ libraryDependencies ++=
 
 lazy val runtime =
   (project in file("."))
-    .enablePlugins(BuildInfoPlugin, PlayScala)
+    .enablePlugins(BuildInfoPlugin, /*DockerPlugin,*/ PlayScala)
     .disablePlugins(PlayLayoutPlugin)
     .settings(
       buildInfoKeys :=
