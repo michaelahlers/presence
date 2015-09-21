@@ -5,6 +5,7 @@
     "css-loader": "^0.17.0",
     "less-loader": "^2.2.0",
     "react": "^0.13.3",
+    "restful.js": "^0.7.0",
     "style-loader": "^0.12.3"
   },
   "devDependencies": {
