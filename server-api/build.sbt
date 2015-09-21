@@ -17,7 +17,8 @@ name := "michaelahlers-presence-server-api"
 version := "git describe HEAD".!!.trim.replaceAll("-[\\w]+$", "").drop(1)
 
 libraryDependencies ++=
-  "com.typesafe.scala-logging" %% "scala-logging" % "3.1.0" ::
+  "com.typesafe.play" %% "filters-helpers" % "2.4.3" ::
+    "com.typesafe.scala-logging" %% "scala-logging" % "3.1.0" ::
     Nil
 
 /* Testing dependencies. */
