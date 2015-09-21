@@ -17,6 +17,10 @@
   - Will watch source trees for changes.
   - Browser will automatically refresh the web application.
   - Visit `http://localhost:8080/webpack-dev-server/` to run.
+  
+## Libraries
+
+- [Restful.js](https://github.com/marmelab/restful.js)
 
 ## References
 
