@@ -18,6 +18,7 @@
     "eslint-plugin-react": "^3.4.2",
     "file-loader": "^0.8.4",
     "glob": "^5.0.14",
+    "html-webpack-plugin": "^1.6.1",
     "less": "^2.5.1",
     "path": "^0.11.14",
     "rimraf": "^2.4.3",
@@ -26,8 +27,8 @@
   },
   "scripts": {
     "clean": "rimraf build dist",
-    "build": "webpack --config webpack.development.config.js --devtool source-map --progress --color",
-    "develop": "webpack-dev-server --config webpack.development.config.js --devtool source-map --progress --color --hot --content-base build",
+    "build": "webpack --devtool source-map --progress --color",
+    "develop": "webpack-dev-server --devtool source-map --progress --color --hot --content-base build",
     "deploy": "NODE_ENV=production webpack  --config webpack.production.config.js -p --progress --color"
   },
   "repository": {

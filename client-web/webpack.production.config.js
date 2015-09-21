@@ -4,6 +4,9 @@ var glob = require('glob')
   , path = require('path')
   , webpack = require('webpack');
 
+var CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin
+  , HtmlWebpackPlugin = require('html-webpack-plugin');
+
 var modulesPath = path.join(__dirname, 'node_modules')
   , reactPath = path.join(modulesPath, 'react', 'react.js');
 
@@ -13,10 +16,7 @@ var sourcePath = path.join(__dirname, 'src', 'main')
 module.exports = {
 
   entry: {
-    index: [
-       path.resolve(sourcePath, 'index.html')
-      , path.resolve(sourcePath, 'index.js')
-    ],
+    index: path.resolve(sourcePath, 'index.js'),
     vendors: ['react']
   },
 
@@ -28,7 +28,7 @@ module.exports = {
 
   output: {
     path: targetPath,
-    filename: '[name].js'
+    filename: '[name]-[hash].min.js'
   },
 
   module: {
@@ -53,14 +53,6 @@ module.exports = {
         },
         noParse: ['react']
       }, {
-        test: /\.html$/,
-        /* TODO: Switch to URL loader. */
-        loader: 'file',
-        query: {
-          context: sourcePath,
-          name: '[path][name].[ext]'
-        }
-      }, {
         test: /\.less$/,
         loader: 'style!css!less?strictMath' //&noIeCompat'
       }
@@ -69,7 +61,8 @@ module.exports = {
   },
 
   plugins: [
-    new webpack.optimize.CommonsChunkPlugin('vendors', 'vendors.js')
+    new CommonsChunkPlugin('vendors', 'vendors-[hash].js')
+    , new HtmlWebpackPlugin({title: 'Michael Ahlers', minify: true})
   ]
 
 };
