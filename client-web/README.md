@@ -5,6 +5,8 @@
 ### OS X
 
 1. Follow installation instructions for [Homebrew](http://brew.sh/).
+1. `$ brew install awscli`
+  - If deploying to S3.
 1. `$ brew install node`
 1. `$ npm install`
   - Whenever dependencies are changed.
@@ -46,7 +48,14 @@ Assuming a bucket called “my-client-web-bucket”:
     
 ## Libraries
 
+- [deepmerge](https://github.com/KyleAMathews/deepmerge)
+  - Merge the enumerable attributes of two objects deeply.
+- [fetch](https://github.com/github/fetch)
+  - A window.fetch JavaScript polyfill.
+- [Immutable](https://facebook.github.io/immutable-js/)
+  - Immutable persistent data collections for Javascript which increase efficiency and simplicity.
 - [Restful.js](https://github.com/marmelab/restful.js)
+  - A pure JS client for interacting with server-side RESTful resources. Think Restangular without Angular.
 
 ## References
 
