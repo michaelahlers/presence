@@ -51,7 +51,8 @@ module.exports = {
         loader: 'babel',
         query: {
           /* Enable ES7 features. */
-          stage: 0,
+          stage: 2,
+          experimental: true,
           cacheDirectory: true
         },
         noParse: ['react']
