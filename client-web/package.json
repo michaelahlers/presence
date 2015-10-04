@@ -3,13 +3,13 @@
   "description": "Personal web presence for Michael Ahlers.",
   "dependencies": {
     "css-loader": "^0.17.0",
-    "deepmerge": "^0.2.10",
     "hoops": "^0.2.1",
+    "immutable": "^3.7.5",
     "less-loader": "^2.2.0",
     "react": "^0.13.3",
     "restful.js": "^0.7.0",
     "style-loader": "^0.12.3",
-    "urijs": "^1.16.1"
+    "whatwg-fetch": "^0.9.0"
   },
   "devDependencies": {
     "babel-core": "^5.8.23",
@@ -33,7 +33,7 @@
     "clean": "rimraf build dist",
     "build": "webpack --devtool source-map --progress --color",
     "develop": "webpack-dev-server --devtool source-map --progress --color --hot --content-base build",
-    "deploy": "NODE_ENV=production webpack  --config webpack.production.config.js -p --progress --color"
+    "deploy": "NODE_ENV=production webpack --config webpack.production.config.js -p --progress --color"
   },
   "repository": {
     "type": "git",
