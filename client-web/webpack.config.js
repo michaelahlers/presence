@@ -2,7 +2,7 @@
 
 var glob = require('glob')
   , path = require('path')
-  , webpack = require('webpack')
+  , webpack = require('webpack');
 
 var CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin
   , HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -10,7 +10,7 @@ var CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin
 var modulesPath = path.join(__dirname, 'node_modules')
   , reactPath = path.join(modulesPath, 'react', 'react.js');
 
-var sourcePath = path.join(__dirname, 'src', 'main')
+var sourcePath = path.join(__dirname, 'src')
   , targetPath = path.join(__dirname, 'build');
 
 module.exports = {

@@ -10,7 +10,7 @@ var CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin
 var modulesPath = path.join(__dirname, 'node_modules')
   , reactPath = path.join(modulesPath, 'react', 'react.js');
 
-var sourcePath = path.join(__dirname, 'src', 'main')
+var sourcePath = path.join(__dirname, 'src')
   , targetPath = path.join(__dirname, 'dist');
 
 module.exports = {
