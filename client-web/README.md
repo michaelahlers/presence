@@ -59,4 +59,6 @@ Assuming a bucket called “my-client-web-bucket”:
 
 ## References
 
+- [Jest Example: React ES6](https://github.com/facebook/jest/tree/master/examples/react-es6)
 - [React and Webpack Cookbook](http://christianalfoni.github.io/react-webpack-cookbook/)
+- [React on ES6+](http://babeljs.io/blog/2015/06/07/react-on-es6-plus/)
