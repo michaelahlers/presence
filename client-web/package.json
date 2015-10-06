@@ -38,6 +38,13 @@
     "deploy": "NODE_ENV=production webpack --config webpack.production.config.js -p --progress --color",
     "test": "jest --verbose"
   },
+  "jest":  {
+    "scriptPreprocessor": "<rootDir>/node_modules/babel-jest",
+    "unmockedModulePathPatterns": [
+      "<rootDir>/node_modules/react",
+      "<rootDir>/node_modules/react-tools"
+    ]
+  },
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/michaelahlers/michaelahlers-presence.git"
