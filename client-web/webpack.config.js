@@ -67,6 +67,11 @@ module.exports = {
   plugins: [
     new CommonsChunkPlugin('vendors', 'vendors.js')
     , new HtmlWebpackPlugin({title: 'Michael Ahlers'})
-  ]
+  ],
+
+  devServer: {
+    /* See https://github.com/rackt/react-router/issues/676#issuecomment-143834149 for source. */
+    historyApiFallback: true
+  }
 
 };
