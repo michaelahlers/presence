@@ -7,6 +7,7 @@
     "immutable": "^3.7.5",
     "less-loader": "^2.2.0",
     "react": "^0.13.3",
+    "react-router": "^0.13.4",
     "restful.js": "^0.7.0",
     "style-loader": "^0.12.3",
     "whatwg-fetch": "^0.9.0"
@@ -38,7 +39,7 @@
     "deploy": "NODE_ENV=production webpack --config webpack.production.config.js -p --progress --color",
     "test": "jest --verbose"
   },
-  "jest":  {
+  "jest": {
     "scriptPreprocessor": "<rootDir>/node_modules/babel-jest",
     "unmockedModulePathPatterns": [
       "<rootDir>/node_modules/react",
