@@ -3,11 +3,12 @@
   "description": "Personal web presence for Michael Ahlers.",
   "dependencies": {
     "css-loader": "^0.17.0",
+    "history": "^1.12.5",
     "hoops": "^0.2.1",
     "immutable": "^3.7.5",
     "less-loader": "^2.2.0",
     "react": "^0.13.3",
-    "react-router": "^0.13.4",
+    "react-router": "^1.0.0-rc3",
     "restful.js": "^0.7.0",
     "style-loader": "^0.12.3",
     "whatwg-fetch": "^0.9.0"
