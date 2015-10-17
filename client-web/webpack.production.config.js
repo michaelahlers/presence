@@ -10,6 +10,9 @@ var CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin
 var modulesPath = path.join(__dirname, 'node_modules')
   , reactPath = path.join(modulesPath, 'react', 'react.js');
 
+/* See https://github.com/christianalfoni/react-webpack-cookbook/issues/35 for details. */
+var reactDOMPath = path.join(modulesPath, 'react-dom', 'dist', 'react-dom.js');
+
 var sourcePath = path.join(__dirname, 'src')
   , targetPath = path.join(__dirname, 'dist');
 
@@ -17,12 +20,13 @@ module.exports = {
 
   entry: {
     index: path.resolve(sourcePath, 'index.js'),
-    vendors: ['react']
+    vendors: ['react', 'react-dom']
   },
 
   resolve: {
     alias: {
-      'react': reactPath
+      'react': reactPath,
+      'react-dom': reactDOMPath
     }
   },
 
