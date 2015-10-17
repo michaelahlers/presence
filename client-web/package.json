@@ -8,8 +8,6 @@
     "immutable": "^3.7.5",
     "less-loader": "^2.2.0",
     "react": "^0.14.0",
-    "react-addons-css-transition-group": "^0.14.0",
-    "react-dom": "^0.14.0",
     "react-router": "^1.0.0-rc3",
     "restful.js": "^0.7.0",
     "style-loader": "^0.12.3",

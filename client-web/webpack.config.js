@@ -8,10 +8,11 @@ var CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin
   , HtmlWebpackPlugin = require('html-webpack-plugin');
 
 var modulesPath = path.join(__dirname, 'node_modules')
-  , reactPath = path.join(modulesPath, 'react', 'react.js');
 
 /* See https://github.com/christianalfoni/react-webpack-cookbook/issues/35 for details. */
-var reactDOMPath = path.join(modulesPath, 'react-dom', 'dist', 'react-dom.js');
+var reactPath = path.join(modulesPath, 'react', 'react.js')
+  , reactDOMPath = path.join(modulesPath, 'react', 'lib', 'ReactDOM.js')
+  , reactCSSTransitionGroup = path.join(modulesPath, 'react', 'lib', 'ReactCSSTransitionGroup.js');
 
 var sourcePath = path.join(__dirname, 'src')
   , targetPath = path.join(__dirname, 'build');
@@ -23,13 +24,18 @@ module.exports = {
       'webpack/hot/dev-server'
       , path.resolve(sourcePath, 'index.js')
     ],
-    vendors: ['react', 'react-dom']
+    vendors: [
+      'react'
+      , 'react-dom'
+      , 'react-addons-css-transition-group'
+    ]
   },
 
   resolve: {
     alias: {
       'react': reactPath,
-      'react-dom': reactDOMPath
+      'react-dom': reactDOMPath,
+      'react-addons-css-transition-group': reactCSSTransitionGroup
     }
   },
 
