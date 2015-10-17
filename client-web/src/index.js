@@ -3,8 +3,11 @@
 require('./index.less');
 
 import React from 'react';
-import { Router, Route, Link } from 'react-router';
+import ReactDOM from 'react-dom';
+
 import createBrowserHistory from 'history/lib/createBrowserHistory';
+import { Router, Route, Link } from 'react-router';
+
 import 'regenerator/runtime';
 
 import Posts from './Posts';
@@ -35,7 +38,7 @@ export default class Root extends React.Component {
 // @formatter:on
   const settings = await require('./settings');
 
-  React.render((
+  ReactDOM.render((
     <Router history={createBrowserHistory()}>
       <Route path="/" component={Root}>
         <Route path="posts" component={Posts}>
