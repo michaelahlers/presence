@@ -14,7 +14,7 @@ export default class extends React.Component {
 
         {this.props.children || [1, 2, 3].map(id => {
           return (
-            <div>
+            <div key={id}>
               <h2>Post {id}</h2>
               <p>Summary for Post {id}. <Link to={`/posts/${id}`}>Read more…</Link></p>
             </div>
