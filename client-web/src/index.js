@@ -3,12 +3,50 @@
 require('./index.less');
 
 import React from 'react';
+import { Router, Route, Link } from 'react-router';
+import createBrowserHistory from 'history/lib/createBrowserHistory';
+import 'regenerator/runtime';
 
-const content =
-  <div>
-    <h1>Presence</h1>
-  </div>;
+import Posts from './Posts';
+import Post from './Post';
 
-require('./settings').then(settings => {
-  React.render(content, document.body);
-});
+import Projects from './Projects';
+import Project from './Project';
+
+import NotFound from './NotFound';
+
+export default class Root extends React.Component {
+  render() {
+    return (
+      <div>
+        <ul>
+          <li><Link to={`/posts`}>Posts</Link></li>
+          <li><Link to={`/projects`}>Projects</Link></li>
+        </ul>
+
+        {this.props.children}
+      </div>
+    );
+  }
+};
+
+// @formatter:off
+(async function () {
+// @formatter:on
+  const settings = await require('./settings');
+
+  React.render((
+    <Router history={createBrowserHistory()}>
+      <Route path="/" component={Root}>
+        <Route path="posts" component={Posts}>
+          <Route path=":postId" component={Post}/>
+        </Route>
+        <Route path="projects" component={Projects}>
+          <Route path=":projectId" component={Project}/>
+        </Route>
+      </Route>
+      <Route path="*" component={NotFound}/>
+    </Router>
+  ), document.body);
+
+})();
