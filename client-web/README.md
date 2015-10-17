@@ -54,6 +54,7 @@ Assuming a bucket called “my-client-web-bucket”:
   - Immutable persistent data collections for Javascript which increase efficiency and simplicity.
 - [Restful.js](https://github.com/marmelab/restful.js)
   - A pure JS client for interacting with server-side RESTful resources. Think Restangular without Angular.
+- [Regenerator Loader for Webpack](https://github.com/pjeby/regenerator-loader)
 
 ## References
 
