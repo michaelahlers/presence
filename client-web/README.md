@@ -48,8 +48,6 @@ Assuming a bucket called “my-client-web-bucket”:
     
 ## Libraries
 
-- [deepmerge](https://github.com/KyleAMathews/deepmerge)
-  - Merge the enumerable attributes of two objects deeply.
 - [fetch](https://github.com/github/fetch)
   - A window.fetch JavaScript polyfill.
 - [Immutable](https://facebook.github.io/immutable-js/)
@@ -59,6 +57,8 @@ Assuming a bucket called “my-client-web-bucket”:
 
 ## References
 
-- [Jest Example: React ES6](https://github.com/facebook/jest/tree/master/examples/react-es6)
 - [React and Webpack Cookbook](http://christianalfoni.github.io/react-webpack-cookbook/)
 - [React on ES6+](http://babeljs.io/blog/2015/06/07/react-on-es6-plus/)
+- [Jest Example: React ES6](https://github.com/facebook/jest/tree/master/examples/react-es6)
+- [Taming the Asynchronous Beast with ES7](http://pouchdb.com/2015/03/05/taming-the-async-beast-with-es7.html)
+- [How to Get ES7 Async Functions with Babel](http://jbernier.com/how-to-get-es7-async-functions-with-babel)
