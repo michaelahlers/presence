@@ -7,7 +7,7 @@ var glob = require('glob')
 var CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin
   , HtmlWebpackPlugin = require('html-webpack-plugin');
 
-var modulesPath = path.join(__dirname, 'node_modules')
+var modulesPath = path.join(__dirname, 'node_modules');
 
 /* See https://github.com/christianalfoni/react-webpack-cookbook/issues/35 for details. */
 var reactPath = path.join(modulesPath, 'react', 'react.js')
