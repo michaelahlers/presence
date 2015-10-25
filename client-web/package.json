@@ -2,6 +2,7 @@
   "name": "michaelahlers-presence-client-web",
   "description": "Personal web presence for Michael Ahlers.",
   "dependencies": {
+    "classnames": "^2.2.0",
     "css-loader": "^0.17.0",
     "history": "^1.12.5",
     "hoops": "^0.2.1",
