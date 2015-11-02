@@ -14,8 +14,8 @@ var reactPath = path.join(modulesPath, 'react', 'react.js')
   , reactDOMPath = path.join(modulesPath, 'react', 'lib', 'ReactDOM.js')
   , reactCSSTransitionGroup = path.join(modulesPath, 'react', 'lib', 'ReactCSSTransitionGroup.js');
 
-var sourcePath = path.join(__dirname, 'src')
-  , targetPath = path.join(__dirname, 'build');
+var sourcePath = path.resolve(__dirname, 'src')
+  , targetPath = path.resolve(__dirname, 'build');
 
 module.exports = {
 
@@ -41,7 +41,8 @@ module.exports = {
 
   output: {
     path: targetPath,
-    filename: '[name].js'
+    filename: '[name].js',
+    chunkFilename: '[id].chunk.js'
   },
 
   module: {
