@@ -2,19 +2,16 @@
 
 require('./index.less');
 
-import React from 'react';
-import ReactDOM from 'react-dom';
-
-import createBrowserHistory from 'history/lib/createBrowserHistory';
-import { Router, Route, Link } from 'react-router';
-
 import 'regenerator/runtime';
 
-import Posts from './Posts';
-import Post from './Post';
+import classNames from 'classnames';
 
-import Projects from './Projects';
-import Project from './Project';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+
+import { createHistory, createHashHistory, useBasename } from 'history';
+import { Router, Route, Link } from 'react-router';
 
 import NotFound from './NotFound';
 
@@ -22,8 +19,9 @@ export default class Root extends React.Component {
   render() {
     return (
       <div>
+        <h1>Presence</h1>
+
         <ul>
-          <li><Link to={`/posts`}>Posts</Link></li>
           <li><Link to={`/projects`}>Projects</Link></li>
         </ul>
 
@@ -38,18 +36,21 @@ export default class Root extends React.Component {
 // @formatter:on
   const settings = await require('./settings');
 
-  ReactDOM.render((
-    <Router history={createBrowserHistory()}>
-      <Route path="/" component={Root}>
-        <Route path="posts" component={Posts}>
-          <Route path=":postId" component={Post}/>
-        </Route>
-        <Route path="projects" component={Projects}>
-          <Route path=":projectId" component={Project}/>
-        </Route>
-      </Route>
-      <Route path="*" component={NotFound}/>
-    </Router>
-  ), document.body);
+  /* In light of http://stackoverflow.com/questions/16267339/s3-static-website-hosting-route-all-paths-to-index-html forgo using HTML5 browser history until a good solution is found to deploy to S3.  */
+  // const history = useBasename(createHistory)({});
+  const history = createHashHistory({queryKey: false});
+
+  const routes = {
+    component: 'div',
+    childRoutes: [{
+      path: '/',
+      component: Root,
+      childRoutes: [
+        require('./projects')
+      ]
+    }]
+  };
+
+  ReactDOM.render(<Router history={history} routes={routes}/>, document.body);
 
 })();
