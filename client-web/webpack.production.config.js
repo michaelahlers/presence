@@ -14,8 +14,8 @@ var reactPath = path.join(modulesPath, 'react', 'react.js')
   , reactDOMPath = path.join(modulesPath, 'react', 'lib', 'ReactDOM.js')
   , reactCSSTransitionGroup = path.join(modulesPath, 'react', 'lib', 'ReactCSSTransitionGroup.js');
 
-var sourcePath = path.join(__dirname, 'src')
-  , targetPath = path.join(__dirname, 'dist');
+var sourcePath = path.resolve(__dirname, 'src')
+  , targetPath = path.resolve(__dirname, 'dist');
 
 module.exports = {
 
