@@ -38,7 +38,8 @@ module.exports = {
 
   output: {
     path: targetPath,
-    filename: '[name]-[hash].min.js'
+    filename: '[name]-[hash].min.js',
+    chunkFilename: '[id]-[hash].chunk.min.js'
   },
 
   module: {
@@ -58,7 +59,8 @@ module.exports = {
         loader: 'babel',
         query: {
           /* Enable ES7 features. */
-          stage: 0,
+          stage: 2,
+          experimental: true,
           cacheDirectory: true
         },
         noParse: ['react']
@@ -70,9 +72,10 @@ module.exports = {
 
   },
 
+  /* See https://github.com/ampedandwired/html-webpack-plugin/issues/97 for bug requiring that minify be set to false. */
   plugins: [
     new CommonsChunkPlugin('vendors', 'vendors-[hash].js')
-    , new HtmlWebpackPlugin({title: 'Michael Ahlers', minify: true})
+    , new HtmlWebpackPlugin({title: 'Michael Ahlers'/*, minify: true*/})
   ]
 
 };
