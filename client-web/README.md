@@ -42,7 +42,7 @@ Assuming a bucket called “my-client-web-bucket”:
     ```
   - _Static Website Hosting_ enabled.
     - Set `index.html` for the _Index Document_.
-    - Add redirection rules containing (see [_S3 Static Website Hosting Route All Paths to `index.html`_](http://stackoverflow.com/questions/16267339/s3-static-website-hosting-route-all-paths-to-index-html) at Stackoverflow for more information):
+    - Add to _Edit Redirection Rules_ the following (see [_S3 Static Website Hosting Route All Paths to `index.html`_](http://stackoverflow.com/questions/16267339/s3-static-website-hosting-route-all-paths-to-index-html) at Stackoverflow for more information):
 
     ```xml
     <RoutingRules>
@@ -58,7 +58,7 @@ Assuming a bucket called “my-client-web-bucket”:
     ```
 1. `$ npm run deploy`
   - Will generate production-ready assets.
-1. `$ aws sync --delete dist/ s3://my-client-web-bucket/`
+1. `$ aws s3 sync --delete dist/ s3://my-client-web-bucket/`
 
 ## Libraries
 
