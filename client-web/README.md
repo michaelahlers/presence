@@ -17,7 +17,7 @@
   - Will watch source trees for changes.
   - Browser will automatically refresh the web application.
   - Visit `http://localhost:8080/webpack-dev-server/` to run.
-  
+
 ## Deployment
 
 ### S3
@@ -42,10 +42,24 @@ Assuming a bucket called “my-client-web-bucket”:
     ```
   - _Static Website Hosting_ enabled.
     - Set `index.html` for the _Index Document_.
+    - Add redirection rules containing (see [_S3 Static Website Hosting Route All Paths to `index.html`_](http://stackoverflow.com/questions/16267339/s3-static-website-hosting-route-all-paths-to-index-html) at Stackoverflow for more information):
+
+    ```xml
+    <RoutingRules>
+      <RoutingRule>
+        <Condition>
+          <HttpErrorCodeReturnedEquals>404</HttpErrorCodeReturnedEquals>
+        </Condition>
+        <Redirect>
+          <ReplaceKeyPrefixWith>#/</ReplaceKeyPrefixWith>
+        </Redirect>
+      </RoutingRule>
+    </RoutingRules>
+    ```
 1. `$ npm run deploy`
   - Will generate production-ready assets.
 1. `$ aws sync --delete dist/ s3://my-client-web-bucket/`
-    
+
 ## Libraries
 
 - [fetch](https://github.com/github/fetch)
