@@ -51,6 +51,9 @@ export default class Root extends React.Component {
     }]
   };
 
-  ReactDOM.render(<Router history={history} routes={routes}/>, document.body);
+  const mount = document.createElement('div');
+  document.body.appendChild(mount);
+
+  ReactDOM.render(<Router history={history} routes={routes}/>, mount);
 
 })();
