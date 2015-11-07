@@ -8,6 +8,7 @@
     "hoops": "^0.2.1",
     "immutable": "^3.7.5",
     "less-loader": "^2.2.1",
+    "radium": "^0.14.3",
     "react": "^0.14.2",
     "react-router": "^1.0.0-rc4",
     "regenerator-loader": "^2.0.0",
