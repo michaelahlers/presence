@@ -62,12 +62,16 @@ module.exports = {
         loader: 'babel',
         query: {
           /* Enable ES7 features. */
-          stage: 2,
-          experimental: true,
+          presets: [
+            'es2015'
+            , 'stage-2'
+            , 'react'
+          ],
           cacheDirectory: true
         },
         noParse: ['react']
-      }, {
+      },
+      {
         test: /\.less$/,
         loader: 'style!css!less?strictMath' //&noIeCompat'
       }
