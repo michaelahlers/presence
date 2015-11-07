@@ -13,9 +13,7 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { createHistory, createHashHistory, useBasename } from 'history';
 import { Router, Route, Link } from 'react-router';
 
-import NotFound from './NotFound';
-
-export default class Root extends React.Component {
+class Root extends React.Component {
   render() {
     return (
       <div>
@@ -29,7 +27,7 @@ export default class Root extends React.Component {
       </div>
     );
   }
-};
+}
 
 // @formatter:off
 (async function () {
@@ -41,19 +39,16 @@ export default class Root extends React.Component {
   const history = createHashHistory({queryKey: false});
 
   const routes = {
-    component: 'div',
-    childRoutes: [{
-      path: '/',
-      component: Root,
-      childRoutes: [
-        require('./projects')
-      ]
-    }]
+    path: '/',
+    component: Root,
+    childRoutes: [
+      require('./projects')
+    ]
   };
 
-  const mount = document.createElement('div');
-  document.body.appendChild(mount);
-
-  ReactDOM.render(<Router history={history} routes={routes}/>, mount);
+  ReactDOM.render(
+    <Router history={history} routes={routes}/>,
+    document.body.appendChild(document.createElement('div'))
+  );
 
 })();
