@@ -62,16 +62,14 @@ module.exports = {
         loader: 'babel',
         query: {
           /* Enable ES7 features. */
-          presets: [
-            'es2015'
-            , 'stage-2'
-            , 'react'
-          ],
+          /* Asynchronous route and component loading fails with Babel 6.1. See https://github.com/rackt/react-router/issues/2495 for details. */
+          //presets: ['es2015', 'stage-2', 'react'],
+          stage: 2,
+          experimental: true,
           cacheDirectory: true
         },
         noParse: ['react']
-      },
-      {
+      }, {
         test: /\.less$/,
         loader: 'style!css!less?strictMath' //&noIeCompat'
       }
