@@ -3,6 +3,7 @@
   "description": "Personal web presence for Michael Ahlers.",
   "dependencies": {
     "classnames": "^2.2.0",
+    "css-layout": "^1.0.0",
     "css-loader": "^0.22.0",
     "history": "^1.13.0",
     "hoops": "^0.2.1",
