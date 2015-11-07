@@ -1,7 +1,7 @@
 import React from 'react';
 import { Router, Route, Link } from 'react-router';
 
-export default class extends React.Component {
+class ProjectsView extends React.Component {
 
   render() {
     return (
@@ -20,3 +20,5 @@ export default class extends React.Component {
   }
 
 }
+
+export default ProjectsView;

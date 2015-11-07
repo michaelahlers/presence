@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default class extends React.Component {
+class ProjectView extends React.Component {
 
   render() {
     const { projectId } = this.props.params;
@@ -13,3 +13,5 @@ export default class extends React.Component {
   }
 
 }
+
+export default ProjectView;
