@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "description": "Personal web presence for Michael Ahlers.",
   "scripts": {
+    "clean": "rimraf build dist"
   },
   "repository": {
     "type": "git",
@@ -13,5 +14,8 @@
   "bugs": {
     "url": "http://github.com/michaelahlers/michaelahlers-presence/issues"
   },
-  "homepage": "http://github.com/michaelahlers/michaelahlers-presence/wiki"
+  "homepage": "http://github.com/michaelahlers/michaelahlers-presence/wiki",
+  "devDependencies": {
+    "jest": "^0.1.40"
+  }
 }
