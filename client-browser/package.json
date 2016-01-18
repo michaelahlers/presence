@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "description": "Personal web presence for Michael Ahlers.",
   "scripts": {
-    "clean": "rimraf build dist"
+    "clean": "rimraf build dist",
+    "build": "webpack --devtool source-map --progress --color",
+    "develop": "webpack-dev-server --devtool source-map --progress --color --hot --content-base build"
   },
   "repository": {
     "type": "git",
@@ -16,6 +18,10 @@
   },
   "homepage": "http://github.com/michaelahlers/michaelahlers-presence/wiki",
   "devDependencies": {
-    "jest": "^0.1.40"
+    "html-webpack-plugin": "^1.7.0",
+    "jest": "^0.1.40",
+    "path": "^0.12.7",
+    "webpack": "^1.12.11",
+    "webpack-dev-server": "^1.14.1"
   }
 }
