@@ -1,0 +1,17 @@
+{
+  "name": "client-browser",
+  "version": "0.0.0",
+  "description": "Personal web presence for Michael Ahlers.",
+  "scripts": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/michaelahlers/michaelahlers-presence.git"
+  },
+  "author": "Michael Ahlers <michael@ahlers.co>",
+  "license": "MIT",
+  "bugs": {
+    "url": "http://github.com/michaelahlers/michaelahlers-presence/issues"
+  },
+  "homepage": "http://github.com/michaelahlers/michaelahlers-presence/wiki"
+}
