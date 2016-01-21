@@ -14,8 +14,35 @@ var reactPath = path.join(modulesPath, 'react', 'lib', 'React.js')
   , reactDOMPath = path.join(modulesPath, 'react', 'lib', 'ReactDOM.js')
   , reactCSSTransitionGroup = path.join(modulesPath, 'react', 'lib', 'ReactCSSTransitionGroup.js');
 
-var sourcePath = path.resolve(__dirname, 'src')
-  , targetPath = path.resolve(__dirname, 'build');
+var profiles = {
+  development: {
+    entry: {
+      index: [
+        'webpack/hot/dev-server',
+        'webpack-dev-server/client?http://localhost:8080',
+        'babel-polyfill',
+        path.resolve(__dirname, 'src', 'index.js')
+      ]
+    },
+    output: {
+      path: path.resolve(__dirname, 'build'),
+      filename: '[name].js',
+      chunkFilename: '[id].chunk.js'
+    }
+  },
+  production: {
+    entry: {
+      index: path.resolve(__dirname, 'src', 'index.js')
+    },
+    output: {
+      path: path.resolve(__dirname, 'dist'),
+      filename: '[name]-[hash].js',
+      chunkFilename: '[id]-[hash].chunk.js'
+    }
+  }
+};
+
+var profile = profiles[require('minimist')(process.argv.slice(2)).profile || 'development'];
 
 module.exports = {
 
@@ -30,12 +57,7 @@ module.exports = {
   },
 
   entry: {
-    index: [
-      'webpack/hot/dev-server',
-      'webpack-dev-server/client?http://localhost:8080',
-      'babel-polyfill',
-      path.resolve(sourcePath, 'index.js')
-    ],
+    index: profile.entry.index,
     vendors: [
       'react',
       'react-dom',
@@ -43,11 +65,7 @@ module.exports = {
     ]
   },
 
-  output: {
-    path: targetPath,
-    filename: '[name].js',
-    chunkFilename: '[id].chunk.js'
-  },
+  output: profile.output,
 
   module: {
 
@@ -61,7 +79,7 @@ module.exports = {
 
     loaders: [
       {
-        include: sourcePath,
+        exclude: /node_modules/,
         test: /\.js$/,
         noParse: [reactPath],
         loader: 'babel',
@@ -76,7 +94,7 @@ module.exports = {
   },
 
   devServer: {
-    contentBase: targetPath
+    contentBase: profile.output.path
   },
 
   plugins: [
