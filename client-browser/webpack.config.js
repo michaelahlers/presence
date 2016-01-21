@@ -28,17 +28,30 @@ var profiles = {
       path: path.resolve(__dirname, 'build'),
       filename: '[name].js',
       chunkFilename: '[id].chunk.js'
-    }
+    },
+    plugins: [
+      new CommonsChunkPlugin('vendors', 'vendors.js'),
+      new HotModuleReplacementPlugin(),
+      new HtmlWebpackPlugin({title: 'Michael Ahlers'})
+    ]
+
   },
   production: {
     entry: {
-      index: path.resolve(__dirname, 'src', 'index.js')
+      index: [
+        'babel-polyfill',
+        path.resolve(__dirname, 'src', 'index.js')
+      ]
     },
     output: {
       path: path.resolve(__dirname, 'dist'),
       filename: '[name]-[hash].js',
       chunkFilename: '[id]-[hash].chunk.js'
-    }
+    },
+    plugins: [
+      new CommonsChunkPlugin('vendors', 'vendors-[hash].js'),
+      new HtmlWebpackPlugin({title: 'Michael Ahlers'})
+    ]
   }
 };
 
@@ -72,17 +85,17 @@ module.exports = {
     preLoaders: [
       {
         loader: 'eslint',
-        exclude: /node_modules/,
+        exclude: [modulesPath],
         test: /\.js$/
       }
     ],
 
     loaders: [
       {
-        exclude: /node_modules/,
+        loader: 'babel',
+        exclude: [modulesPath],
         test: /\.js$/,
         noParse: [reactPath],
-        loader: 'babel',
         query: {
           plugins: ['transform-runtime'],
           presets: ['es2015', 'stage-0', 'react']
@@ -94,13 +107,13 @@ module.exports = {
   },
 
   devServer: {
-    contentBase: profile.output.path
+    contentBase: path.resolve(__dirname, 'build'),
+    hot: true,
+    quiet: false,
+    noInfo: false,
+    stats: {colors: true}
   },
 
-  plugins: [
-    new CommonsChunkPlugin('vendors', 'vendors-[hash].js'),
-    new HotModuleReplacementPlugin(),
-    new HtmlWebpackPlugin({title: 'Michael Ahlers'})
-  ]
+  plugins: profile.plugins
 
 };
