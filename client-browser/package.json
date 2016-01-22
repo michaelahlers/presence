@@ -5,7 +5,7 @@
   "scripts": {
     "clean": "rimraf build dist",
     "build": "webpack --progress --color",
-    "develop": "webpack-dev-server --progress --color --hot",
+    "develop": "webpack-dev-server --progress --color",
     "deploy": "rimraf dist; NODE_ENV=production webpack --progress --color --optimize-minimize --profile=production"
   },
   "repository": {

@@ -108,7 +108,8 @@ module.exports = {
 
   devServer: {
     contentBase: path.resolve(__dirname, 'build'),
-    hot: true,
+    /* See https://github.com/webpack/webpack-dev-server/issues/87 for details. */
+    // hot: true,
     quiet: false,
     noInfo: false,
     stats: {colors: true}
