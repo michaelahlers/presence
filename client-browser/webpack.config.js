@@ -27,7 +27,8 @@ var profiles = {
     output: {
       path: path.resolve(__dirname, 'build'),
       filename: '[name].js',
-      chunkFilename: '[id].chunk.js'
+      chunkFilename: '[id].chunk.js',
+      publicPath: '/'
     },
     plugins: [
       new CommonsChunkPlugin('vendors', 'vendors.js'),
@@ -46,7 +47,8 @@ var profiles = {
     output: {
       path: path.resolve(__dirname, 'dist'),
       filename: '[name]-[hash].js',
-      chunkFilename: '[id]-[hash].chunk.js'
+      chunkFilename: '[id]-[hash].chunk.js',
+      publicPath: '/'
     },
     plugins: [
       new CommonsChunkPlugin('vendors', 'vendors-[hash].js'),
@@ -112,7 +114,9 @@ module.exports = {
     // hot: true,
     quiet: false,
     noInfo: false,
-    stats: {colors: true}
+    stats: {colors: true},
+    /* See https://github.com/rackt/react-router/issues/676#issuecomment-143834149 for source. */
+    historyApiFallback: true
   },
 
   plugins: profile.plugins
