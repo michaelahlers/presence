@@ -10,8 +10,6 @@ var pulseKeyframes = Radium.keyframes({
   '100%': {transform: 'scale3d(1,1,0)'}
 }, 'pulse');
 
-console.log(pulseKeyframes);
-
 const styles = {
   base: {
     background: 'blue',
@@ -48,7 +46,7 @@ const styles = {
 };
 
 @Radium
-export default class extends React.Component {
+class Button extends React.Component {
   static propTypes = {
     kind: React.PropTypes.oneOf(['primary', 'warning']).isRequired
   };
@@ -70,3 +68,5 @@ export default class extends React.Component {
     );
   }
 }
+
+module.exports = Button;
