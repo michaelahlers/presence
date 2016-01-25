@@ -1,5 +1,7 @@
 import React from 'react';
 
+import {Link} from 'react-router';
+
 import Radium, { Style, StyleRoot } from 'radium';
 
 const rules = {
@@ -76,6 +78,17 @@ class Dashboard extends React.Component {
         </div>
 
         <p>Ban.</p>
+
+        <ul>
+          <li>
+            <Link to={`/posts`}>Posts</Link>
+
+            <ul>
+              <li><Link to={`/posts/123`}>123</Link></li>
+              <li><Link to={`/posts/456`}>456</Link></li>
+            </ul>
+          </li>
+        </ul>
 
         {this.state.component}
 

@@ -1,10 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import { createHistory } from 'history';
-
-import {Router, browserHistory} from 'react-router';
-
 const route = {
 
   component: 'div',
@@ -31,14 +27,16 @@ const route = {
 
 };
 
-/* In light of http://stackoverflow.com/questions/16267339/s3-static-website-hosting-route-all-paths-to-index-html forgo using HTML5 browser history until a good solution is found to deploy to S3. See also http://rackt.org/history/stable/HashHistoryCaveats.html for details on (and caveats especially of) hash history. */
-// const history = useBasename(createHistory)({});
+/* In light of http://stackoverflow.com/q/16267339/700420 forgo using HTML5 browser history until a good solution is found to deploy to S3. See also http://rackt.org/history/stable/HashHistoryCaveats.html for details on (and caveats especially of) hash history. */
+
+import { createHistory } from 'history';
+import {Router, browserHistory} from 'react-router';
+
 const history = createHistory();
 
 history.listen(function (location) {
-  if (-1 < location.hash.indexOf('#/')) {
-    history.replace(location.hash.substring(1));
-  }
+  const path = (/#(\/.*)$/.exec(location.hash) || [])[1];
+  if (path) history.replace(path);
 });
 
 ReactDOM.render(
