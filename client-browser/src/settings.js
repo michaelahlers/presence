@@ -13,6 +13,6 @@ const defaultSettings = Immutable.Map({
 const settings =
   fetch('/settings.json')
     .then(response => response.json())
-    .then(defaultSettings.mergeDeep, error => defaultSettings);
+    .then(settings => defaultSettings.mergeDeep(settings), error => defaultSettings);
 
 module.exports = settings;
