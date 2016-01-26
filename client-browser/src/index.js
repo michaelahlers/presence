@@ -32,14 +32,21 @@ const route = {
 import { createHistory } from 'history';
 import {Router, browserHistory} from 'react-router';
 
-const history = createHistory();
+(async function () {
 
-history.listen(function (location) {
-  const path = (/#(\/.*)$/.exec(location.hash) || [])[1];
-  if (path) history.replace(path);
-});
+  const settings = await require('./settings');
 
-ReactDOM.render(
-  <Router history={history} routes={route}/>,
-  document.body.appendChild(document.createElement('div'))
-);
+  const history = createHistory();
+
+  history.listen(function (location) {
+    const path = (/#(\/.*)$/.exec(location.hash) || [])[1];
+    if (path) history.replace(path);
+  });
+
+  ReactDOM.render(
+    <Router history={history} routes={route}/>,
+    document.body.appendChild(document.createElement('div'))
+  );
+
+})();
+
