@@ -22,7 +22,7 @@ describe('Settings', () => {
     it('overrides defaults with deployment settings', async () => {
       require('whatwg-fetch').setResponse({
         status: 200,
-        json: function () {
+        json() {
           return {
             'api': {
               'host': 'production-server'
@@ -43,6 +43,22 @@ describe('Settings', () => {
 
     it('falls back on defaults on request error', async () => {
       const settings = await require('../settings.js');
+
+      expect(settings).is(Immutable.Map({
+        'api': {
+          'host': 'localhost',
+          'port': 9000
+        }
+      }));
+    });
+
+    it('falls back on defaults on non-JSON response', async () => {
+      require('whatwg-fetch').setResponse({
+        status: 200,
+        json() {
+          return 'Non-JSON.'
+        }
+      });
 
       expect(settings).is(Immutable.Map({
         'api': {
