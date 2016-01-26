@@ -99,8 +99,7 @@ module.exports = {
         test: /\.js$/,
         noParse: [reactPath],
         query: {
-          plugins: ['transform-runtime', 'transform-decorators-legacy'],
-          presets: ['es2015', 'stage-0', 'react']
+          plugins: ['transform-runtime', 'transform-decorators-legacy']
         }
 
       }
