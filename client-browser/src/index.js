@@ -20,7 +20,8 @@ const route = {
       getChildRoutes(location, cb) {
         require.ensure([], (require) => {
           cb(null, [
-            require('./routes/Posts')
+            require('./routes/Posts'),
+            require('./routes/Projects')
           ]);
         });
       }
