@@ -2,58 +2,9 @@ import React from 'react';
 
 import {Link} from 'react-router';
 
-import Radium, { Style, StyleRoot } from 'radium';
-
-const rules = {
-  body: {
-    margin: 0,
-    fontFamily: 'Helvetica Neue, Helvetica, Arial, sans-serif'
-  },
-  html: {
-    background: '#ccc',
-    fontSize: '100%'
-  },
-  mediaQueries: {
-    '(min-width: 550px)': {
-      html: {
-        fontSize: '120%'
-      }
-    },
-    '(min-width: 1200px)': {
-      html: {
-        fontSize: '140%'
-      }
-    }
-  },
-  'h1, h2, h3': {
-    fontWeight: 'bold'
-  }
-};
-
 import Button from './Button.js';
-import Loading from './Loading.js';
 
 class Dashboard extends React.Component {
-
-  constructor() {
-    super();
-    this.state = {
-      component: <Loading/>
-    };
-  }
-
-  componentDidMount() {
-
-    setTimeout(() => {
-      require.ensure([], () => {
-        const Hello = require('./Hello.js');
-        this.setState({
-          component: <Hello/>
-        });
-      });
-    }, 500);
-
-  }
 
   render() {
     return (
@@ -88,9 +39,16 @@ class Dashboard extends React.Component {
               <li><Link to={`/posts/456`}>456</Link></li>
             </ul>
           </li>
-        </ul>
 
-        {this.state.component}
+          <li>
+            <Link to={`/projects`}>Projects</Link>
+
+            <ul>
+              <li><Link to={`/projects/123`}>123</Link></li>
+              <li><Link to={`/projects/456`}>456</Link></li>
+            </ul>
+          </li>
+        </ul>
 
       </div>
     );
@@ -102,15 +60,15 @@ class Application extends React.Component {
 
   render() {
     return (
-      <StyleRoot>
-
-        <Style rules={{rules}}/>
+      <div className="application">
 
         <h1>Michael Ahlers</h1>
 
-        {this.props.children || <Dashboard />}
+        <Dashboard/>
 
-      </StyleRoot>
+        {this.props.children}
+
+      </div>
     );
   }
 

@@ -1,9 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import Container from './components/Container.js';
+
 const route = {
 
-  component: 'div',
+  component: Container,
 
   childRoutes: [
     {
@@ -29,14 +31,14 @@ const route = {
 
 /* In light of http://stackoverflow.com/q/16267339/700420 forgo using HTML5 browser history until a good solution is found to deploy to S3. See also http://rackt.org/history/stable/HashHistoryCaveats.html for details on (and caveats especially of) hash history. */
 
+import { Router, useRouterHistory } from 'react-router';
 import { createHistory } from 'history';
-import {Router, browserHistory} from 'react-router';
 
 (async function () {
 
   const settings = await require('./settings');
 
-  const history = createHistory();
+  const history = useRouterHistory(createHistory)();
 
   history.listen(function (location) {
     const path = (/#(\/.*)$/.exec(location.hash) || [])[1];
