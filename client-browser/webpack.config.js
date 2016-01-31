@@ -101,7 +101,13 @@ module.exports = {
         query: {
           plugins: ['transform-runtime', 'transform-decorators-legacy']
         }
-
+      },
+      {
+        loader: 'url-loader',
+        test: /\.(png|jpeg)$/,
+        query: {
+          limit: 8192
+        }
       }
     ]
 
