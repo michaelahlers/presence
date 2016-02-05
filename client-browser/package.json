@@ -6,6 +6,8 @@
     "clean": "rimraf build",
     "develop": "webpack-dev-server --progress --color",
     "build": "webpack --progress --color",
+    "deploy": "aws s3 sync --dryrun --delete --exclude 'settings.json' 'build/'",
+    "deploy-unsafe": "aws s3 sync --delete --exclude 'settings.json' 'build/'",
     "test": "jest --verbose"
   },
   "babel": {
