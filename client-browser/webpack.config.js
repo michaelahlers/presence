@@ -154,7 +154,7 @@ module.exports = {
   },
 
   devServer: {
-    contentBase: path.resolve(__dirname, 'build'),
+    //contentBase: path.resolve(__dirname, 'build'),
     /* See https://github.com/webpack/webpack-dev-server/issues/87 for details. */
     // hot: true,
     quiet: false,
