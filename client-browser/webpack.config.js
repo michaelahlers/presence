@@ -4,8 +4,11 @@ var path = require('path')
   , webpack = require('webpack');
 
 var CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin
+  , DedupePlugin = webpack.optimize.DedupePlugin
   , HotModuleReplacementPlugin = webpack.HotModuleReplacementPlugin
-  , HtmlWebpackPlugin = require('html-webpack-plugin');
+  , HtmlWebpackPlugin = require('html-webpack-plugin')
+  , OccurenceOrderPlugin = webpack.optimize.OccurenceOrderPlugin
+  , UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
 
 var modulesPath = path.join(__dirname, 'node_modules');
 
@@ -45,19 +48,22 @@ var profiles = {
       ]
     },
     output: {
-      path: path.resolve(__dirname, 'dist'),
+      path: path.resolve(__dirname, 'build'),
       filename: '[name]-[hash].js',
       chunkFilename: '[id]-[hash].chunk.js',
       publicPath: '/'
     },
     plugins: [
       new CommonsChunkPlugin('vendors', 'vendors-[hash].js'),
-      new HtmlWebpackPlugin({title: 'Michael Ahlers'})
+      new DedupePlugin(),
+      new HtmlWebpackPlugin({title: 'Michael Ahlers'}),
+      new OccurenceOrderPlugin(),
+      new UglifyJsPlugin()
     ]
   }
 };
 
-var profile = profiles[require('minimist')(process.argv.slice(2)).profile || 'development'];
+var profile = profiles[require('minimist')(process.argv.slice(2)).profile] || profiles['development'];
 
 module.exports = {
 

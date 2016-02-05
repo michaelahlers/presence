@@ -3,10 +3,9 @@
   "version": "0.0.0",
   "description": "Personal web presence for Michael Ahlers.",
   "scripts": {
-    "clean": "rimraf build dist",
-    "build": "webpack --progress --color",
+    "clean": "rimraf build",
     "develop": "webpack-dev-server --progress --color",
-    "deploy": "rimraf dist; NODE_ENV=production webpack --progress --color --optimize-minimize --profile=production",
+    "build": "webpack --progress --color",
     "test": "jest --verbose"
   },
   "babel": {
