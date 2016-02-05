@@ -1,165 +1,200 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-//import Container from './components/Container.js';
-//
-//const route = {
-//
-//  component: Container,
-//
-//  childRoutes: [
-//    {
-//      path: '/',
-//
-//      getComponent(location, cb) {
-//        require.ensure([], (require) => {
-//          cb(null, require('./components/Application.js'));
-//        });
-//      },
-//
-//      getChildRoutes(location, cb) {
-//        require.ensure([], (require) => {
-//          cb(null, [
-//            require('./routes/Posts'),
-//            require('./routes/Projects')
-//          ]);
-//        });
-//      }
-//    }
-//  ]
-//
-//};
-//
-///* In light of http://stackoverflow.com/q/16267339/700420 forgo using HTML5 browser history until a good solution is found to deploy to S3. See also http://rackt.org/history/stable/HashHistoryCaveats.html for details on (and caveats especially of) hash history. */
-//
-//import { Router, useRouterHistory } from 'react-router';
-//import { createHistory } from 'history';
-//
-//(async function () {
-//
-//  const settings = await require('./settings');
-//
-//  const history = useRouterHistory(createHistory)();
-//
-//  history.listen(function (location) {
-//    const path = (/#(\/.*)$/.exec(location.hash) || [])[1];
-//    if (path) history.replace(path);
-//  });
-//
-//  ReactDOM.render(
-//    <Router history={history} routes={route}/>,
-//    document.body.appendChild(document.createElement('div'))
-//  );
-//
-//})();
-
 import Radium, { Style, StyleRoot } from 'radium';
 import color from 'color';
 
-const styles = {
-  base: {
-    html: {
-      fontFamily: 'Helvetica, sans-serif'
-    },
-    body: {}
-  },
-
-  landing: {
-    position: 'absolute',
-    left: 0,
-    top: 0,
-    width: '100%',
-    height: '100%',
-    transformStyle: 'preserve-3d',
-
-    content: {
-
-      position: 'absolute',
-      left: '50%',
-      top: '50%',
-      marginRight: '-50%',
-      transform: 'translate(-50%, -50%)',
-
-      logo: {
-
-        textAlign: 'center',
-
-        width: 700,
-        height: 450,
-        backgroundImage: `url("${require('./assets/Ahlers Consulting (700 px, 450 px).png')}")`,
-      },
-
-      title: {
-        textAlign: 'center',
-        fontWeight: 'lighter',
-        fontSize: '3em',
-        textTransform: 'lowercase',
-        letterSpacing: '0.3em'
-      }
-
-    }
-  }
-
-};
-
-const foo = {
-
-  'ul': {
-    textAlign: 'center',
-    margin: 0,
-    padding: 0,
-    fontSize: '1.5em',
-    listStyleType: 'none'
-  },
-
-  'ul li': {
-    margin: 0
-  },
-
-  mediaQueries: {
-    '(min-width: 992px)': {
-      'ul li': {
-        display: 'inline',
-        margin: '0 0.5em'
-      }
-    }
-  },
-
-  'a': {
-    color: 'gray',
-    textDecoration: 'none'
-  }
-
-};
+import 'font-awesome/css/font-awesome.css';
 
 @Radium
-class Landing extends React.Component {
+class Header extends React.Component {
+
+  static styles = {
+    'h1': {
+      textAlign: 'center',
+      fontWeight: 'lighter',
+      fontSize: '2em',
+      textTransform: 'lowercase',
+      letterSpacing: '0.25em',
+      color: 'gray'
+    },
+
+    /* TODO: Genericize this function. */
+    logo() {
+      const width = 30;
+      const height = width / 1.5;
+      const unit = 'em';
+
+      return {
+        marginLeft: 'auto',
+        marginRight: 'auto',
+
+        width: `${width}${unit}`,
+        height: `${height}${unit}`,
+
+        backgroundImage: `url("${require('./assets/Ahlers Consulting Logo.png')}")`,
+        backgroundSize: `${width}${unit} ${height}${unit}`,
+
+        '@media (min-device-pixel-ratio: 1.5)': {
+          backgroundImage: `url("${require('./assets/Ahlers Consulting Logo@2x.png')}")`,
+          backgroundSize: `${width}${unit} ${height}${unit}`
+        }
+      };
+    }
+  };
 
   render() {
     return (
-      <div style={styles.landing}>
-        <div style={styles.landing.content}>
-          <Style rules={foo}/>
+      <header>
+        <Style scopeSelector="header" rules={Header.styles}/>
 
-          <div style={styles.landing.content.logo}></div>
-          <h1 style={styles.landing.content.title}>Ahlers Consulting</h1>
-          <ul>
-            <li><a href="mailto:michael@ahlers.consulting?subject=Found at ahlers.consulting.">michael@ahlers.consulting</a></li>
-            <li><a href="tel:+1-571-830-0258">+1 (571) 830-0258</a></li>
-          </ul>
-        </div>
-      </div>
+        <div style={Header.styles.logo()}></div>
+        <h1>Ahlers Consulting</h1>
+      </header>
+    );
+  }
+
+}
+
+@Radium
+class Section extends React.Component {
+
+  static styles = {
+    '': {}
+  };
+
+  render() {
+    return (
+      <section>
+        <Style scopeSelector="section" rules={Section.styles}/>
+
+        <p>I am an awesome software developer.</p>
+
+      </section>
+    );
+  }
+}
+
+@Radium
+class Footer extends React.Component {
+
+  static styles = {
+    '': {
+      background: '#222',
+      color: 'gray'
+    },
+
+    'a': {
+      color: 'gray'
+    },
+
+    'a:hover': {
+      color: 'white'
+    },
+
+    'dl': {
+      margin: 0
+    },
+
+    'dl dt': {
+      clear: 'both',
+      float: 'left',
+      margin: '0 0.5em 0 0'
+    },
+
+    'dl dd': {
+      margin: '0'
+    },
+
+    'dl dt, dl dd': {
+      lineHeight: '1.5em'
+    },
+
+    'dl dd:after': {
+      content: '',
+      display: 'table',
+      clear: 'both'
+    }
+  };
+
+  render() {
+    return (
+      <footer>
+        <Style scopeSelector="footer" rules={Footer.styles}/>
+
+        <dl>
+          <dt><i className="fa fa-envelope-square"/></dt>
+          <dd><a href="mailto:michael@ahlers.consulting?subject=Found at ahlers.consulting.">michael@ahlers.consulting</a></dd>
+          <dt><i className="fa fa-linkedin-square"/></dt>
+          <dd><a href="https://linkedin.com/in/michael-ahlers-52719358" target="_blank">michael-ahlers-52719358</a></dd>
+          <dt><i className="fa fa-phone-square"/></dt>
+          <dd><a href="tel:+1-571-830-0258">+1 (571) 830-0258</a></dd>
+        </dl>
+
+      </footer>
+    );
+  }
+}
+
+@Radium
+class Application extends React.Component {
+
+  static styles = {
+    'html': {
+      margin: 0
+    },
+
+    'body': {
+      margin: 0,
+      padding: 0,
+      fontFamily: 'Helvetica, sans-serif'
+    },
+
+    'html, body, body > div, body > div > div': {
+      height: '100%'
+    },
+
+    'a': {
+      textDecoration: 'none'
+    },
+
+    'article': {
+      display: 'flex',
+      flexFlow: 'column',
+      height: '100%'
+    },
+
+    'article header': {
+      flex: '0 1 auto'
+    },
+
+    'article section': {
+      flex: '1 1 auto'
+    },
+
+    'article footer': {
+      flex: '0 1 auto'
+    }
+  };
+
+  render() {
+    return (
+      <StyleRoot>
+        <Style rules={Application.styles}/>
+
+        <article>
+          <Header/>
+          <Section/>
+          <Footer/>
+        </article>
+      </StyleRoot>
     );
   }
 
 }
 
 ReactDOM.render(
-  <StyleRoot>
-    <Style rules={styles.base}/>
-
-    <Landing/>
-  </StyleRoot>,
+  <Application />,
   document.body.appendChild(document.createElement('div'))
 );
 
