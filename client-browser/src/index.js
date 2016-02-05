@@ -70,13 +70,11 @@ const styles = {
     top: 0,
     width: '100%',
     height: '100%',
-    //backgroundColor: 'blue',
     transformStyle: 'preserve-3d',
 
     content: {
 
       position: 'absolute',
-      //backgroundColor:'red',
       left: '50%',
       top: '50%',
       marginRight: '-50%',
@@ -86,43 +84,17 @@ const styles = {
 
         textAlign: 'center',
 
-        width: 300,
-        height: 193,
-        backgroundImage: `url("${require('./assets/Ahlers Consulting (300 px, 193 px).png')}")`,
-
-        '@media (min-width: 992px)': {
-          width: 500,
-          height: 321,
-          backgroundImage: `url("${require('./assets/Ahlers Consulting (500 px, 321 px).png')}")`
-        },
-
-        '@media (min-width: 1200px)': {
-          width: 700,
-          height: 450,
-          backgroundImage: `url("${require('./assets/Ahlers Consulting (700 px, 450 px).png')}")`
-        }
-
+        width: 700,
+        height: 450,
+        backgroundImage: `url("${require('./assets/Ahlers Consulting (700 px, 450 px).png')}")`,
       },
 
       title: {
-
         textAlign: 'center',
-
         fontWeight: 'lighter',
-        fontSize: '1.75em',
-        letterSpacing: '0.1em',
-
+        fontSize: '3em',
         textTransform: 'lowercase',
-
-        '@media (min-width: 992px)': {
-          fontSize: '2.5em',
-          letterSpacing: '0.2em'
-        },
-
-        '@media (min-width: 1200px)': {
-          fontSize: '3em',
-          letterSpacing: '0.3em'
-        }
+        letterSpacing: '0.3em'
       }
 
     }
@@ -136,7 +108,7 @@ const foo = {
     textAlign: 'center',
     margin: 0,
     padding: 0,
-    fontSize: '0.75em',
+    fontSize: '1.5em',
     listStyleType: 'none'
   },
 
@@ -146,24 +118,9 @@ const foo = {
 
   mediaQueries: {
     '(min-width: 992px)': {
-      'ul': {
-        fontSize: '1em'
-      },
-
       'ul li': {
         display: 'inline',
         margin: '0 0.5em'
-      }
-    },
-
-    '(min-width: 1200px)': {
-      'ul': {
-        fontSize: '1.5em'
-      },
-
-      'ul li': {
-        display: 'inline',
-        margin: '0 0.75em'
       }
     }
   },
@@ -187,8 +144,8 @@ class Landing extends React.Component {
           <div style={styles.landing.content.logo}></div>
           <h1 style={styles.landing.content.title}>Ahlers Consulting</h1>
           <ul>
-            <li><a href="mailto:michael@ahlers.consulting">michael@ahlers.consulting</a></li>
-            <li><a href="tel:1 (571) 830-0258">1 (571) 830-0258</a></li>
+            <li><a href="mailto:michael@ahlers.consulting?subject=Found at ahlers.consulting.">michael@ahlers.consulting</a></li>
+            <li><a href="tel:+1-571-830-0258">+1 (571) 830-0258</a></li>
           </ul>
         </div>
       </div>
