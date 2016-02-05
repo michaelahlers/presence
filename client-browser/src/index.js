@@ -86,22 +86,43 @@ const styles = {
 
         textAlign: 'center',
 
-        width: 250,
+        width: 300,
         height: 193,
-        backgroundImage: `url("${require('./assets/Ahlers Consulting (250x193 px).png')}")`,
+        backgroundImage: `url("${require('./assets/Ahlers Consulting (300 px, 193 px).png')}")`,
 
         '@media (min-width: 992px)': {
           width: 500,
-          height: 385,
-          backgroundImage: `url("${require('./assets/Ahlers Consulting (500x385 px).png')}")`
+          height: 321,
+          backgroundImage: `url("${require('./assets/Ahlers Consulting (500 px, 321 px).png')}")`
         },
 
         '@media (min-width: 1200px)': {
-          width: 750,
-          height: 578,
-          backgroundImage: `url("${require('./assets/Ahlers Consulting (750x578 px).png')}")`
+          width: 700,
+          height: 450,
+          backgroundImage: `url("${require('./assets/Ahlers Consulting (700 px, 450 px).png')}")`
         }
 
+      },
+
+      title: {
+
+        textAlign: 'center',
+
+        fontWeight: 'lighter',
+        fontSize: '1.75em',
+        letterSpacing: '0.1em',
+
+        textTransform: 'lowercase',
+
+        '@media (min-width: 992px)': {
+          fontSize: '2.5em',
+          letterSpacing: '0.2em'
+        },
+
+        '@media (min-width: 1200px)': {
+          fontSize: '3em',
+          letterSpacing: '0.3em'
+        }
       }
 
     }
@@ -111,26 +132,40 @@ const styles = {
 
 const foo = {
 
-  'dl': {
+  'ul': {
     textAlign: 'center',
+    margin: 0,
+    padding: 0,
+    fontSize: '0.75em',
+    listStyleType: 'none'
+  },
+
+  'ul li': {
     margin: 0
   },
 
-  'dl dt, dl dd': {
-    display: 'inline',
-    color: 'lightgray'
-  },
+  mediaQueries: {
+    '(min-width: 992px)': {
+      'ul': {
+        fontSize: '1em'
+      },
 
-  'dl dt': {
-    marginLeft: '1em'
-  },
+      'ul li': {
+        display: 'inline',
+        margin: '0 0.5em'
+      }
+    },
 
-  'dl dt:first-child': {
-    marginLeft: 0
-  },
+    '(min-width: 1200px)': {
+      'ul': {
+        fontSize: '1.5em'
+      },
 
-  'dl dd': {
-    marginLeft: '0.25em'
+      'ul li': {
+        display: 'inline',
+        margin: '0 0.75em'
+      }
+    }
   },
 
   'a': {
@@ -150,12 +185,11 @@ class Landing extends React.Component {
           <Style rules={foo}/>
 
           <div style={styles.landing.content.logo}></div>
-          <dl style={{}}>
-            <dt>e-mail</dt>
-            <dd><a href="mailto:michael@ahlers.consulting">michael@ahlers.consulting</a></dd>
-            <dt>telephone</dt>
-            <dd><a href="tel:1 (571) 830-0258">1 (571) 830-0258</a></dd>
-          </dl>
+          <h1 style={styles.landing.content.title}>Ahlers Consulting</h1>
+          <ul>
+            <li><a href="mailto:michael@ahlers.consulting">michael@ahlers.consulting</a></li>
+            <li><a href="tel:1 (571) 830-0258">1 (571) 830-0258</a></li>
+          </ul>
         </div>
       </div>
     );
