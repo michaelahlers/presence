@@ -108,11 +108,45 @@ module.exports = {
           plugins: ['transform-runtime', 'transform-decorators-legacy']
         }
       },
+
       {
         loader: 'url-loader',
         test: /\.(png|jpeg)$/,
         query: {
           limit: 8192
+        }
+      },
+
+      {
+        test: /\.css$/,
+        loader: 'style!css'
+      }, {
+        test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'url',
+        query: {
+          limit: 8192,
+          mimetype: 'application/font-woff'
+        }
+      }, {
+        test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'url',
+        query: {
+          limit: 8192,
+          mimetype: 'application/octet-stream'
+        }
+      }, {
+        test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'url',
+        query: {
+          limit: 8192,
+          mimetype: 'application/vnd.ms-fontobject'
+        }
+      }, {
+        test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'url',
+        query: {
+          limit: 8192,
+          mimetype: 'image/svg+xml'
         }
       }
     ]
