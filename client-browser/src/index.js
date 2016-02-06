@@ -10,6 +10,10 @@ import 'font-awesome/css/font-awesome.css';
 class Header extends React.Component {
 
   static styles = {
+    '': {
+      padding: '2em 0 0 0'
+    },
+
     'h1': {
       textAlign: 'center',
       fontWeight: 'lighter',
@@ -26,8 +30,7 @@ class Header extends React.Component {
       const unit = 'em';
 
       return {
-        marginLeft: 'auto',
-        marginRight: 'auto',
+        margin: '0 auto',
 
         width: `${width}${unit}`,
         height: `${height}${unit}`,
@@ -60,7 +63,26 @@ class Header extends React.Component {
 class Section extends React.Component {
 
   static styles = {
-    '': {}
+    '': {
+      padding: '2em 2em'
+    },
+
+    mediaQueries: {
+      '(min-width: 992px)': {
+        '': {
+          padding: '2em 10em'
+        }
+      },
+      '(min-width: 1200px)': {
+        '': {
+          padding: '2em 20em'
+        }
+      }
+    },
+
+    'p': {
+      fontSize: '1.5em'
+    }
   };
 
   render() {
@@ -68,7 +90,9 @@ class Section extends React.Component {
       <section>
         <Style scopeSelector="section" rules={Section.styles}/>
 
-        <p>I am an awesome software developer.</p>
+        <p>Michael Ahlers is software developer—with over {new Date().getFullYear() - 2001} years of professional experience—who views the practice through an
+          engineering lens, and offers tenacious attention to detail. When not working, Michael enjoys competitive bike racing, and recreational flying as a
+          certified sport pilot.</p>
 
       </section>
     );
@@ -80,6 +104,7 @@ class Footer extends React.Component {
 
   static styles = {
     '': {
+      padding: '0 2em',
       background: '#222',
       color: 'gray'
     },
@@ -93,17 +118,21 @@ class Footer extends React.Component {
     },
 
     'dl': {
-      margin: 0
+      position: 'relative',
+      left: '50%',
+      transform: 'translateX(-50%)',
+      fontSize: '1.5em',
+      display: 'inline-block'
     },
 
     'dl dt': {
-      clear: 'both',
+      clear: 'left',
       float: 'left',
-      margin: '0 0.5em 0 0'
+      margin: 0
     },
 
     'dl dd': {
-      margin: '0'
+      margin: '0 0 0 1.25em'
     },
 
     'dl dt, dl dd': {
@@ -147,7 +176,8 @@ class Application extends React.Component {
     'body': {
       margin: 0,
       padding: 0,
-      fontFamily: 'Helvetica, sans-serif'
+      fontFamily: 'Helvetica, sans-serif',
+      fontSize: '100%'
     },
 
     'html, body, body > div, body > div > div': {
