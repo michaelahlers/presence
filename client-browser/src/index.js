@@ -250,5 +250,5 @@ if (!global.Intl) {
     render();
   });
 } else {
-  console.log('FTW!?');
+  render();
 }
