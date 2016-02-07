@@ -105,7 +105,14 @@ module.exports = {
         test: /\.js$/,
         noParse: [reactPath],
         query: {
-          plugins: ['transform-runtime', 'transform-decorators-legacy']
+          plugins: [
+            'transform-runtime',
+            'transform-decorators-legacy',
+            ['react-intl', {
+              messagesDir: path.join(__dirname, 'build', 'messages'),
+              enforceDescriptions: false
+            }]
+          ]
         }
       },
 

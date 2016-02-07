@@ -1,6 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import {IntlProvider, FormattedMessage, addLocaleData} from 'react-intl';
+
+addLocaleData(require('react-intl/lib/locale-data/en'));
+
 import Radium, { Style, StyleRoot } from 'radium';
 import color from 'color';
 
@@ -17,10 +21,11 @@ class Header extends React.Component {
     'h1': {
       textAlign: 'center',
       fontWeight: 'lighter',
-      fontSize: '2em',
+      fontSize: '1.5em',
       textTransform: 'lowercase',
       letterSpacing: '0.25em',
-      color: 'gray'
+      color: 'gray',
+      marginBottom: 0
     },
 
     /* TODO: Genericize this function. */
@@ -52,7 +57,7 @@ class Header extends React.Component {
         <Style scopeSelector="header" rules={Header.styles}/>
 
         <div style={Header.styles.logo()}></div>
-        <h1>Ahlers Consulting</h1>
+        <h1>Michael Ahlers Consulting</h1>
       </header>
     );
   }
@@ -64,7 +69,7 @@ class Section extends React.Component {
 
   static styles = {
     '': {
-      padding: '2em 2em'
+      padding: '0 2em'
     },
 
     mediaQueries: {
@@ -90,9 +95,15 @@ class Section extends React.Component {
       <section>
         <Style scopeSelector="section" rules={Section.styles}/>
 
-        <p>Michael Ahlers is software developer—with over {new Date().getFullYear() - 2001} years of professional experience—who views the practice through an
-          engineering lens, and offers tenacious attention to detail. When not working, Michael enjoys competitive bike racing, and recreational flying as a
-          certified sport pilot.</p>
+        <p>
+          <FormattedMessage
+            id="section.introduction"
+            defaultMessage="Michael Ahlers is software developer&mdash;with over {years} years of professional experience&mdash;who views the practice through an engineering lens, with tenacious attention to detail. When not working, Michael enjoys competitive bike racing and recreational flying as a certified sport pilot."
+            values={{
+              years: new Date().getFullYear() - 2001
+            }}
+          />
+        </p>
 
       </section>
     );
@@ -153,7 +164,7 @@ class Footer extends React.Component {
 
         <dl>
           <dt><i className="fa fa-envelope-square"/></dt>
-          <dd><a href="mailto:michael@ahlers.consulting?subject=Found at ahlers.consulting.">michael@ahlers.consulting</a></dd>
+          <dd><a href="mailto:michael@ahlers.consulting">michael@ahlers.consulting</a></dd>
           <dt><i className="fa fa-linkedin-square"/></dt>
           <dd><a href="https://linkedin.com/in/michael-ahlers-52719358" target="_blank">michael-ahlers-52719358</a></dd>
           <dt><i className="fa fa-phone-square"/></dt>
@@ -223,9 +234,21 @@ class Application extends React.Component {
 
 }
 
-ReactDOM.render(
-  <Application />,
-  document.body.appendChild(document.createElement('div'))
-);
+function render() {
+  ReactDOM.render(
+    <IntlProvider locale="en">
+      <Application/>
+    </IntlProvider>,
+    document.body.appendChild(document.createElement('div'))
+  );
+}
 
-
+if (!global.Intl) {
+  require.ensure(['intl', 'intl/locale-data/jsonp/en.js'], (require) => {
+    require('intl');
+    require('intl/locale-data/jsonp/en.js');
+    render();
+  });
+} else {
+  console.log('FTW!?');
+}
