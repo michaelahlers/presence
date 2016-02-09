@@ -98,7 +98,7 @@ class Section extends React.Component {
         <p>
           <FormattedMessage
             id="section.introduction"
-            defaultMessage="Michael Ahlers is software developer&mdash;with over {years} years of professional experience&mdash;who views the practice through an engineering lens, with tenacious attention to detail. When not working, Michael enjoys competitive bike racing and recreational flying as a certified sport pilot."
+            defaultMessage="Michael Ahlers is a software developer&mdash;with over {years} years of professional experience&mdash;who views the practice through an engineering lens, applying tenacious attention to detail. When not working, Michael enjoys competitive bike racing and recreational flying as a certified sport pilot."
             values={{
               years: new Date().getFullYear() - 2001
             }}
