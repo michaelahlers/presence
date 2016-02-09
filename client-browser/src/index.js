@@ -166,7 +166,7 @@ class Footer extends React.Component {
           <dt><i className="fa fa-envelope-square"/></dt>
           <dd><a href="mailto:michael@ahlers.consulting">michael@ahlers.consulting</a></dd>
           <dt><i className="fa fa-linkedin-square"/></dt>
-          <dd><a href="https://linkedin.com/in/michael-ahlers-52719358" target="_blank">michael-ahlers-52719358</a></dd>
+          <dd><a href="https://linkedin.com/in/michaelahlers" target="_blank">michaelahlers</a></dd>
           <dt><i className="fa fa-phone-square"/></dt>
           <dd><a href="tel:+1-571-830-0258">+1 (571) 830-0258</a></dd>
         </dl>
