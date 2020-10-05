@@ -1,10 +1,12 @@
+import java.net.URL
+
 name := "presence"
 description := "Personal web presence for Michael Ahlers."
 
 ThisBuild / organization := "consulting.ahlers"
 ThisBuild / organizationName := "Ahlers Consulting"
 
-ThisBuild / homepage := "http://ahlers.consulting"
+ThisBuild / homepage := Some(new URL("http://ahlers.consulting"))
 ThisBuild / startYear := Some(2020)
 
 ThisBuild / developers :=
