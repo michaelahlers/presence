@@ -1,5 +1,4 @@
-scalaVersion := "2.13.3"
-crossScalaVersions += "2.12.12"
+ThisBuild / scalaVersion := "2.13.3"
 
 ThisBuild / libraryDependencies ++=
   Nil
