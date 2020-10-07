@@ -1,1 +1,1 @@
-name := "presence-service-web"
+name := "presence-web-server"

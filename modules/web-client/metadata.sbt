@@ -1,1 +1,1 @@
-name := "presence-client-browser"
+name := "presence-web-client"
