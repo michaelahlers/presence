@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Ahlers Consulting</title>
+  </head>
+  <body>
+  @scalajs.html.scripts(
+    "presence-web-client",
+    routes.Assets.versioned(_).toString,
+    Option(_)
+            .map("/public/%s".format(_))
+            .map(getClass.getResource(_))
+            .flatMap(Option(_))
+            .nonEmpty)
+  </body>
+</html>
