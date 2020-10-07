@@ -11,11 +11,6 @@ ThisBuild / libraryDependencies ++=
     "org.scalatest" %% "scalatest" % "3.1.2" % Test ::
     Nil
 
-ThisBuild / libraryDependencies ++=
-  "ch.qos.logback" % "logback-classic" % "1.2.3" ::
-    "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2" ::
-    Nil
-
 ThisBuild / libraryDependencies ++= {
   CrossVersion.partialVersion(scalaVersion.value) match {
     case Some((2, 12)) =>

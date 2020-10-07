@@ -3,6 +3,7 @@ package ahlers.presence.web.server
 import play.api.ApplicationLoader.Context
 import play.api.Mode.Dev
 import play.api.{ ApplicationLoader, LoggerConfigurator }
+import slogging.{ LoggerConfig, SLF4JLoggerFactory }
 
 /**
  * @author <a href="mailto:michael@ahlers.consulting">Michael Ahlers</a>
@@ -10,6 +11,8 @@ import play.api.{ ApplicationLoader, LoggerConfigurator }
  */
 class WebServerLoader extends ApplicationLoader {
   override def load(context: Context) = {
+
+    LoggerConfig.factory = SLF4JLoggerFactory()
 
     /** @see [[https://playframework.com/documentation/latest/ScalaCompileTimeDependencyInjection#Configuring-Logging Compile-Time Dependency Injection: Configure Logging]] */
     LoggerConfigurator(context.environment.classLoader)

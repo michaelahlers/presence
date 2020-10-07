@@ -1,4 +1,5 @@
-GET        /                             ahlers.presence.web.server.WebUiController.index
+POST        /logging                      ahlers.presence.web.server.WebUiController.logging
+GET         /                             ahlers.presence.web.server.WebUiController.index
 
-GET        /assets/*file                 controllers.Assets.at(file)
-GET        /versionedAssets/*file        controllers.Assets.versioned(path="/public", file: Asset)
+GET         /assets/*file                 controllers.Assets.at(file)
+GET         /versionedAssets/*file        controllers.Assets.versioned(path="/public", file: Asset)
