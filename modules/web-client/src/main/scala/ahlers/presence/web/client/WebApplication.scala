@@ -10,19 +10,11 @@ import scala.scalajs.js
  * @since October 05, 2020
  */
 object WebApplication extends LazyLogging {
-  LoggerConfig.factory =
-    HttpLoggerFactory(
-      "/logging",
-      "client1",
-      (id, level, name, message, cause) =>
-        js.Dynamic.literal(
-          id = id,
-          //level = level,
-          name = name,
-          message = message
-        )
-    )
+  LoggerConfig.factory = HttpLoggerFactory("/logging")
 
-  def main(arguments: Array[String]): Unit =
+  def main(arguments: Array[String]): Unit = {
     logger.info(Message.text)
+    logger.warn(Message.text, new Exception("An error."))
+  }
+
 }
