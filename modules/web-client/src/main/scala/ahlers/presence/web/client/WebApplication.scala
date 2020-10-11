@@ -1,9 +1,7 @@
 package ahlers.presence.web.client
 
 import ahlers.presence.web.Message
-import slogging.{ ConsoleLoggerFactory, HttpLoggerFactory, LazyLogging, LoggerConfig, StrictLogging }
-
-import scala.scalajs.js
+import slogging.{ HttpLoggerFactory, LazyLogging, LoggerConfig }
 
 /**
  * @author <a href="michael@ahlers.consulting">Michael Ahlers</a>
@@ -12,9 +10,7 @@ import scala.scalajs.js
 object WebApplication extends LazyLogging {
   LoggerConfig.factory = HttpLoggerFactory("/logging")
 
-  def main(arguments: Array[String]): Unit = {
+  def main(arguments: Array[String]): Unit =
     logger.info(Message.text)
-    logger.warn(Message.text, new Exception("An error."))
-  }
 
 }

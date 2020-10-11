@@ -21,14 +21,17 @@ class WebUiController(
     Action(parse.json[LoggingRequest]) { request =>
       import MessageLevel._
       import request.body
+
       val logger = LoggerFactory.getLogger(body.name)
+
       body.level match {
-        case `trace` => body.cause.fold(logger.trace(body.message))(logger.trace(body.message, _))
-        case `debug` => body.cause.fold(logger.debug(body.message))(logger.debug(body.message, _))
-        case `info` => body.cause.fold(logger.info(body.message))(logger.info(body.message, _))
-        case `warn` => body.cause.fold(logger.warn(body.message))(logger.warn(body.message, _))
-        case `error` => body.cause.fold(logger.error(body.message))(logger.error(body.message, _))
+        case `trace` => logger.trace(body.message)
+        case `debug` => logger.debug(body.message)
+        case `info` => logger.info(body.message)
+        case `warn` => logger.warn(body.message)
+        case `error` => logger.error(body.message)
       }
+
       Ok
     }
 
@@ -44,8 +47,7 @@ object WebUiController {
   case class LoggingRequest(
     level: MessageLevel,
     name: String,
-    message: String,
-    cause: Option[String])
+    message: String)
 
   object LoggingRequest {
 
@@ -64,8 +66,7 @@ object WebUiController {
       (__ \ "level").read[MessageLevel]
         .and((__ \ "name").read[String])
         .and((__ \ "msg").read[String])
-        .and((__ \ "cause").readNullable[String])
-        .apply(LoggingRequest(_, _, _, _))
+        .apply(LoggingRequest(_, _, _))
 
   }
 
