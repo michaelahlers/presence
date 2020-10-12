@@ -11,6 +11,6 @@ object WebApplication extends LazyLogging {
   LoggerConfig.factory = HttpLoggerFactory("/logging")
 
   def main(arguments: Array[String]): Unit =
-    logger.info(Message.text)
+    logger.info("Hello, World!")
 
 }

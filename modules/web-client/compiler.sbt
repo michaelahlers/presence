@@ -1,0 +1,3 @@
+scalacOptions ++=
+  "-Ymacro-annotations" ::
+    Nil

@@ -1,4 +1,8 @@
 libraryDependencies ++=
+  "org.lrng.binding" %%% "html" % "latest.release" ::
+    Nil
+
+libraryDependencies ++=
   "org.scala-js" %%% "scalajs-dom" % "1.1.0" ::
     Nil
 
