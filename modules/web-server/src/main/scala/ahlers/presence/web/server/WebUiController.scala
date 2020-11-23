@@ -40,7 +40,6 @@ class WebUiController(
 
   def index =
     Action { implicit request =>
-      logger.info(s"$request")
       Ok(wire[ahlers.presence.web.server.html.default].render())
     }
 }
