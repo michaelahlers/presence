@@ -8,6 +8,7 @@ import org.webjars.play.{ RequireJS, WebJarComponents }
 import play.api.ApplicationLoader.Context
 import play.api.BuiltInComponentsFromContext
 import play.filters.HttpFiltersComponents
+import play.filters.logging.AccessLogFilter
 import router.Routes
 
 /**
@@ -24,8 +25,12 @@ class WebServerModule(
 
   implicit val clock = Clock.systemUTC()
 
-  override val httpFilters =
-    super.httpFilters
+  override val httpFilters = {
+    val accessLogFilter = wire[AccessLogFilter]
+
+    super.httpFilters :+
+      accessLogFilter
+  }
 
   val uiController = wire[WebUiController]
 
