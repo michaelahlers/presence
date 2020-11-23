@@ -1,6 +1,8 @@
 package ahlers.presence.web.server
 
+import com.softwaremill.macwire._
 import ahlers.presence.web.server.WebUiController.LoggingRequest
+import org.webjars.play.{ WebJarAssets, WebJarsUtil }
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 import play.api.mvc.{ AbstractController, ControllerComponents }
@@ -13,7 +15,8 @@ import scala.util.control.NoStackTrace
  * @since October 06, 2020
  */
 class WebUiController(
-  controllerComponents: ControllerComponents)
+  controllerComponents: ControllerComponents,
+  webJars: WebJarsUtil)
   extends AbstractController(controllerComponents)
     with StrictLogging {
 
@@ -38,7 +41,7 @@ class WebUiController(
   def index =
     Action { implicit request =>
       logger.info(s"$request")
-      Ok(ahlers.presence.web.server.html.index())
+      Ok(wire[ahlers.presence.web.server.html.default].render())
     }
 }
 

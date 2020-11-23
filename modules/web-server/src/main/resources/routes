@@ -1,7 +1,9 @@
 +nocsrf
-POST        /logging                      ahlers.presence.web.server.WebUiController.logging
+POST        /logging            ahlers.presence.web.server.WebUiController.logging
 
-GET         /                             ahlers.presence.web.server.WebUiController.index
+GET        /                    ahlers.presence.web.server.WebUiController.index
 
-GET         /assets/*file                 controllers.Assets.at(file)
-GET         /versionedAssets/*file        controllers.Assets.versioned(path="/public", file: Asset)
+#GET        /assets/*file                 controllers.Assets.at(file)
+GET        /assets/*file        controllers.Assets.versioned(path="/public", file: Asset)
+
+->        /webjars              webjars.Routes

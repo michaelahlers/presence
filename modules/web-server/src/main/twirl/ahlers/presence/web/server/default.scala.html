@@ -1,7 +1,12 @@
+@import org.webjars.play.WebJarsUtil
+
+@this(webJars: WebJarsUtil)
+
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Ahlers Consulting</title>
+    <title>Michael Ahlers</title>
+    @webJars.locate("semantic.min.css").css()
   </head>
   <body>
   @scalajs.html.scripts(
