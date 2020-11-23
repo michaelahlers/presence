@@ -1,6 +1,6 @@
 libraryDependencies ++=
   "com.thoughtworks.binding" %%% "futurebinding" % "12.0.0" ::
-    "org.lrng.binding" %%% "html" % "latest.release" ::
+    "org.lrng.binding" %%% "html" % "1.0.3" ::
     Nil
 
 libraryDependencies ++=
