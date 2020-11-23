@@ -7,6 +7,12 @@ libraryDependencies ++=
     Nil
 
 libraryDependencies ++=
+  "org.webjars" % "Semantic-UI" % "2.4.0" ::
+    "org.webjars" % "jquery" % "2.1.3" ::
+    "org.webjars" %% "webjars-play" % "2.8.0" ::
+    Nil
+
+libraryDependencies ++=
   "biz.enef" %% "slogging" % "0.6.2" ::
     "biz.enef" %% "slogging-slf4j" % "0.6.2" ::
     "ch.qos.logback" % "logback-classic" % "1.2.3" ::
