@@ -1,6 +1,6 @@
 package play.filters.logging
 
-import akka.http.scaladsl.model.StatusCode
+import akka.http.scaladsl.model.{ ContentType, HttpMethods, StatusCodes, Uri }
 import akka.stream.Materializer
 import play.api.mvc.{ Filter, RequestHeader, Result }
 import slogging.StrictLogging
@@ -19,18 +19,59 @@ class AccessLogFilter(
   extends Filter
     with StrictLogging {
 
+  import AccessLogFilter._
+
   override def apply(nextFilter: RequestHeader => Future[Result])(request: RequestHeader) =
     nextFilter(request)
       .andThen {
-
-        case Success(result) if StatusCode.int2StatusCode(result.header.status).isFailure() =>
-          logger.warn(s"""${request.method} ${request.uri} ${result.header.status}${result.body.contentType.map(" " + _).getOrElse("")}.""")
-
-        case Success(result) =>
-          logger.info(s"""${request.method} ${request.uri} ${result.header.status}${result.body.contentType.map(" " + _).getOrElse("")}.""")
-
-        case Failure(reason) =>
-          logger.error(s"""${request.method} ${request.uri}.""", reason)
-
+        case Success(result) => logSuccess(request, result)
+        case Failure(reason) => logFailure(request, reason)
       }
+
+}
+
+object AccessLogFilter extends StrictLogging {
+
+  val isInfo = logger.underlying.isInfoEnabled
+  val isWarn = logger.underlying.isWarnEnabled
+  val isError = logger.underlying.isErrorEnabled
+
+  def logSuccess(request: RequestHeader, result: Result): Unit =
+    if (isInfo || isWarn) {
+      val method =
+        HttpMethods
+          .getForKey(request.method)
+
+      val statusCode =
+        StatusCodes
+          .getForKey(result.header.status)
+
+      val uri =
+        Uri(request.host + request.uri)
+
+      val contentType =
+        result.body.contentType
+          .flatMap(ContentType.parse(_)
+            .toOption)
+
+      val message = s"""${method.map(_.value).getOrElse("")}${statusCode.map(statusCode => s" ${statusCode.intValue} (${statusCode.reason})").getOrElse("")} ${uri}${contentType.map(" " + _).getOrElse("")}."""
+
+      if (statusCode.exists(_.isFailure())) logger.warn(message)
+      else logger.info(message)
+    }
+
+  def logFailure(request: RequestHeader, reason: Throwable): Unit = {
+    val method =
+      HttpMethods
+        .getForKey(request.method)
+
+    val uri =
+      Uri(request.host + request.uri)
+
+    if (isError) {
+      val message = s"""${method.map(_.value).getOrElse("")} ${uri}."""
+      logger.error(message, reason)
+    }
+  }
+
 }
