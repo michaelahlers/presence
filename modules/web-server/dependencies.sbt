@@ -1,5 +1,5 @@
 libraryDependencies ++=
-  "com.softwaremill.macwire" %% "macros" % "2.3.6" % Provided ::
+  "com.softwaremill.macwire" %% "macros" % "2.3.7" % Provided ::
     Nil
 
 libraryDependencies ++=
