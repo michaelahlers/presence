@@ -4,7 +4,7 @@ libraryDependencies ++=
     Nil
 
 libraryDependencies ++=
-  "be.doeraene" %%% "scalajs-jquery" % "1.0.0" ::
+  "org.querki" %%% "jquery-facade" % "2.0" ::
     "org.scala-js" %%% "scalajs-dom" % "1.1.0" ::
     Nil
 
