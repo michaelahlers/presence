@@ -4,7 +4,7 @@ ThisBuild / libraryDependencies ++=
   Nil
 
 ThisBuild / libraryDependencies ++=
-  "com.softwaremill.diffx" %% "diffx-scalatest" % "0.3.28" % Test ::
+  "com.softwaremill.diffx" %% "diffx-scalatest" % "0.3.30" % Test ::
     "com.github.alexarchambault" %% "scalacheck-shapeless_1.14" % "1.2.5" % Test ::
     "org.scalacheck" %% "scalacheck" % "1.14.2" % Test ::
     "org.scalamock" %% "scalamock" % "4.4.0" % Test ::
