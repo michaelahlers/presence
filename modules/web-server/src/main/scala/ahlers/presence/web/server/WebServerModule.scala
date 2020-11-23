@@ -8,6 +8,7 @@ import org.webjars.play.{ RequireJS, WebJarComponents }
 import play.api.ApplicationLoader.Context
 import play.api.BuiltInComponentsFromContext
 import play.filters.HttpFiltersComponents
+import play.filters.csrf.CSRFFilter
 import play.filters.logging.AccessLogFilter
 import router.Routes
 
@@ -28,7 +29,8 @@ class WebServerModule(
   override val httpFilters = {
     val accessLogFilter = wire[AccessLogFilter]
 
-    super.httpFilters :+
+    super.httpFilters
+      .filterNot(_.getClass == classOf[CSRFFilter]) :+
       accessLogFilter
   }
 

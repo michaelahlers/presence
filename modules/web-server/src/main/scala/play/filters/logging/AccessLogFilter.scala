@@ -24,10 +24,10 @@ class AccessLogFilter(
       .andThen {
 
         case Success(result) if StatusCode.int2StatusCode(result.header.status).isFailure() =>
-          logger.warn(s"""${request.method} ${request.uri} ${result.header.status} ${result.body.contentType.getOrElse("(no response content type)")}.""")
+          logger.warn(s"""${request.method} ${request.uri} ${result.header.status}${result.body.contentType.map(" " + _).getOrElse("")}.""")
 
         case Success(result) =>
-          logger.info(s"""${request.method} ${request.uri} ${result.header.status} ${result.body.contentType.getOrElse("(no response content type)")}.""")
+          logger.info(s"""${request.method} ${request.uri} ${result.header.status}${result.body.contentType.map(" " + _).getOrElse("")}.""")
 
         case Failure(reason) =>
           logger.error(s"""${request.method} ${request.uri}.""", reason)

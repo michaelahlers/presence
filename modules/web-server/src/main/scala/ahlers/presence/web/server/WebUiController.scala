@@ -38,7 +38,7 @@ class WebUiController(
       Ok
     }
 
-  def index =
+  def default =
     Action { implicit request =>
       Ok(wire[ahlers.presence.web.server.html.default].render())
     }
