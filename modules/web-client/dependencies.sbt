@@ -13,6 +13,6 @@ libraryDependencies ++=
     Nil
 
 jsDependencies ++=
-  ("org.webjars" % "jquery" % "2.1.3" / "jquery.js").minified("jquery.min.js") ::
-    ("org.webjars" % "Semantic-UI" % "2.4.0" / "semantic.js").minified("semantic.min.js").dependsOn("jquery.js") ::
+  ("org.webjars" % "jquery" % "3.5.1" / "jquery.js").minified("jquery.min.js") ::
+    ("org.webjars" % "Semantic-UI" % "2.4.1" / "semantic.js").minified("semantic.min.js").dependsOn("jquery.js") ::
     Nil

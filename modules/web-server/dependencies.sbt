@@ -8,8 +8,8 @@ libraryDependencies ++=
     Nil
 
 libraryDependencies ++=
-  "org.webjars" % "Semantic-UI" % "2.4.0" ::
-    "org.webjars" % "jquery" % "2.1.3" ::
+  "org.webjars" % "Semantic-UI" % "2.4.1" ::
+    "org.webjars" % "jquery" % "3.5.1" ::
     "org.webjars" %% "webjars-play" % "2.8.0" ::
     Nil
 
