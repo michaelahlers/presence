@@ -4,7 +4,8 @@ libraryDependencies ++=
     Nil
 
 libraryDependencies ++=
-  "org.scala-js" %%% "scalajs-dom" % "1.1.0" ::
+  "be.doeraene" %%% "scalajs-jquery" % "1.0.0" ::
+    "org.scala-js" %%% "scalajs-dom" % "1.1.0" ::
     Nil
 
 libraryDependencies ++=
