@@ -60,18 +60,17 @@ object AccessLogFilter extends StrictLogging {
       else logger.info(message)
     }
 
-  def logFailure(request: RequestHeader, reason: Throwable): Unit = {
-    val method =
-      HttpMethods
-        .getForKey(request.method)
-
-    val uri =
-      Uri(request.host + request.uri)
-
+  def logFailure(request: RequestHeader, reason: Throwable): Unit =
     if (isError) {
+      val method =
+        HttpMethods
+          .getForKey(request.method)
+
+      val uri =
+        Uri(request.host + request.uri)
+
       val message = s"""${method.map(_.value).getOrElse("")} ${uri}."""
       logger.error(message, reason)
     }
-  }
 
 }
