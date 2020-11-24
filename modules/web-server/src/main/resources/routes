@@ -4,5 +4,6 @@ GET         /assets/*file        controllers.Assets.versioned(path = "/public", 
 
 ->          /libraries           webjars.Routes
 
+# https://stackoverflow.com/a/21802675
 GET         /                    ahlers.presence.web.server.WebClientController.getDefault(path: Path = Path.Empty)
 GET         /*path               ahlers.presence.web.server.WebClientController.getDefault(path: Path)
