@@ -4,11 +4,15 @@ import com.thoughtworks.binding.Binding
 import Binding._
 import org.lrng.binding.html
 import html.NodeBinding
+import org.querki.jquery.$
 import org.scalajs.dom.html.{ Input, Table }
 import org.scalajs.dom.raw._
+import semantic.jquery.SemanticVisibilitySettings
 import slogging.{ HttpLoggerFactory, LazyLogging, LoggerConfig }
+import semantic.jquery.syntax._
 
 import scala.concurrent.Future
+import scala.scalajs.js
 
 /**
  * @author <a href="michael@ahlers.consulting">Michael Ahlers</a>
@@ -71,8 +75,23 @@ object WebApplication extends LazyLogging {
       </tbody>
     </table>
 
-  def main(arguments: Array[String]): Unit =
+  def main(arguments: Array[String]): Unit = {
     logger.info("Hello, World!")
+
+    $(".masthead")
+      .visibility(SemanticVisibilitySettings
+        .once(false)
+        .onBottomPassed(() =>
+          $(".fixed.menu")
+            .transition("fade in"))
+        .onBottomPassedReverse(() =>
+          $(".fixed.menu")
+            .transition("fade out")))
+
+    $(".ui.sidebar")
+      .sidebar("attach events", ".toc.item")
+
+  }
 
   //import org.scalajs.dom.document
   //html.render(document.body, table)
