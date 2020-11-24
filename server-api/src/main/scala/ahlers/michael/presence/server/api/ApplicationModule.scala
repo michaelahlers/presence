@@ -6,12 +6,9 @@ import com.google.inject.AbstractModule
 import com.typesafe.scalalogging.LazyLogging
 
 @Singleton
-class ApplicationModule
-  extends AbstractModule
-          with LazyLogging {
+class ApplicationModule extends AbstractModule with LazyLogging {
 
-  override def configure() = {
-    logger.info( s"""Started Presence version ${BuildInfo.version} (revision ${BuildInfo.revision}).""")
-  }
+  override def configure() =
+    logger.info(s"""Started Presence version ${BuildInfo.version} (revision ${BuildInfo.revision}).""")
 
 }
