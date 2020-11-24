@@ -32,12 +32,14 @@ class AccessLogFilter(
 
 object AccessLogFilter extends StrictLogging {
 
+  val isTrace = logger.underlying.isTraceEnabled
+  val isDebug = logger.underlying.isDebugEnabled
   val isInfo = logger.underlying.isInfoEnabled
   val isWarn = logger.underlying.isWarnEnabled
   val isError = logger.underlying.isErrorEnabled
 
   def logSuccess(request: RequestHeader, result: Result): Unit =
-    if (isInfo || isWarn) {
+    if (isTrace || isWarn) {
       val method =
         HttpMethods
           .getForKey(request.method)
@@ -57,7 +59,7 @@ object AccessLogFilter extends StrictLogging {
       val message = s"""${method.map(_.value).getOrElse("")}${statusCode.map(statusCode => s" ${statusCode.intValue} (${statusCode.reason})").getOrElse("")} ${uri}${contentType.map(" " + _).getOrElse("")}."""
 
       if (statusCode.exists(_.isFailure())) logger.warn(message)
-      else logger.info(message)
+      else logger.trace(message)
     }
 
   def logFailure(request: RequestHeader, reason: Throwable): Unit =
