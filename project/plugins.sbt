@@ -1,5 +1,5 @@
 addSbtPlugin("com.thoughtworks.sbt-scala-js-map" % "sbt-scala-js-map" % "4.0.0")
-addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.8.2")
+addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.8.5")
 addSbtPlugin("com.typesafe.sbt" % "sbt-gzip" % "1.0.2")
 addSbtPlugin("com.typesafe.sbt" % "sbt-digest" % "1.1.4")
 addSbtPlugin("com.typesafe.sbt" % "sbt-less" % "1.1.2")
