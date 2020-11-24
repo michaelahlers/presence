@@ -4,7 +4,9 @@ libraryDependencies ++=
     Nil
 
 libraryDependencies ++=
-  "org.querki" %%% "jquery-facade" % "2.0" ::
+  "com.github.julien-truffaut" %%% "monocle-core" % "2.0.3" ::
+    "com.github.julien-truffaut" %%% "monocle-macro" % "2.0.3" ::
+    "org.querki" %%% "jquery-facade" % "2.0" ::
     "org.scala-js" %%% "scalajs-dom" % "1.1.0" ::
     Nil
 
