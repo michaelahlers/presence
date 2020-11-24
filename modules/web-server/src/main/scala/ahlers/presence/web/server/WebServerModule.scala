@@ -34,7 +34,7 @@ class WebServerModule(
       accessLogFilter
   }
 
-  val uiController = wire[WebUiController]
+  val uiController = wire[WebClientController]
 
   val router: Routes = {
     val webJarRoutes = {
