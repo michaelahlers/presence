@@ -14,7 +14,7 @@ import semantic.jquery.syntax._
 
 import scala.concurrent.Future
 import scala.scalajs.js
-import scala.scalajs.js.Object.getOwnPropertyNames
+import scala.scalajs.js.Object.{ getOwnPropertyNames, isExtensible }
 
 /**
  * @author <a href="michael@ahlers.consulting">Michael Ahlers</a>
@@ -102,25 +102,67 @@ object WebClientApplication extends LazyLogging {
     $(".ui.sidebar")
       .sidebar("attach events", ".toc.item")
 
-    def checkState() = {
+    class Router(state: Var[String]) extends SingleMountPoint[String](state) {
       import trail._
+
       val HomeRoute: Route[Unit] = Root / "home"
       val WorkRoute: Route[Unit] = Root / "work"
       val CompanyRoute: Route[Unit] = Root / "company"
       val CareersRoute: Route[Unit] = Root / "careers"
 
-      window.location.href match {
-        case route @ HomeRoute(_) => logger.info(s"Home: $route")
-        case route @ WorkRoute(_) => logger.info(s"Work: $route")
-        case route @ CompanyRoute(_) => logger.info(s"Company: $route")
-        case route @ CareersRoute(_) => logger.info(s"Careers: $route")
+      override protected def set(value: String) =
+        window.history.replaceState(
+          null,
+          null,
+          value match {
+            case "home" => HomeRoute.url(())
+            case "work" => WorkRoute.url(())
+            case "company" => CompanyRoute.url(())
+            case "careers" => CareersRoute.url(())
+          }
+        )
+
+      def updateState() = {
+        import trail._
+        val HomeRoute: Route[Unit] = Root / "home"
+        val WorkRoute: Route[Unit] = Root / "work"
+        val CompanyRoute: Route[Unit] = Root / "company"
+        val CareersRoute: Route[Unit] = Root / "careers"
+
+        window.location.href match {
+          case route @ HomeRoute(_) =>
+            logger.info(s"Home: $route")
+            state.value = "home"
+          case route @ WorkRoute(_) =>
+            logger.info(s"Work: $route")
+            state.value = "work"
+          case route @ CompanyRoute(_) =>
+            logger.info(s"Company: $route")
+            state.value = "company"
+          case route @ CareersRoute(_) =>
+            logger.info(s"Careers: $route")
+            state.value = "careers"
+        }
+      }
+
+      val listener = { _: Event =>
+        updateState()
+      }
+
+      override protected def mount() = {
+        updateState()
+        super.mount()
+        window.addEventListener("popstate", listener)
+      }
+
+      override protected def unmount() = {
+        window.removeEventListener("popstate", listener)
+        super.unmount()
       }
     }
 
-    checkState()
-    window.onpopstate = { _ =>
-      checkState()
-    }
+    object route extends Router(Var("home"))
+    route.watch()
 
     $("a").on(
       "click",
@@ -131,7 +173,7 @@ object WebClientApplication extends LazyLogging {
           case anchor: HTMLAnchorElement =>
             logger.info(s"anchor.href: ${anchor.href}, anchor.pathname: ${anchor.pathname}")
             window.history.pushState(null, null, anchor.href)
-            checkState()
+            route.updateState()
         }
 
       }
