@@ -7,7 +7,7 @@ import html.NodeBinding
 import org.querki.jquery.$
 import org.scalajs.dom.html.{ Input, Table }
 import org.scalajs.dom.raw._
-import semantic.jquery.SemanticVisibilitySettings
+import semantic.jquery.SemanticUiVisibilitySettings
 import slogging.{ HttpLoggerFactory, LazyLogging, LoggerConfig }
 import semantic.jquery.syntax._
 
@@ -79,7 +79,7 @@ object WebApplication extends LazyLogging {
     logger.info("Hello, World!")
 
     $(".masthead")
-      .visibility(SemanticVisibilitySettings
+      .visibility(SemanticUiVisibilitySettings
         .once(false)
         .onBottomPassed(() =>
           $(".fixed.menu")
