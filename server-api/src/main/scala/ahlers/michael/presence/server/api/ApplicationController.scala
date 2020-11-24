@@ -1,7 +1,7 @@
 package ahlers.michael.presence.server.api
 
 import play.api.libs.json.Json._
-import play.api.mvc.{Controller, Action}
+import play.api.mvc.{ Action, Controller }
 
 class ApplicationController extends Controller {
 
