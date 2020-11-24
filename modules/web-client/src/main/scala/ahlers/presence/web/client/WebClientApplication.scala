@@ -19,7 +19,7 @@ import scala.scalajs.js
  * @since October 05, 2020
  */
 object WebClientApplication extends LazyLogging {
-  LoggerConfig.factory = HttpLoggerFactory("/logging")
+  LoggerConfig.factory = HttpLoggerFactory("/logs")
 
   case class Contact(name: Var[String], email: Var[String])
 
