@@ -7,12 +7,14 @@ import html.NodeBinding
 import org.querki.jquery.$
 import org.scalajs.dom.html.{ Input, Table }
 import org.scalajs.dom.raw._
+import org.scalajs.dom.window
 import semantic.jquery.SemanticUiVisibilitySettings
 import slogging.{ HttpLoggerFactory, LazyLogging, LoggerConfig }
 import semantic.jquery.syntax._
 
 import scala.concurrent.Future
 import scala.scalajs.js
+import scala.scalajs.js.Object.getOwnPropertyNames
 
 /**
  * @author <a href="michael@ahlers.consulting">Michael Ahlers</a>
@@ -75,8 +77,17 @@ object WebClientApplication extends LazyLogging {
       </tbody>
     </table>
 
+  //sealed trait Page
+  //case object Home extends Page
+  //case object Work extends Page
+  //case object Company extends Page
+  //case object Careers extends Page
+
   def main(arguments: Array[String]): Unit = {
     logger.info("Hello, World!")
+
+    logger.info(s"${window.location.pathname}")
+    logger.info(s"${window.history}")
 
     $(".masthead")
       .visibility(SemanticUiVisibilitySettings
@@ -90,6 +101,41 @@ object WebClientApplication extends LazyLogging {
 
     $(".ui.sidebar")
       .sidebar("attach events", ".toc.item")
+
+    def checkState() = {
+      import trail._
+      val HomeRoute: Route[Unit] = Root / "home"
+      val WorkRoute: Route[Unit] = Root / "work"
+      val CompanyRoute: Route[Unit] = Root / "company"
+      val CareersRoute: Route[Unit] = Root / "careers"
+
+      window.location.href match {
+        case route @ HomeRoute(_) => logger.info(s"Home: $route")
+        case route @ WorkRoute(_) => logger.info(s"Work: $route")
+        case route @ CompanyRoute(_) => logger.info(s"Company: $route")
+        case route @ CareersRoute(_) => logger.info(s"Careers: $route")
+      }
+    }
+
+    checkState()
+    window.onpopstate = { _ =>
+      checkState()
+    }
+
+    $("a").on(
+      "click",
+      { event: Event =>
+        if (event.target == event.currentTarget) event.preventDefault()
+        event.stopPropagation()
+        event.target match {
+          case anchor: HTMLAnchorElement =>
+            logger.info(s"anchor.href: ${anchor.href}, anchor.pathname: ${anchor.pathname}")
+            window.history.pushState(null, null, anchor.href)
+            checkState()
+        }
+
+      }
+    )
 
   }
 

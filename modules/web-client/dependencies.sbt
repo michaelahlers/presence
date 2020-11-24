@@ -4,7 +4,8 @@ libraryDependencies ++=
     Nil
 
 libraryDependencies ++=
-  "com.github.julien-truffaut" %%% "monocle-core" % "2.0.3" ::
+  "tech.sparse" %%% "trail" % "0.3.0" ::
+    "com.github.julien-truffaut" %%% "monocle-core" % "2.0.3" ::
     "com.github.julien-truffaut" %%% "monocle-macro" % "2.0.3" ::
     "org.querki" %%% "jquery-facade" % "2.0" ::
     "org.scala-js" %%% "scalajs-dom" % "1.1.0" ::
