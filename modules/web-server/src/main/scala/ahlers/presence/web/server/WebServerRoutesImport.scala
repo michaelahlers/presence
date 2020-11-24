@@ -1,7 +1,7 @@
 package ahlers.presence.web.server
 
 import play.api.mvc
-import play.api.mvc.PathBindable
+import play.api.mvc.{ JavascriptLiteral, PathBindable }
 import play.api.mvc.PathBindable.bindableString
 
 /**
@@ -16,5 +16,8 @@ object WebServerRoutesImport {
   implicit val pathBindablePath: PathBindable[Path] =
     implicitly[mvc.PathBindable[String]]
       .transform(Path(_), _.toString())
+
+  implicit val javascriptLiteralPath: JavascriptLiteral[Path] =
+    _.toString()
 
 }
