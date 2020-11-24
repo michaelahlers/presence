@@ -16,3 +16,5 @@ pipelineStages ++=
   digest ::
     gzip ::
     Nil
+
+routesImport += "ahlers.presence.web.server.WebServerRoutesImport._"

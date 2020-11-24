@@ -2,6 +2,7 @@ package ahlers.presence.web.server
 
 import com.softwaremill.macwire._
 import ahlers.presence.web.server.WebClientController.LoggingRequest
+import akka.http.scaladsl.model.Uri.Path
 import org.webjars.play.{ WebJarAssets, WebJarsUtil }
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
@@ -38,7 +39,7 @@ class WebClientController(
       Ok
     }
 
-  def getDefault =
+  def getDefault(path: Path) =
     Action { implicit request =>
       Ok(wire[ahlers.presence.web.server.html.default].render())
     }
