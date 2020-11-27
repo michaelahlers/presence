@@ -2,7 +2,7 @@ package ahlers.presence.web.client
 
 import ahlers.presence.web.client.Router.Action.{ Follow, Replace }
 import ahlers.presence.web.client.Router.{ Action, Rule }
-import cats.Invariant
+import cats.syntax.option._
 import com.thoughtworks.binding.Binding.{ SingleMountPoint, Var }
 import org.scalajs.dom.raw.Event
 import org.scalajs.dom.window
@@ -23,7 +23,7 @@ class Router[A](rules: Seq[Rule[A]] = Seq.empty, action: Var[Action[A]]) extends
     action match {
 
       case Follow(state) =>
-        val url = uri(state)
+        val url = reverse(state)
         logger.info(s"Router set state: follow $url to $state.")
         window.history.pushState(
           null,
@@ -31,7 +31,7 @@ class Router[A](rules: Seq[Rule[A]] = Seq.empty, action: Var[Action[A]]) extends
           url)
 
       case Replace(state) =>
-        val url = uri(state)
+        val url = reverse(state)
         logger.info(s"Router set state: replace $url to $state.")
         window.history.replaceState(
           null,
@@ -48,7 +48,7 @@ class Router[A](rules: Seq[Rule[A]] = Seq.empty, action: Var[Action[A]]) extends
       case _ => ???
     }
 
-  val listener = { _: Event =>
+  private val listener = { _: Event =>
     updateState()
   }
 
@@ -63,7 +63,7 @@ class Router[A](rules: Seq[Rule[A]] = Seq.empty, action: Var[Action[A]]) extends
     super.unmount()
   }
 
-  def uri(state: A): String =
+  def reverse(state: A): String =
     rules
       .flatMap(_.encode(state)) match {
       case Seq() => ???
@@ -73,17 +73,11 @@ class Router[A](rules: Seq[Rule[A]] = Seq.empty, action: Var[Action[A]]) extends
 
   def follow(state: A): Unit =
     action.value =
-      Follow(uri(state), state)
+      Follow(state)
 
 }
 
 object Router {
-
-  implicit object invariantRoute extends Invariant[Route] {
-
-    override def imap[A, B](fa: Route[A])(f: A => B)(g: B => A): Route[B] = ???
-
-  }
 
   trait Rule[A] {
     def encode(x: A): Option[String]
