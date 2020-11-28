@@ -38,14 +38,14 @@ object WebClientApplication extends LazyLogging {
 //  .sidebar("attach events", ".toc.item")
 
     def menu = {
-      println(Assets.versioned("ahlers/presence/web/server/default.css"))
-
-      def link(page: UiState, label: HtmlElement) =
+      def link(uiState: UiState, label: HtmlElement) =
         a(
           className := "item",
-          onClick.preventDefault.mapToValue(page) --> (UiState.router.pushState(_)),
-          href := UiState.router.relativeUrlForPage(page),
-          label)
+          className <-- UiState.router.$currentPage.map(_ == uiState).map(enabled => Map("active" -> enabled)),
+          onClick.preventDefault.mapToValue(uiState) --> UiState.router.pushState _,
+          href := UiState.router.relativeUrlForPage(uiState),
+          label
+        )
 
       div(
         className := "ui inverted vertical masthead center aligned segment",
