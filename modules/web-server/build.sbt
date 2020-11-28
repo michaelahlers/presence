@@ -1,3 +1,5 @@
+import com.typesafe.sbt.digest.Import.DigestKeys.{ indexPath, indexWriter }
+
 enablePlugins(PlayScala)
 disablePlugins(PlayLayoutPlugin)
 
@@ -18,3 +20,6 @@ pipelineStages ++=
     Nil
 
 routesImport += "ahlers.presence.web.server.WebServerRoutesImport._"
+
+indexPath := Some("javascripts/versioned.js")
+indexWriter ~= (writer => index => s"var versioned = ${writer(index)};")
