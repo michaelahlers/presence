@@ -37,10 +37,10 @@ object UiState extends LazyLogging {
       deserializePage = decode[UiState](_).valueOr(throw _)
     )
 
-  router
-    .$currentPage
-    .foreach(state =>
-      logger
-        .info(s"""Transitioned to state ${state.getClass()}."""))(unsafeWindowOwner)
+  //router
+  //  .$currentPage
+  //  .foreach(state =>
+  //    logger
+  //      .info(s"""Transitioned to state ${state.getClass()}."""))(unsafeWindowOwner)
 
 }

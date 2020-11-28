@@ -1,15 +1,13 @@
 package ahlers.presence.web.server
 
-import com.softwaremill.macwire._
 import ahlers.presence.web.server.WebClientController.LoggingRequest
 import akka.http.scaladsl.model.Uri.Path
-import org.webjars.play.{ WebJarAssets, WebJarsUtil }
-import play.api.libs.json._
+import com.softwaremill.macwire._
+import org.webjars.play.WebJarsUtil
 import play.api.libs.functional.syntax._
+import play.api.libs.json._
 import play.api.mvc.{ AbstractController, ControllerComponents }
 import slogging.{ LoggerFactory, MessageLevel, StrictLogging }
-
-import scala.util.control.NoStackTrace
 
 /**
  * @author <a href="mailto:michael@ahlers.consulting">Michael Ahlers</a>
@@ -41,7 +39,7 @@ class WebClientController(
 
   def getDefault(path: Path) =
     Action { implicit request =>
-      Ok(wire[ahlers.presence.web.server.html.default].render())
+      Ok(wire[ahlers.presence.web.server.html.default].apply())
     }
 
 }

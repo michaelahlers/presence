@@ -1,6 +1,8 @@
 @import org.webjars.play.WebJarsUtil
+@import play.api.mvc.RequestHeader
 
 @this(webJars: WebJarsUtil)
+@()(implicit request: RequestHeader)
 
 <!DOCTYPE html>
 <html>
@@ -13,6 +15,8 @@
 
     @webJars.locate("semantic.css").css()
     <link rel="stylesheet" href="@routes.Assets.versioned("ahlers/presence/web/server/default.css")">
+
+    @helper.javascriptRouter("jsRoutes")(routes.javascript.Assets.versioned)
 
   </head>
   <body>
