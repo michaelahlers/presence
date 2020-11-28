@@ -11,6 +11,9 @@ libraryDependencies ++=
   //"com.github.japgolly.scalajs-react" %%% "extra" % "1.7.7" ::
   "com.github.julien-truffaut" %%% "monocle-core" % "2.0.3" ::
     "com.github.julien-truffaut" %%% "monocle-macro" % "2.0.3" ::
+    "io.circe" %%% "circe-core" % "0.14.0-M1" ::
+    "io.circe" %%% "circe-generic" % "0.14.0-M1" ::
+    "io.circe" %%% "circe-parser" % "0.14.0-M1" ::
     "org.querki" %%% "jquery-facade" % "2.0" ::
     "org.scala-js" %%% "scalajs-dom" % "1.1.0" ::
     //"tech.sparse" %%% "trail" % "0.3.0" ::
