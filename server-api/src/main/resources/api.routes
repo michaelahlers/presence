@@ -1,1 +1,0 @@
-GET        /sessions        @ahlers.michael.presence.server.api.ApplicationController.getSessions
