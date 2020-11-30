@@ -10,7 +10,7 @@ import scala.scalajs.js
  * @author <a href="michael@ahlers.consulting">Michael Ahlers</a>
  * @since October 05, 2020
  */
-object WebClientApplication extends LazyLogging {
+object WebClientApplication extends App with LazyLogging {
   LoggerConfig.factory = HttpLoggerFactory("/logs")
 
   case class Asset(url: String, absoluteUrl: String)
@@ -22,48 +22,45 @@ object WebClientApplication extends LazyLogging {
 
   }
 
-  def main(arguments: Array[String]): Unit = {
+  //$(".masthead")
+  //  .visibility(SemanticUiVisibilitySettings
+  //    .once(false)
+  //    .onBottomPassed(() =>
+  //      $(".fixed.menu")
+  //        .transition("fade in"))
+  //    .onBottomPassedReverse(() =>
+  //      $(".fixed.menu")
+  //        .transition("fade out")))
+  //
+  //$(".ui.sidebar")
+  //  .sidebar("attach events", ".toc.item")
 
-//$(".masthead")
-//  .visibility(SemanticUiVisibilitySettings
-//    .once(false)
-//    .onBottomPassed(() =>
-//      $(".fixed.menu")
-//        .transition("fade in"))
-//    .onBottomPassedReverse(() =>
-//      $(".fixed.menu")
-//        .transition("fade out")))
-//
-//$(".ui.sidebar")
-//  .sidebar("attach events", ".toc.item")
+  def menu = {
+    def link(uiState: UiState, label: HtmlElement) =
+      a(
+        className := "item",
+        className <-- UiState.router.$currentPage.map(_ == uiState).map(enabled => Map("active" -> enabled)),
+        onClick.preventDefault.mapToValue(uiState) --> UiState.router.pushState _,
+        href := UiState.router.relativeUrlForPage(uiState),
+        label
+      )
 
-    def menu = {
-      def link(uiState: UiState, label: HtmlElement) =
-        a(
-          className := "item",
-          className <-- UiState.router.$currentPage.map(_ == uiState).map(enabled => Map("active" -> enabled)),
-          onClick.preventDefault.mapToValue(uiState) --> UiState.router.pushState _,
-          href := UiState.router.relativeUrlForPage(uiState),
-          label
-        )
-
+    div(
+      className := "ui inverted vertical masthead center aligned segment",
       div(
-        className := "ui inverted vertical masthead center aligned segment",
+        className := "ui container",
         div(
-          className := "ui container",
-          div(
-            className := "ui large secondary inverted pointing menu",
-            link(UiState.Landing, i(className := "home icon")),
-            link(UiState.Resume, span("Resume")),
-            link(UiState.Contact, span("Contact"))
-          )
+          className := "ui large secondary inverted pointing menu",
+          link(UiState.Landing, i(className := "home icon")),
+          link(UiState.Resume, span("Resume")),
+          link(UiState.Contact, span("Contact"))
         )
       )
-    }
-
-    windowEvents
-      .onLoad
-      .foreach(_ => render(dom.document.body, menu))(unsafeWindowOwner)
+    )
   }
+
+  windowEvents
+    .onLoad
+    .foreach(_ => render(dom.document.body, menu))(unsafeWindowOwner)
 
 }

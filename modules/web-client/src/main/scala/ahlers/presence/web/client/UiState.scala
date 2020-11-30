@@ -34,8 +34,7 @@ object UiState extends LazyLogging {
       $popStateEvent = windowEvents.onPopState,
       getPageTitle = _.toString,
       serializePage = _.asJson.noSpaces,
-      deserializePage = decode[UiState](_).valueOr(throw _)
-    )
+      deserializePage = decode[UiState](_).valueOr(throw _))
 
   //router
   //  .$currentPage
