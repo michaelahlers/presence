@@ -1,5 +1,6 @@
 package ahlers.presence.web.client
 
+import ahlers.presence.web.client.CssSettings._
 import com.raquo.laminar.api.L._
 import org.scalajs.dom
 import slogging.{ HttpLoggerFactory, LazyLogging, LoggerConfig }
@@ -12,6 +13,8 @@ import scala.scalajs.js
  */
 object WebClientApplication extends App with LazyLogging {
   LoggerConfig.factory = HttpLoggerFactory("/logs")
+
+  GlobalStyles.addToDocument()
 
   case class Asset(url: String, absoluteUrl: String)
   object Assets {
@@ -35,32 +38,8 @@ object WebClientApplication extends App with LazyLogging {
   //$(".ui.sidebar")
   //  .sidebar("attach events", ".toc.item")
 
-  def menu = {
-    def link(uiState: UiState, label: HtmlElement) =
-      a(
-        className := "item",
-        className <-- UiState.router.$currentPage.map(_ == uiState).map(enabled => Map("active" -> enabled)),
-        onClick.preventDefault.mapToValue(uiState) --> UiState.router.pushState _,
-        href := UiState.router.relativeUrlForPage(uiState),
-        label
-      )
-
-    div(
-      className := "ui inverted vertical masthead center aligned segment",
-      div(
-        className := "ui container",
-        div(
-          className := "ui large secondary inverted pointing menu",
-          link(UiState.Landing, i(className := "home icon")),
-          link(UiState.Resume, span("Resume")),
-          link(UiState.Contact, span("Contact"))
-        )
-      )
-    )
-  }
-
   windowEvents
     .onLoad
-    .foreach(_ => render(dom.document.body, menu))(unsafeWindowOwner)
+    .foreach(_ => render(dom.document.body, SiteMenu()))(unsafeWindowOwner)
 
 }
