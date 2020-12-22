@@ -8,8 +8,9 @@ libraryDependencies ++=
     Nil
 
 libraryDependencies ++=
-  //"com.github.japgolly.scalajs-react" %%% "extra" % "1.7.7" ::
-  "com.github.julien-truffaut" %%% "monocle-core" % "2.0.3" ::
+  "com.github.japgolly.scalacss" %%% "core" % "0.6.1" ::
+    //"com.github.japgolly.scalajs-react" %%% "extra" % "1.7.7" ::
+    "com.github.julien-truffaut" %%% "monocle-core" % "2.0.3" ::
     "com.github.julien-truffaut" %%% "monocle-macro" % "2.0.3" ::
     "io.circe" %%% "circe-core" % "0.14.0-M1" ::
     "io.circe" %%% "circe-generic" % "0.14.0-M1" ::
