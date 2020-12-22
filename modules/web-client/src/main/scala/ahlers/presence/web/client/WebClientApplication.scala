@@ -2,6 +2,7 @@ package ahlers.presence.web.client
 
 import ahlers.presence.web.client.CssSettings._
 import com.raquo.laminar.api.L._
+import com.raquo.waypoint.SplitRender
 import org.scalajs.dom
 import slogging.{ HttpLoggerFactory, LazyLogging, LoggerConfig }
 
@@ -38,8 +39,19 @@ object WebClientApplication extends App with LazyLogging {
   //$(".ui.sidebar")
   //  .sidebar("attach events", ".toc.item")
 
-  windowEvents
-    .onLoad
-    .foreach(_ => render(dom.document.body, SiteMenu()))(unsafeWindowOwner)
+  val pageSplitter =
+    SplitRender[UiState, HtmlElement](UiState.router.$currentPage)
+      .collectStatic(UiState.Landing)(LandingPage())
+      .collectStatic(UiState.Resume)(ResumePage())
+      .collectStatic(UiState.Contact)(ContactPage())
+
+  val site: Div =
+    div(
+      SiteMenu(),
+      child <-- pageSplitter.$view)
+
+  documentEvents
+    .onDomContentLoaded
+    .foreach(_ => render(dom.document.body, site))(unsafeWindowOwner)
 
 }
