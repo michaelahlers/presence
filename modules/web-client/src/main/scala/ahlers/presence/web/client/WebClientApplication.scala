@@ -14,17 +14,7 @@ import scala.scalajs.js
  */
 object WebClientApplication extends App with LazyLogging {
   LoggerConfig.factory = HttpLoggerFactory("/logs")
-
   GlobalStyles.addToDocument()
-
-  case class Asset(url: String, absoluteUrl: String)
-  object Assets {
-    def versioned(path: String): Asset = {
-      val request = js.Dynamic.global.jsRoutes.controllers.Assets.versioned(path)
-      Asset(request.url.toString, request.absoluteURL().toString)
-    }
-
-  }
 
   //$(".masthead")
   //  .visibility(SemanticUiVisibilitySettings
