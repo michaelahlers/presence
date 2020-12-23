@@ -1,6 +1,6 @@
 enablePlugins(ScalaJSPlugin)
 enablePlugins(ScalaJSWeb)
-enablePlugins(TzdbPlugin)
+//enablePlugins(TzdbPlugin)
 
 scalaJSUseMainModuleInitializer := true
-zonesFilter := (_ == "America/New_York")
+//zonesFilter := (_ == "America/New_York")
