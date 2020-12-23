@@ -1,6 +1,7 @@
 package ahlers.presence.web.client
 
 import com.raquo.laminar.api.L._
+import CssSettings._
 
 import java.time.{ LocalDate, Period, ZoneId }
 
@@ -25,9 +26,7 @@ object MastheadView {
   def apply(): Div =
     div(
       h1(
-        className := "logo",
         img(
-          width := "300px",
           src := Asset.versioned("ahlers/presence/web/client/Ahlers Consulting (dark).svg").url)),
       p(
         "Michael Ahlers is a software developer—with over ",

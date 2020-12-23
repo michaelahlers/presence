@@ -4,6 +4,7 @@ import ahlers.presence.web.client.CssSettings._
 import com.raquo.laminar.api.L._
 import com.raquo.waypoint.SplitRender
 import org.scalajs.dom
+import scalacss.internal.mutable.GlobalRegistry
 import slogging.{ HttpLoggerFactory, LazyLogging, LoggerConfig }
 
 import scala.scalajs.js
@@ -14,7 +15,8 @@ import scala.scalajs.js
  */
 object WebClientApplication extends App with LazyLogging {
   LoggerConfig.factory = HttpLoggerFactory("/logs")
-  GlobalStyles.addToDocument()
+  //GlobalStyles.addToDocument()
+  GlobalRegistry.addToDocumentOnRegistration()
 
   //$(".masthead")
   //  .visibility(SemanticUiVisibilitySettings
