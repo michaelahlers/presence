@@ -31,7 +31,7 @@ object WebClientApplication extends App with LazyLogging {
 
   val pageSplitter =
     SplitRender[UiState, HtmlElement](UiState.router.$currentPage)
-      .collectStatic(UiState.Landing)(LandingPage())
+      .collectStatic(UiState.Landing)(LandingPageView())
       .collectStatic(UiState.Resume)(ResumePage())
       .collectStatic(UiState.Contact)(ContactPage())
 
