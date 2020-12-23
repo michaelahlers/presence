@@ -12,7 +12,7 @@ libraryDependencies ++=
   //("org.webjars.bowergithub.semantic-org" % "semantic-ui-less" % "2.4.1").excludeAll(ExclusionRule().withArtifact("jquery")) ::
   "org.webjars" % "Semantic-UI" % "2.4.1" ::
     "org.webjars" % "jquery" % "3.5.1" ::
-    "org.webjars" %% "webjars-play" % "2.8.0" ::
+    "org.webjars" %% "webjars-play" % "2.8.0-1" ::
     Nil
 
 libraryDependencies ++=
