@@ -15,6 +15,7 @@ libraryDependencies ++=
     "io.circe" %%% "circe-core" % "0.14.0-M1" ::
     "io.circe" %%% "circe-generic" % "0.14.0-M1" ::
     "io.circe" %%% "circe-parser" % "0.14.0-M1" ::
+    "io.github.cquiroz" %%% "scala-java-time" % "2.1.0" ::
     "org.querki" %%% "jquery-facade" % "2.0" ::
     "org.scala-js" %%% "scalajs-dom" % "1.1.0" ::
     //"tech.sparse" %%% "trail" % "0.3.0" ::
