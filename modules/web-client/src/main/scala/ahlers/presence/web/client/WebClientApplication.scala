@@ -31,18 +31,13 @@ object WebClientApplication extends App with LazyLogging {
   //$(".ui.sidebar")
   //  .sidebar("attach events", ".toc.item")
 
-  val site: Div =
-    div(
-      HeaderView(),
-      MainView(),
-      FooterView())
-
   documentEvents
     .onDomContentLoaded
-    .mapToValue(div(
+    .mapToValue(Seq(
       HeaderView(),
       MainView(),
       FooterView()))
-    .foreach(render(dom.document.body, _))(unsafeWindowOwner)
+    .foreach(_.foreach(
+      render(dom.document.body, _)))(unsafeWindowOwner)
 
 }
