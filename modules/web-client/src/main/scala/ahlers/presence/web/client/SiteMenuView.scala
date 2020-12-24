@@ -6,15 +6,16 @@ import com.raquo.laminar.api.L._
  * @since December 22, 2020
  * @author <a href="mailto:michael@ahlers.consulting">Michael Ahlers</a>
  */
-object SiteMenu {
+object SiteMenuView {
 
   def apply(): Div =
     div(
       className := "ui large top fixed inverted pointing menu",
       div(
-        className := GlobalStyles.semantic.container.htmlClass,
+        //className := GlobalStyles.semantic.container.htmlClass,
+        className := "ui container",
         SiteLink(UiState.Landing, i(className := "home icon")),
-        SiteLink(UiState.Resume, span("Resume")),
+        //SiteLink(UiState.Resume, span("Resume")),
         SiteLink(UiState.Contact, span("Contact"))
       )
     )

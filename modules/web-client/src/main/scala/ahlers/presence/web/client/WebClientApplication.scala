@@ -39,8 +39,9 @@ object WebClientApplication extends App with LazyLogging {
 
   val site: Div =
     div(
-      SiteMenu(),
-      child <-- pageSplitter.$view)
+      SiteMenuView(),
+      child <-- pageSplitter.$view,
+      FooterView())
 
   documentEvents
     .onDomContentLoaded
