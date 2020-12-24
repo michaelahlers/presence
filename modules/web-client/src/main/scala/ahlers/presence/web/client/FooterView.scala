@@ -8,37 +8,30 @@ import com.raquo.laminar.api.L._
  */
 object FooterView {
 
+  val contactLabelAnchors: Seq[(HtmlElement, HtmlElement)] =
+    (i(className := "fas fa-envelope-square"), a(href := "mailto:michael@ahlers.consulting", "michael@ahlers.consulting")) ::
+      (i(className := "fab fa-linkedin"), a(href := "http://linkedin.com/in/michaelahlers", "/in/michaelahlers")) ::
+      (i(className := "fab fa-github-square"), a(href := "http://github.com/michaelahlers", "/michaelahlers")) ::
+      (i(className := "fab fa-stack-exchange"), a(href := "http://stackexchange.com/users/359179/michael-ahlers", "/users/359179/michael-ahlers")) ::
+      (i(className := "fas fa-phone-square"), a(href := "tel:+1-571-830-0258", "+1 (571) 830-0258")) ::
+      Nil
+
   def apply(): HtmlElement =
     footer(
-      className := "ui inverted vertical footer segment",
+      className := "footer mt-auto text-white-50 bg-dark",
       div(
-        className := "ui container",
+        className := "container",
         div(
-          className := "ui stackable divided equal height stackable grid",
+          className := "row justify-content-center",
           div(
-            className := "ui column seven wide list",
-            div(
-              className := "item",
-              i(className := "envelope square icon"),
-              a(className := "content", href := "mailto:michael@ahlers.consulting", "michael@ahlers.consulting")),
-            div(
-              className := "item",
-              i(className := "linkedin square icon"),
-              a(className := "content", href := "http://linkedin.com/in/michaelahlers", "/in/michaelahlers")),
-            div(
-              className := "item",
-              i(className := "github square icon"),
-              a(className := "content", href := "http://github.com/michaelahlers", "/michaelahlers")),
-            div(
-              className := "item",
-              i(className := "stack overflow square icon"),
-              a(className := "content", href := "http://stackoverflow.com/users/700420/michael-ahlers", "/users/700420/michael-ahlers")
-            ),
-            div(
-              className := "item",
-              i(className := "phone square icon"),
-              a(className := "content", href := "tel:+1-571-830-0258", "+1 (571) 830-0258"))
-          )
+            className := "col-6",
+            table(
+              className := "",
+              contactLabelAnchors.map { case (label, anchor) =>
+                tr(
+                  td(label),
+                  td(anchor))
+              }))
         )
       )
     )

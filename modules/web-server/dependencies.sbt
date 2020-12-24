@@ -10,7 +10,11 @@ libraryDependencies ++=
 libraryDependencies ++=
   //"org.webjars.bowergithub.jquery" % "jquery" % "3.5.1" ::
   //("org.webjars.bowergithub.semantic-org" % "semantic-ui-less" % "2.4.1").excludeAll(ExclusionRule().withArtifact("jquery")) ::
-  "org.webjars" % "Semantic-UI" % "2.4.1" ::
+  //"org.webjars" % "Semantic-UI" % "2.4.1" ::
+  //"org.webjars" % "semantic-ui-less" % "2.4.1" ::
+  "org.webjars" % "bootstrap" % "5.0.0-beta1" ::
+    "org.webjars.npm" % "bootstrap-icons" % "1.2.2" ::
+    "org.webjars" % "font-awesome" % "5.15.1" ::
     "org.webjars" % "jquery" % "3.5.1" ::
     "org.webjars" %% "webjars-play" % "2.8.0-1" ::
     Nil

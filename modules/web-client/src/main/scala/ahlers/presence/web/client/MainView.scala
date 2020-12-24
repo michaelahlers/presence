@@ -16,6 +16,8 @@ object MainView {
       .collectStatic(UiState.Contact)(ContactPage())
 
   def apply(): HtmlElement =
-    main(child <-- pageSplitter.$view)
+    main(
+      className := "flex-shrink-0",
+      child <-- pageSplitter.$view)
 
 }

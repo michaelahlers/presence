@@ -8,14 +8,19 @@ import com.raquo.laminar.api.L._
  */
 object SiteMenuView {
 
-  def apply(): Div =
-    div(
-      className := "ui large top fixed inverted pointing menu",
+  def apply(): HtmlElement =
+    nav(
+      className := "navbar navbar-expand-lg navbar-dark bg-dark",
       div(
-        className := "ui container",
-        SiteAnchorView(UiState.Landing, i(className := "home icon")),
-        //SiteLink(UiState.Resume, span("Resume")),
-        SiteAnchorView(UiState.Contact, span("Contact"))
+        className := "container",
+        div(
+          className := "collapse navbar-collapse",
+          ul(
+            className := "navbar-nav me-auto mb-2 mb-lg-0",
+            SiteAnchorView(UiState.Landing, i(className := "bi bi-house-fill")),
+            SiteAnchorView(UiState.Contact, span("Contact"))
+          )
+        )
       )
     )
 

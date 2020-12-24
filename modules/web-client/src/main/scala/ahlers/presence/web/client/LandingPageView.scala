@@ -17,24 +17,20 @@ object LandingPageView {
         .of(2000, 5, 1)
         .until(LocalDate.now(ZoneOffset.UTC)))
 
-  def apply(): Div =
-    div(
-      className := "ui container grid",
+  def apply(): HtmlElement =
+    article(
+      className := "container",
       div(
-        className := "row",
-        div(
-          className := "column")),
-      div(
-        className := "row",
+        className := "row justify-content-center",
         h1(
-          className := "column centered eight wide header",
+          className := "col-4",
           img(
             src := Asset.versioned("ahlers/presence/web/client/Ahlers Consulting (dark).svg").url))
       ),
       div(
-        className := "ui row",
+        className := "row justify-content-center",
         p(
-          className := "ui column centered ten wide lead text",
+          className := "col-8 lead",
           child.text <--
             experiencePeriod
               .map(_.getYears())

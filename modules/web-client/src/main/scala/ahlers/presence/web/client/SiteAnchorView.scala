@@ -8,18 +8,20 @@ import com.raquo.laminar.api.L._
  */
 object SiteAnchorView {
 
-  def apply(uiState: UiState, label: HtmlElement): Anchor = {
+  def apply(uiState: UiState, label: HtmlElement): Li = {
     val $isActive: Signal[Boolean] =
       UiState.router
         .$currentPage
         .map(_ == uiState)
 
-    a(
-      className := "item",
+    li(
+      className := "nav-item",
       className <-- $isActive.map(enabled => Map("active" -> enabled)),
-      onClick.preventDefault.mapToValue(uiState) --> UiState.router.pushState _,
-      href := UiState.router.relativeUrlForPage(uiState),
-      label
+      a(
+        className := "nav-link",
+        onClick.preventDefault.mapToValue(uiState) --> UiState.router.pushState _,
+        href := UiState.router.relativeUrlForPage(uiState),
+        label)
     )
   }
 
