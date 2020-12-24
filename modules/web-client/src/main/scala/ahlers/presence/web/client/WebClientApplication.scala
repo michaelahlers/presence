@@ -31,20 +31,18 @@ object WebClientApplication extends App with LazyLogging {
   //$(".ui.sidebar")
   //  .sidebar("attach events", ".toc.item")
 
-  val pageSplitter =
-    SplitRender[UiState, HtmlElement](UiState.router.$currentPage)
-      .collectStatic(UiState.Landing)(LandingPageView())
-      .collectStatic(UiState.Resume)(ResumePage())
-      .collectStatic(UiState.Contact)(ContactPage())
-
   val site: Div =
     div(
-      SiteMenuView(),
-      child <-- pageSplitter.$view,
+      HeaderView(),
+      MainView(),
       FooterView())
 
   documentEvents
     .onDomContentLoaded
-    .foreach(_ => render(dom.document.body, site))(unsafeWindowOwner)
+    .mapToValue(div(
+      HeaderView(),
+      MainView(),
+      FooterView()))
+    .foreach(render(dom.document.body, _))(unsafeWindowOwner)
 
 }

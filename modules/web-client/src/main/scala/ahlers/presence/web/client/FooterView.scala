@@ -8,8 +8,8 @@ import com.raquo.laminar.api.L._
  */
 object FooterView {
 
-  def apply(): Div =
-    div(
+  def apply(): HtmlElement =
+    footer(
       className := "ui inverted vertical footer segment",
       div(
         className := "ui container",

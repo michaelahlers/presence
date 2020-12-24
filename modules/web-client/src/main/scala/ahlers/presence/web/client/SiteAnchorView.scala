@@ -6,7 +6,7 @@ import com.raquo.laminar.api.L._
  * @since December 22, 2020
  * @author <a href="mailto:michael@ahlers.consulting">Michael Ahlers</a>
  */
-object SiteLink {
+object SiteAnchorView {
 
   def apply(uiState: UiState, label: HtmlElement): Anchor = {
     val $isActive: Signal[Boolean] =

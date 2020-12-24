@@ -12,11 +12,10 @@ object SiteMenuView {
     div(
       className := "ui large top fixed inverted pointing menu",
       div(
-        //className := GlobalStyles.semantic.container.htmlClass,
         className := "ui container",
-        SiteLink(UiState.Landing, i(className := "home icon")),
+        SiteAnchorView(UiState.Landing, i(className := "home icon")),
         //SiteLink(UiState.Resume, span("Resume")),
-        SiteLink(UiState.Contact, span("Contact"))
+        SiteAnchorView(UiState.Contact, span("Contact"))
       )
     )
 
