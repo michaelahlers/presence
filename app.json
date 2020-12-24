@@ -1,6 +1,0 @@
-{
-  "name": "Michael Ahlers: Presence",
-  "description": "Personal web presence for Michael Ahlers, and full-stack Scala sandbox.",
-  "image": "heroku/scala",
-  "addons": []
-}
