@@ -23,3 +23,7 @@ routesImport += "ahlers.presence.web.server.WebServerRoutesImport._"
 
 indexPath := Some("javascripts/versioned.js")
 indexWriter ~= (writer => index => s"var versioned = ${writer(index)};")
+
+Compile / herokuAppName := "michaelahlers-presence-staging"
+Compile / herokuSkipSubProjects := false
+Compile / herokuJdkVersion := "15"
