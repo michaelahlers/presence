@@ -6,6 +6,7 @@
 
 <!DOCTYPE html>
 <html class="h-100">
+
   <head>
     <title>Michael Ahlers</title>
 
@@ -13,9 +14,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
-    @*webJars.locate("bootstrap.css").css()*@
-    @webJars.locate("bootstrap-icons.css").css()
-    @webJars.locate("font-awesome/5.15.1/js/all.js").script()
+    @webJars.locate("font-awesome", "all.js").script()
 
     <link rel="stylesheet" href="@routes.Assets.versioned("ahlers/presence/web/server/default.css")">
 
@@ -29,8 +28,8 @@
         };
       })();
     </script>
+  </head>
 
-    </head>
   <body class="d-flex flex-column h-100">
     @scalajs.html.scripts(
       "presence-web-client",
@@ -40,6 +39,6 @@
               .map(getClass.getResource(_))
               .flatMap(Option(_))
               .nonEmpty)
-
   </body>
+
 </html>
