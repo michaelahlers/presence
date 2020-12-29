@@ -21,21 +21,21 @@ object LandingPageView {
     article(
       className := "container",
       div(
-        className := "row justify-content-md-center",
+        className := "row justify-content-center mt-5",
         div(
           className := "col-4",
           img(src := Asset.versioned("ahlers/presence/web/client/Ahlers Consulting (dark).svg").url)),
         div(
           className := "col-4 text-nowrap",
           h1(className := "title", "Michael Ahlers"),
-          h2(className := "text-lowercase text-muted", "Software Engineer"),
+          //h2(className := "text-lowercase text-muted", "Software Engineer"),
           ContactInformationView()
         )
       ),
       div(
-        className := "row justify-content-center",
+        className := "row justify-content-center mt-5 mb-3",
         div(
-          className := "col-8",
+          className := "col-7",
           p(
             className := "lead",
             child.text <--
