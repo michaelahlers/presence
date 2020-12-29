@@ -1,13 +1,8 @@
 package ahlers.presence.web.client
 
-import ahlers.presence.web.client.CssSettings._
 import com.raquo.laminar.api.L._
-import com.raquo.waypoint.SplitRender
 import org.scalajs.dom
-import scalacss.internal.mutable.GlobalRegistry
 import slogging.{ HttpLoggerFactory, LazyLogging, LoggerConfig }
-
-import scala.scalajs.js
 
 /**
  * @author <a href="michael@ahlers.consulting">Michael Ahlers</a>
@@ -15,8 +10,9 @@ import scala.scalajs.js
  */
 object WebClientApplication extends App with LazyLogging {
   LoggerConfig.factory = HttpLoggerFactory("/logs")
+
   //GlobalStyles.addToDocument()
-  GlobalRegistry.addToDocumentOnRegistration()
+  //GlobalRegistry.addToDocumentOnRegistration()
 
   //$(".masthead")
   //  .visibility(SemanticUiVisibilitySettings
@@ -30,6 +26,22 @@ object WebClientApplication extends App with LazyLogging {
   //
   //$(".ui.sidebar")
   //  .sidebar("attach events", ".toc.item")
+
+  /** Bootstrap utility classes can't be assigned to parents using modifiers. */
+  Seq("h-100")
+    .foreach(dom
+      .document
+      .body
+      .parentElement
+      .classList
+      .add(_))
+
+  Seq("d-flex", "flex-column", "h-100")
+    .foreach(dom
+      .document
+      .body
+      .classList
+      .add(_))
 
   documentEvents
     .onDomContentLoaded

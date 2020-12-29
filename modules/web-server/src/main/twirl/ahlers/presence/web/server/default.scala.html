@@ -1,11 +1,12 @@
 @import org.webjars.play.WebJarsUtil
 @import play.api.mvc.RequestHeader
+@import routes.Assets
 
 @this(webJars: WebJarsUtil)
 @()(implicit request: RequestHeader)
 
 <!DOCTYPE html>
-<html class="h-100">
+<html>
 
   <head>
     <title>Michael Ahlers</title>
@@ -29,16 +30,18 @@
 
   </head>
 
-  <body class="d-flex flex-column h-100">
+  <body>
+
     @webJars.locate("font-awesome", "all.js").script()
     @scalajs.html.scripts(
       "presence-web-client",
-      routes.Assets.versioned(_).toString,
+      Assets.versioned(_).toString,
       Option(_)
-              .map("/public/%s".format(_))
-              .map(getClass.getResource(_))
-              .flatMap(Option(_))
-              .nonEmpty)
+        .map("/public/%s".format(_))
+        .map(getClass.getResource(_))
+        .flatMap(Option(_))
+        .nonEmpty)
+
   </body>
 
 </html>
