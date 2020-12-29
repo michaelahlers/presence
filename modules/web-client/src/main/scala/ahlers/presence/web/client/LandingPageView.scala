@@ -26,7 +26,7 @@ object LandingPageView {
           className := "col-4",
           img(src := Asset.versioned("ahlers/presence/web/client/Ahlers Consulting (dark).svg").url)),
         div(
-          className := "col-4 text-nowrap",
+          className := "col-5 text-nowrap",
           h1(className := "title", "Michael Ahlers"),
           //h2(className := "text-lowercase text-muted", "Software Engineer"),
           ContactInformationView()
