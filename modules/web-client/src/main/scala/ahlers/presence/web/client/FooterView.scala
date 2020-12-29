@@ -14,10 +14,7 @@ object FooterView {
       div(
         className := "container",
         div(
-          className := "row justify-content-center",
-          div(
-            className := "col-6",
-            ContactInformationView())))
+          className := "row justify-content-center"))
     )
 
 }
