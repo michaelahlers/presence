@@ -35,7 +35,7 @@ object LandingPageView {
       div(
         className := "row justify-content-center mt-5 mb-3",
         div(
-          className := "col-7",
+          className := "col-8",
           p(
             className := "lead",
             child.text <--
