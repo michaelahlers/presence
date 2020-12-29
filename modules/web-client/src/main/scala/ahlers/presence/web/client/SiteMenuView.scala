@@ -1,6 +1,10 @@
 package ahlers.presence.web.client
 
 import com.raquo.laminar.api.L._
+import com.raquo.laminar.nodes.ReactiveHtmlElement
+import org.scalajs.dom
+
+import scala.scalajs.js
 
 /**
  * @since December 22, 2020
@@ -8,17 +12,25 @@ import com.raquo.laminar.api.L._
  */
 object SiteMenuView {
 
-  def apply(): HtmlElement =
+  @js.native
+  trait RawElement extends js.Object {
+    def doThing(): Unit // Note: This is not actually implemented in mwc-button, just an example
+  }
+
+  type Ref = dom.html.Element //with RawElement
+
+  def apply(modifiers: Modifier[ReactiveHtmlElement[Ref]]*): HtmlElement =
     nav(
-      className := "navbar navbar-expand-lg navbar-dark fixed-top bg-dark",
+      modifiers,
       div(
         className := "container",
         div(
-          className := "collapse navbar-collapse",
+          //className := "collapse navbar-collapse",
+          className := "row",
           ul(
-            className := "navbar-nav me-auto mb-2 mb-lg-0",
-            SiteAnchorView(UiState.Landing, i(className := "fas fa-home")),
-            SiteAnchorView(UiState.Contact, span("Contact"))
+            className := "navbar-nav me-auto",
+            SiteAnchorView(UiState.Landing, i(className := "fas fa-home")) //,
+            //SiteAnchorView(UiState.Contact, span("Contact"))
           )
         )
       )
