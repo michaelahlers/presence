@@ -10,7 +10,7 @@ object SiteMenuView {
 
   def apply(): HtmlElement =
     nav(
-      className := "navbar navbar-expand-lg navbar-dark bg-dark",
+      className := "navbar navbar-expand-lg navbar-dark fixed-top bg-dark",
       div(
         className := "container",
         div(

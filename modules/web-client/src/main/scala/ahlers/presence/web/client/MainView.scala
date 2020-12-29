@@ -17,7 +17,7 @@ object MainView {
 
   def apply(): HtmlElement =
     main(
-      className := "flex-shrink-0",
+      className := "flex-grow-1",
       child <-- pageSplitter.$view)
 
 }
