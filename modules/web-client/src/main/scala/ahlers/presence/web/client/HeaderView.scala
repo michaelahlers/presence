@@ -9,6 +9,9 @@ import com.raquo.laminar.api.L._
 object HeaderView {
 
   def apply(): HtmlElement =
-    header(SiteMenuView())
+    header(
+      SiteMenuView(className := "navbar navbar-expand-lg navbar-dark fixed-top bg-dark"),
+      SiteMenuView(className := "navbar navbar-expand-lg navbar-dark bg-dark")
+    )
 
 }
