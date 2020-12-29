@@ -18,7 +18,7 @@ object ContactInformationView {
         Nil
 
     ul(
-      className := "list-unstyled",
+      className := "list-unstyled text-nowrap",
       referenceLabelAnchors.map {
         case (reference, label, anchor) =>
           li(
