@@ -8,21 +8,26 @@ import com.raquo.laminar.api.L._
  */
 object ContactInformationView {
 
-  def contactLabelAnchors: Seq[(HtmlElement, HtmlElement)] =
-    (i(className := "fas fa-envelope-square"), a(href := "mailto:michael@ahlers.consulting", "michael@ahlers.consulting")) ::
-      (i(className := "fab fa-linkedin"), a(href := "http://linkedin.com/in/michaelahlers", "/in/michaelahlers")) ::
-      (i(className := "fab fa-github-square"), a(href := "http://github.com/michaelahlers", "/michaelahlers")) ::
-      (i(className := "fab fa-stack-exchange"), a(href := "http://stackexchange.com/users/359179/michael-ahlers", "/users/359179/michael-ahlers")) ::
-      (i(className := "fas fa-phone-square"), a(href := "tel:+1-571-830-0258", "+1 (571) 830-0258")) ::
-      Nil
+  def apply(): HtmlElement = {
+    val referenceLabelAnchors: Seq[(String, HtmlElement, HtmlElement)] =
+      ("mailto:michael@ahlers.consulting", i(className := "fas fa-envelope-square"), span("michael@ahlers.consulting")) ::
+        ("http://linkedin.com/in/michaelahlers", i(className := "fab fa-linkedin"), span("/in/michaelahlers")) ::
+        ("http://github.com/michaelahlers", i(className := "fab fa-github-square"), span("/michaelahlers")) ::
+        ("http://stackexchange.com/users/359179/michael-ahlers", i(className := "fab fa-stack-exchange"), span("/users/359179/michael-ahlers")) ::
+        ("tel:+1-571-830-0258", i(className := "fas fa-phone-square"), span("+1 (571) 830-0258")) ::
+        Nil
 
-  // FIXME: Replace table with semantic tags.
-  def apply(): HtmlElement =
-    table(tbody(
-      contactLabelAnchors.map { case (label, anchor) =>
-        tr(
-          th(className := "pe-1", label),
-          td(anchor))
-      }))
+    dl(
+      className := "list-unstyled",
+      referenceLabelAnchors.map {
+        case (reference, label, anchor) =>
+          a(
+            className := "row",
+            href := reference,
+            dt(className := "col-1", label),
+            dd(className := "col-11 mb-0 ps-1", anchor))
+      }
+    )
+  }
 
 }
