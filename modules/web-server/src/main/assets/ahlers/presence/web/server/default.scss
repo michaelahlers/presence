@@ -1,4 +1,15 @@
 $link-decoration: none;
+
+$gray-100: #f8f8f8;
+$gray-200: #e9e9e9;
+$gray-300: #dedede;
+$gray-400: #cecece;
+$gray-500: #adadad;
+$gray-600: #6c6c6c;
+$gray-700: #494949;
+$gray-800: #343434;
+$gray-900: #212121;
+
 //$font-family-sans-serif:
 @import "lib/bootstrap/scss/bootstrap";
 
@@ -7,5 +18,5 @@ $link-decoration: none;
 }
 
 .bg-dark a:hover {
-  color: $gray-100;
+  color: $gray-300;
 }
