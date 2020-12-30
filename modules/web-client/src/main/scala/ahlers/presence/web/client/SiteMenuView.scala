@@ -12,18 +12,13 @@ import scala.scalajs.js
  */
 object SiteMenuView {
 
-  @js.native
-  trait RawElement extends js.Object {
-    def doThing(): Unit // Note: This is not actually implemented in mwc-button, just an example
-  }
-
-  type Ref = dom.html.Element //with RawElement
+  type Ref = dom.html.Element
 
   def apply(modifiers: Modifier[ReactiveHtmlElement[Ref]]*): HtmlElement =
     nav(
       modifiers,
       div(
-        className := "container",
+        className := "container-fluid",
         div(
           //className := "collapse navbar-collapse",
           className := "row",
