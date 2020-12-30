@@ -1,3 +1,11 @@
 $link-decoration: none;
-$font-family-sans-serif: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+//$font-family-sans-serif:
 @import "lib/bootstrap/scss/bootstrap";
+
+.bg-dark a {
+  color: $gray-600;
+}
+
+.bg-dark a:hover {
+  color: $gray-100;
+}
