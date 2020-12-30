@@ -21,7 +21,7 @@ libraryDependencies ++=
     "biz.enef" %%% "slogging-http" % "0.6.2" ::
     Nil
 
-jsDependencies ++=
-  ("org.webjars" % "jquery" % "3.5.1" / "jquery.js").minified("jquery.min.js") ::
-    ("org.webjars" % "Semantic-UI" % "2.4.1" / "semantic.js").minified("semantic.min.js").dependsOn("jquery.js") ::
-    Nil
+//jsDependencies ++=
+//  ("org.webjars" % "jquery" % "3.5.1" / "jquery.js").minified("jquery.min.js") ::
+//    ("org.webjars" % "Semantic-UI" % "2.4.1" / "semantic.js").minified("semantic.min.js").dependsOn("jquery.js") ::
+//    Nil
