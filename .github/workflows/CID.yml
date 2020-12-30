@@ -11,7 +11,7 @@ jobs:
       - name: Setup
         uses: olafurpg/setup-scala@v10
         with:
-          java-version: "adopt@15"
+          java-version: "adopt@1.15"
       - name: Cache
         uses: coursier/cache-action@v5
       - name: Build
