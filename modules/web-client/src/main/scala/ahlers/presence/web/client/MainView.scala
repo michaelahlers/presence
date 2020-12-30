@@ -15,9 +15,18 @@ object MainView {
       .collectStatic(UiState.Resume)(ResumePage())
       .collectStatic(UiState.Contact)(ContactPage())
 
+  val pageClassName =
+    UiState.router.$currentPage
+      .map {
+        case UiState.Landing => "landing"
+        case UiState.Resume => "resume"
+        case UiState.Contact => "contact"
+      }
+
   def apply(): HtmlElement =
     main(
       className := "flex-grow-1",
+      className <-- pageClassName,
       child <-- pageSplitter.$view)
 
 }
