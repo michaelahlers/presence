@@ -1,6 +1,6 @@
 name: CID
 on:
-  push_request:
+  pull_request:
   push:
 jobs:
   build:
