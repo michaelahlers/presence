@@ -46,7 +46,7 @@ object WebClientApplication extends App with LazyLogging {
   documentEvents
     .onDomContentLoaded
     .mapToValue(Seq(
-      HeaderView(),
+      //HeaderView(),
       MainView(),
       FooterView()))
     .foreach(_.foreach(
