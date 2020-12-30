@@ -21,7 +21,7 @@ object LandingPageView {
     article(
       className := "container-fluid",
       div(
-        className := "row justify-content-center mt-3",
+        className := "row d-flex justify-content-center mt-3",
         div(
           className := "col-xl-5 col-lg-6 col-md-7 col-sm-8 col-11",
           img(src := Asset.versioned("ahlers/presence/web/client/Ahlers Consulting (dark).svg").url))
@@ -33,7 +33,7 @@ object LandingPageView {
           h1(className := "display-6 text-center text-muted text-lowercase", "Michael Ahlers Consulting"))
       ),
       div(
-        className := "row justify-content-center mt-3 mb-3",
+        className := "row d-flex justify-content-center mt-3 mb-3",
         div(
           className := "col-xl-7 col-lg-8 col-md-9 col-sm-10 col-12",
           p(
