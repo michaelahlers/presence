@@ -15,15 +15,15 @@ object ContactInformationView {
         Nil
 
     val socialLabelAnchors: Seq[(String, HtmlElement, HtmlElement)] =
-      ("http://linkedin.com/in/michaelahlers", i(className := "fab fa-linkedin"), span(className := "ms-1", "/in/michaelahlers")) ::
-        ("http://github.com/michaelahlers", i(className := "fab fa-github-square"), span(className := "ms-1", "/michaelahlers")) ::
-        ("http://stackexchange.com/users/359179/michael-ahlers", i(className := "fab fa-stack-exchange"), span(className := "ms-1", "/users/359179/michael-ahlers")) ::
+      ("http://linkedin.com/in/michaelahlers", i(className := "fab fa-linkedin"), span(className := "ms-1", "LinkedIn")) ::
+        ("http://github.com/michaelahlers", i(className := "fab fa-github-square"), span(className := "ms-1", "GitHub")) ::
+        ("http://stackexchange.com/users/359179/michael-ahlers", i(className := "fab fa-stack-exchange"), span(className := "ms-1", "Stack Exchange")) ::
         Nil
 
     div(
-      className := "d-flex flex-row justify-content-center mt-3",
+      className := "row d-flex justify-content-center mt-3",
       div(
-        className := "d-inline-flex",
+        className := "col-sm-6 col-12 d-flex justify-content-sm-end",
         ul(
           className := "list-unstyled lead",
           channelLabelAnchors.map {
@@ -38,9 +38,11 @@ object ContactInformationView {
         )
       ),
       div(
-        className := "d-inline-flex ms-3",
+        className := "col-sm-5 col-12",
         ul(
-          className := "ps-3 list-unstyled lead border-start border-3 border-secondary",
+          // FIXME: Restore border but disabled at extra-small.
+          //className := "ps-3 list-unstyled lead border-start border-3 border-secondary",
+          className := "list-unstyled lead",
           socialLabelAnchors.map {
             case (reference, label, anchor) =>
               li(
