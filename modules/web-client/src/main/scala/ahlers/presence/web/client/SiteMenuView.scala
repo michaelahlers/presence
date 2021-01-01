@@ -19,16 +19,8 @@ object SiteMenuView {
       modifiers,
       div(
         className := "container-fluid",
-        div(
-          //className := "collapse navbar-collapse",
-          className := "row",
-          ul(
-            className := "navbar-nav me-auto",
-            SiteAnchorView(UiState.Landing, i(className := "fas fa-home")) //,
-            //SiteAnchorView(UiState.Contact, span("Contact"))
-          )
-        )
-      )
-    )
+        ul(
+          className := "navbar-nav me-auto",
+          SiteAnchorView(UiState.Landing, i(className := "fas fa-home")))))
 
 }

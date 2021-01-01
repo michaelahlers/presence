@@ -10,9 +10,6 @@ object HeaderView {
 
   def apply(): HtmlElement =
     header(
-      //navbar-expand-lg
-      SiteMenuView(className := "navbar navbar-dark fixed-top bg-dark"),
-      SiteMenuView(className := "navbar navbar-dark bg-dark")
-    )
+      SiteMenuView(className := "navbar navbar-dark fixed-top bg-dark"))
 
 }
