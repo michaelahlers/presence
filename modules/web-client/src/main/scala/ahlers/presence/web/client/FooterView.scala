@@ -13,11 +13,7 @@ object FooterView {
       className := "footer mt-auto bg-dark",
       div(
         className := "container-fluid",
-        div(
-          className := "row mt-3",
-          div(
-            className := "col-12 d-flex justify-content-center",
-            ContactInformationView())))
+        ContactInformationView())
     )
 
 }
