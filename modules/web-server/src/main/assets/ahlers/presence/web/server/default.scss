@@ -39,24 +39,24 @@ $gray-900: #212121;
 
 svg.ahlers-consulting-logo g g g:nth-child(4) {
   opacity: 0.05;
-  animation: ahlers-consulting-logo-stroke-fade-in 500ms ease 100ms;
+  animation: ahlers-consulting-logo-stroke-fade-in 300ms ease 500ms;
   animation-fill-mode: forwards;
 }
 
 svg.ahlers-consulting-logo g g g:nth-child(3) {
-  opacity: 0.05;
-  animation: ahlers-consulting-logo-stroke-fade-in 300ms ease 300ms;
+  opacity: 0.04;
+  animation: ahlers-consulting-logo-stroke-fade-in 100ms ease 700ms;
   animation-fill-mode: forwards;
 }
 
 svg.ahlers-consulting-logo g g g:nth-child(2) {
-  opacity: 0.05;
-  animation: ahlers-consulting-logo-stroke-fade-in 500ms ease 900ms;
+  opacity: 0.03;
+  animation: ahlers-consulting-logo-stroke-fade-in 300ms ease 1200ms;
   animation-fill-mode: forwards;
 }
 
 svg.ahlers-consulting-logo g g g:nth-child(1) {
-  opacity: 0.05;
-  animation: ahlers-consulting-logo-stroke-fade-in 300ms ease 1100ms;
+  opacity: 0.02;
+  animation: ahlers-consulting-logo-stroke-fade-in 100ms ease 1400ms;
   animation-fill-mode: forwards;
 }
