@@ -13,10 +13,22 @@ $gray-900: #212121;
 //$font-family-sans-serif:
 @import "lib/bootstrap/scss/bootstrap";
 
-.bg-dark a {
-  color: $gray-600;
-}
+.contact-link {
+  color: $navbar-dark-color;
+  text-decoration: if($link-decoration == none, null, none);
+  @include transition($nav-link-transition);
 
-.bg-dark a:hover {
-  color: $gray-300;
+  &:hover,
+  &:focus {
+    //color: $nav-link-hover-color;
+    color: $navbar-dark-hover-color;
+    text-decoration: if($link-hover-decoration == underline, none, null);
+  }
+
+  //&.disabled {
+  //  color: $nav-link-disabled-color;
+  //  color: $navbar-dark-disabled-color;
+  //  pointer-events: none;
+  //  cursor: default;
+  //}
 }
