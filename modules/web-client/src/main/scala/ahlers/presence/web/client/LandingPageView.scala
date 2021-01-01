@@ -30,7 +30,7 @@ object LandingPageView {
         className := "row mt-3",
         div(
           className := "col-12",
-          h1(className := "display-6 text-center text-muted text-lowercase", "Michael Ahlers Consulting"))
+          h1(className := "display-6 text-center text-muted text-lowercase fw-lighter", "Michael Ahlers Consulting"))
       ),
       div(
         className := "row d-flex justify-content-center mt-3 mb-3",
