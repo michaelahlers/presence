@@ -32,3 +32,31 @@ $gray-900: #212121;
   //  cursor: default;
   //}
 }
+
+@keyframes ahlers-consulting-logo-stroke-fade-in {
+  100% { opacity: 1; }
+}
+
+svg.ahlers-consulting-logo g g g:nth-child(4) {
+  opacity: 0.01;
+  animation: ahlers-consulting-logo-stroke-fade-in 500ms ease 100ms;
+  animation-fill-mode: forwards;
+}
+
+svg.ahlers-consulting-logo g g g:nth-child(3) {
+  opacity: 0.01;
+  animation: ahlers-consulting-logo-stroke-fade-in 300ms ease 300ms;
+  animation-fill-mode: forwards;
+}
+
+svg.ahlers-consulting-logo g g g:nth-child(2) {
+  opacity: 0.01;
+  animation: ahlers-consulting-logo-stroke-fade-in 500ms ease 900ms;
+  animation-fill-mode: forwards;
+}
+
+svg.ahlers-consulting-logo g g g:nth-child(1) {
+  opacity: 0.01;
+  animation: ahlers-consulting-logo-stroke-fade-in 300ms ease 1100ms;
+  animation-fill-mode: forwards;
+}

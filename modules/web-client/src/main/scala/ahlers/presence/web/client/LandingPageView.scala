@@ -24,7 +24,7 @@ object LandingPageView {
         className := "row d-flex justify-content-center mt-3",
         div(
           className := "col-xl-5 col-lg-6 col-md-7 col-sm-8 col-11",
-          img(src := Asset.versioned("ahlers/presence/web/client/Ahlers Consulting (dark).svg").url))
+          LogoView())
       ),
       div(
         className := "row mt-3",
