@@ -23,7 +23,14 @@ object SiteMenuView {
           className := "collapse navbar-collapse",
           ul(
             className := "navbar-nav me-auto",
-            SiteAnchorView(UiState.Landing, i(className := "fas fa-home"))))
+            SiteAnchorView(
+              UiState.Landing,
+              i(className := "fas fa-home"))
+            //SiteAnchorView(
+            //  UiState.Contact,
+            //  span("Contact"))
+          )
+        )
       )
     )
 
