@@ -34,24 +34,6 @@
 
     @webJars.locate("font-awesome", "all.js").script()
 
-    @*<div class="container text-white border border-white">
-      <div class="row justify-content-md-center">
-        <div class="col-4 border border-primary">
-          <img src="@Assets.versioned("ahlers/presence/web/client/Ahlers Consulting (light).svg")"/>
-        </div>
-        <div class="col-4 border border-primary text-nowrap">
-          <h1 class="title">Michael Ahlers</h1>
-          <h2 class="text-lowercase text-muted">Software Engineer</h2>
-          <table><tr><td class="pe-1"><i class="fas fa-envelope-square"></i></td><td><a href="mailto:michael@@ahlers.consulting">
-            michael@@ahlers.consulting</a></td></tr><tr><td><i class="fab fa-linkedin"></i></td><td><a href="http://linkedin.com/in/michaelahlers">
-            /in/michaelahlers</a></td></tr><tr><td><i class="fab fa-github-square"></i></td><td><a href="http://github.com/michaelahlers">
-            /michaelahlers</a></td></tr><tr><td><i class="fab fa-stack-exchange"></i></td><td><a href="http://stackexchange.com/users/359179/michael-ahlers">
-            /users/359179/michael-ahlers</a></td></tr><tr><td><i class="fas fa-phone-square"></i></td><td><a href="tel:+1-571-830-0258">
-            +1 (571) 830-0258</a></td></tr></table>
-        </div>
-      </div>
-    </div>*@
-
     @scalajs.html.scripts(
       "presence-web-client",
       Assets.versioned(_).toString,
