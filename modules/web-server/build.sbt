@@ -1,6 +1,8 @@
 import com.typesafe.sbt.digest.Import.DigestKeys.{ indexPath, indexWriter }
 
 enablePlugins(PlayScala)
+enablePlugins(WebScalaJSBundlerPlugin)
+
 disablePlugins(PlayLayoutPlugin)
 
 Compile / compile :=
