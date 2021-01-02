@@ -8,7 +8,7 @@ Compile / compile :=
     .dependsOn(scalaJSPipeline)
     .value
 
-Assets / LessKeys.less / includeFilter := "*.less"
+//Assets / LessKeys.less / includeFilter := "*.less"
 
 Assets / pipelineStages ++=
   scalaJSPipeline ::
