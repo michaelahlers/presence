@@ -1,6 +1,6 @@
 enablePlugins(ScalaJSBundlerPlugin)
 enablePlugins(ScalaJSPlugin)
-//enablePlugins(ScalaJSWeb)
+enablePlugins(ScalablyTypedConverterPlugin)
 //enablePlugins(TzdbPlugin)
 
 scalaJSUseMainModuleInitializer := true
