@@ -1,9 +1,9 @@
 package ahlers.presence.web.client
 
+import cats.syntax.option._
 import com.raquo.laminar.api.L._
 import d3v4._
-import cats.syntax.option._
-import scala.scalajs.js
+
 import scala.scalajs.js.JSConverters._
 import scala.scalajs.js.UndefOr
 
@@ -130,8 +130,8 @@ object ResumePage {
 
   def apply(): Div = {
     val nodes: Seq[SimNode] =
-      SimNode(0, 0, 0, 0, 0, 0, 0) ::
-        SimNode(1, 0, 0, 0, 0, 0, 0) ::
+      SimNode(0.some, none, none, none, none, none, none) ::
+        SimNode(1.some, none, none, none, none, none, none) ::
         Nil
 
     val links: Seq[SimLink] =
@@ -171,6 +171,7 @@ object ResumePage {
         illustration)
 
     d3.forceSimulation(nodes.toJSArray)
+      .force("link", d3.forceLink(links.toJSArray))
       .force("charge", d3.forceManyBody().strength(-400))
       .force("center", d3.forceCenter(400, 300))
 
@@ -178,52 +179,5 @@ object ResumePage {
       h1("Resume"),
       container)
   }
-
-  //val graphHeight = 450
-  //val barWidth = 80
-  //val barSeparation = 10
-  //val maxData = 50
-  //
-  //val horizontalBarDistance = barWidth + barSeparation
-  //val barHeightMultiplier = graphHeight / maxData;
-  //
-  //val c = d3.hcl("DarkSlateBlue")
-  //
-  //val rectXFun = (d: Int, i: Int) => i * horizontalBarDistance
-  //val rectYFun = (d: Int) => graphHeight - d * barHeightMultiplier
-  //val rectHeightFun = (d: Int) => d * barHeightMultiplier
-  //val rectColorFun = (d: Int, i: Int) => c //c.brighter(i * 0.5).toString
-  //
-  //def apply(): Div = {
-  //  val container =
-  //    div(
-  //      width := "100%",
-  //      height := "450px",
-  //      className := "border border-3")
-  //
-  //  val svg =
-  //    d3
-  //      .select(container.ref)
-  //      .append("svg")
-  //      .attr("width", "100%")
-  //      .attr("height", "450px")
-  //
-  //  val sel =
-  //    svg
-  //      .selectAll("rect")
-  //      .data(js.Array(8, 22, 31, 36, 48, 17, 25))
-  //
-  //  sel.enter()
-  //    .append("rect")
-  //    .attr("x", rectXFun)
-  //    .attr("y", rectYFun)
-  //    .attr("width", barWidth)
-  //    .attr("height", rectHeightFun)
-  //    .style("fill", "DarkSlateBlue")
-  //
-  //  div(
-  //    h1("Resume"),
-  //    container)
-  //}
 
 }
