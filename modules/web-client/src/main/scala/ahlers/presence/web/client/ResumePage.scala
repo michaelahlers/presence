@@ -2,8 +2,9 @@ package ahlers.presence.web.client
 
 import com.raquo.laminar.api.L._
 import d3v4._
-
+import cats.syntax.option._
 import scala.scalajs.js
+import scala.scalajs.js.JSConverters._
 import scala.scalajs.js.UndefOr
 
 /**
@@ -13,199 +14,170 @@ import scala.scalajs.js.UndefOr
 object ResumePage {
 
   case class SimNode(
-    _index: Var[UndefOr[Index]],
-    _x: Var[UndefOr[Double]],
-    _y: Var[UndefOr[Double]],
-    _vx: Var[UndefOr[Double]],
-    _vy: Var[UndefOr[Double]],
-    _fx: Var[UndefOr[Double]],
-    _fy: Var[UndefOr[Double]])
+    _index: Var[Option[Index]],
+    _x: Var[Option[Double]],
+    _y: Var[Option[Double]],
+    _vx: Var[Option[Double]],
+    _vy: Var[Option[Double]],
+    _fx: Var[Option[Double]],
+    _fy: Var[Option[Double]])
     extends SimulationNode {
 
-    override def index = _index.now()
-    override def index_=(newIndex: UndefOr[Index]) = _index.set(newIndex)
+    val $index = _index.signal
+    override def index = _index.now().orUndefined
+    override def index_=(index: UndefOr[Index]) = _index.set(index.toOption)
 
-    override def x = _x.now()
-    override def x_=(newX: UndefOr[Double]) = _x.set()
+    val $x = _x.signal
+    override def x = _x.now().orUndefined
+    override def x_=(x: UndefOr[Double]) = _x.set(x.toOption)
 
-    override def y = _y.now()
-    override def y_=(newY: UndefOr[Double]) = _y.set()
+    val $y = _y.signal
+    override def y = _y.now().orUndefined
+    override def y_=(y: UndefOr[Double]) = _y.set(y.toOption)
 
-    override def vx = _vx.now()
-    override def vx_=(newVX: UndefOr[Double]) = _vx.set()
+    val $vx = _vx.signal
+    override def vx = _vx.now().orUndefined
+    override def vx_=(vx: UndefOr[Double]) = _vx.set(vx.toOption)
 
-    override def vy = _y.now()
-    override def vy_=(newVY: UndefOr[Double]) = _vy.set()
+    val $vy = _vy.signal
+    override def vy = _y.now().orUndefined
+    override def vy_=(vy: UndefOr[Double]) = _vy.set(vy.toOption)
 
-    override def fx = _fx.now()
-    override def fx_=(newfX: UndefOr[Double]) = _fx.set()
+    val $fx = _fx.signal
+    override def fx = _fx.now().orUndefined
+    override def fx_=(fx: UndefOr[Double]) = _fx.set(fx.toOption)
 
-    override def fy = _y.now()
-    override def fy_=(newfY: UndefOr[Double]) = _fy.set()
+    val $fy = _fy.signal
+    override def fy = _y.now().orUndefined
+    override def fy_=(fy: UndefOr[Double]) = _fy.set(fy.toOption)
+
+  }
+
+  object SimNode {
+
+    def apply(
+      index: Option[Index],
+      x: Option[Double],
+      y: Option[Double],
+      vx: Option[Double],
+      vy: Option[Double],
+      fx: Option[Double],
+      fy: Option[Double]
+    ): SimNode =
+      SimNode(
+        Var(index),
+        Var(x),
+        Var(y),
+        Var(vx),
+        Var(vy),
+        Var(fx),
+        Var(fy))
+
+    def apply(
+      index: Index,
+      x: Double,
+      y: Double,
+      vx: Double,
+      vy: Double,
+      fx: Double,
+      fy: Double
+    ): SimNode =
+      SimNode(
+        index.some,
+        x.some,
+        y.some,
+        vx.some,
+        vy.some,
+        fx.some,
+        fy.some)
+
+  }
+
+  case class SimLink(
+    _index: Var[Option[Index]],
+    source: SimNode,
+    target: SimNode)
+    extends SimulationLink[SimNode, SimNode] {
+
+    override def index = _index.now().orUndefined
+    override def index_=(index: UndefOr[Index]) = _index.set(index.toOption)
+
+  }
+
+  object SimLink {
+
+    def apply(
+      index: Option[Index],
+      source: SimNode,
+      target: SimNode
+    ): SimLink =
+      SimLink(
+        Var(index),
+        source,
+        target)
+
+    def apply(
+      index: Index,
+      source: SimNode,
+      target: SimNode
+    ): SimLink =
+      SimLink(
+        index.some,
+        source,
+        target)
 
   }
 
   def apply(): Div = {
-    //val illustration = {
-    //  import svg._
-    //  svg(
-    //    width := "800px",
-    //    height := "600px")
-    //}
+    val nodes: Seq[SimNode] =
+      SimNode(0, 0, 0, 0, 0, 0, 0) ::
+        SimNode(1, 0, 0, 0, 0, 0, 0) ::
+        Nil
+
+    val links: Seq[SimLink] =
+      SimLink(0, nodes(0), nodes(1)) ::
+        Nil
+
+    val illustration = {
+      import svg._
+
+      svg(
+        width := "800px",
+        height := "600px",
+        g(
+          nodes.map(node =>
+            circle(
+              r := "20",
+              cx <-- node.$x.map(_.fold("")(_.toString)),
+              cy <-- node.$y.map(_.fold("")(_.toString)),
+              fill := "#69b3a2")),
+          links.map(link =>
+            line(
+              style := "stroke: #aaa",
+              x1 <-- link.source.$x.map(_.fold("")(_.toString)),
+              y1 <-- link.source.$y.map(_.fold("")(_.toString)),
+              x2 <-- link.target.$x.map(_.fold("")(_.toString)),
+              y2 <-- link.target.$y.map(_.fold("")(_.toString))
+            ))
+        )
+      )
+    }
 
     val container =
       div(
         width := "800px",
         height := "600px",
-        className := "border border-3")
+        className := "border border-3",
+        illustration)
 
-    val svg =
-      d3.select(container.ref)
-        .append("svg")
-        .attr("width", 800)
-        .attr("height", 600)
-        .append("g")
-
-    val links = data.links.asInstanceOf[js.Array[SimulationLink[SimulationNode, SimulationNode]]]
-
-    val link =
-      svg.selectAll("line")
-        .data(links)
-        .enter()
-        .append("line")
-        .style("stroke", "#aaa")
-
-    val nodes = data.nodes.asInstanceOf[js.Array[SimulationNode]]
-
-    val node =
-      svg.selectAll("circle")
-        .data(nodes)
-        .enter()
-        .append("circle")
-        .attr("r", 20)
-        .style("fill", "#69b3a2")
-
-//val simulation = {
-//  val ticked: ListenerFunction0 = { () =>
-//    link
-//      .attr("x1", _.source.x)
-//      .attr("y1", _.source.y)
-//      .attr("x2", _.target.x)
-//      .attr("y2", _.target.y)
-//
-//    node
-//      .attr("cx", _.x.toString.toDouble + 6d)
-//      .attr("cy", _.y.toString.toDouble + 6d)
-//  }
-//
-//  d3.forceSimulation(nodes)
-//    .force("link", d3.forceLink(links))
-//    .force("charge", d3.forceManyBody().strength(-400))
-//    .force("center", d3.forceCenter(400, 300))
-//    .on("tick", ticked)
-//}
+    d3.forceSimulation(nodes.toJSArray)
+      .force("charge", d3.forceManyBody().strength(-400))
+      .force("center", d3.forceCenter(400, 300))
 
     div(
       h1("Resume"),
       container)
   }
-
-  val data = js.JSON.parse(
-    """
-      |{
-      |  "nodes": [
-      |    {
-      |      "id": 1,
-      |      "name": "A"
-      |    },
-      |    {
-      |      "id": 2,
-      |      "name": "B"
-      |    },
-      |    {
-      |      "id": 3,
-      |      "name": "C"
-      |    },
-      |    {
-      |      "id": 4,
-      |      "name": "D"
-      |    },
-      |    {
-      |      "id": 5,
-      |      "name": "E"
-      |    },
-      |    {
-      |      "id": 6,
-      |      "name": "F"
-      |    },
-      |    {
-      |      "id": 7,
-      |      "name": "G"
-      |    },
-      |    {
-      |      "id": 8,
-      |      "name": "H"
-      |    },
-      |    {
-      |      "id": 9,
-      |      "name": "I"
-      |    },
-      |    {
-      |      "id": 10,
-      |      "name": "J"
-      |    }
-      |  ],
-      |  "links": [
-      |
-      |    {
-      |      "source": 1,
-      |      "target": 2
-      |    },
-      |    {
-      |      "source": 1,
-      |      "target": 5
-      |    },
-      |    {
-      |      "source": 1,
-      |      "target": 6
-      |    },
-      |
-      |    {
-      |      "source": 2,
-      |      "target": 3
-      |    },
-      |            {
-      |      "source": 2,
-      |      "target": 7
-      |    }
-      |    ,
-      |
-      |    {
-      |      "source": 3,
-      |      "target": 4
-      |    },
-      |     {
-      |      "source": 8,
-      |      "target": 3
-      |    }
-      |    ,
-      |    {
-      |      "source": 4,
-      |      "target": 5
-      |    }
-      |    ,
-      |
-      |    {
-      |      "source": 4,
-      |      "target": 9
-      |    },
-      |    {
-      |      "source": 5,
-      |      "target": 10
-      |    }
-      |  ]
-      |}
-      |""".stripMargin)
 
   //val graphHeight = 450
   //val barWidth = 80
