@@ -1,7 +1,7 @@
 addSbtPlugin("com.codecommit" % "sbt-github-actions" % "0.9.5")
 addSbtPlugin("com.eed3si9n" % "sbt-buildinfo" % "0.10.0")
 addSbtPlugin("com.heroku" % "sbt-heroku" % "2.1.4")
-addSbtPlugin("com.thoughtworks.sbt-scala-js-map" % "sbt-scala-js-map" % "4.0.0")
+//addSbtPlugin("com.thoughtworks.sbt-scala-js-map" % "sbt-scala-js-map" % "4.0.0")
 addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.8.7")
 addSbtPlugin("com.typesafe.sbt" % "sbt-gzip" % "1.0.2")
 addSbtPlugin("com.typesafe.sbt" % "sbt-digest" % "1.1.4")
