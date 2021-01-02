@@ -3,6 +3,8 @@ package ahlers.presence.web.client
 import cats.syntax.option._
 import com.raquo.laminar.api.L._
 import d3v4._
+import d3v4.d3force.{ Centering, Collision, Force, Link, ManyBody }
+import org.scalajs.dom.ext.KeyCode
 
 import scala.scalajs.js.JSConverters._
 import scala.scalajs.js.UndefOr
@@ -40,7 +42,7 @@ object ResumePage {
     override def vx_=(vx: UndefOr[Double]) = _vx.set(vx.toOption)
 
     val $vy = _vy.signal
-    override def vy = _y.now().orUndefined
+    override def vy = _vy.now().orUndefined
     override def vy_=(vy: UndefOr[Double]) = _vy.set(vy.toOption)
 
     val $fx = _fx.signal
@@ -48,7 +50,7 @@ object ResumePage {
     override def fx_=(fx: UndefOr[Double]) = _fx.set(fx.toOption)
 
     val $fy = _fy.signal
-    override def fy = _y.now().orUndefined
+    override def fy = _fy.now().orUndefined
     override def fy_=(fy: UndefOr[Double]) = _fy.set(fy.toOption)
 
   }
@@ -130,27 +132,23 @@ object ResumePage {
 
   def apply(): Div = {
     val nodes: Seq[SimNode] =
-      SimNode(0.some, none, none, none, none, none, none) ::
-        SimNode(1.some, none, none, none, none, none, none) ::
-        Nil
+      (0 until 5)
+        .map(_.some)
+        .map(SimNode(_, 100d.some, 300d.some, none, none, none, none))
 
     val links: Seq[SimLink] =
-      SimLink(0, nodes(0), nodes(1)) ::
+      SimLink(0.some, nodes(0), nodes(1)) ::
+        SimLink(2.some, nodes(0), nodes(2)) ::
+        SimLink(1.some, nodes(1), nodes(2)) ::
         Nil
 
     val illustration = {
       import svg._
 
       svg(
-        width := "800px",
-        height := "600px",
+        width := "100%",
+        height := "100%",
         g(
-          nodes.map(node =>
-            circle(
-              r := "20",
-              cx <-- node.$x.map(_.fold("")(_.toString)),
-              cy <-- node.$y.map(_.fold("")(_.toString)),
-              fill := "#69b3a2")),
           links.map(link =>
             line(
               style := "stroke: #aaa",
@@ -158,26 +156,102 @@ object ResumePage {
               y1 <-- link.source.$y.map(_.fold("")(_.toString)),
               x2 <-- link.target.$x.map(_.fold("")(_.toString)),
               y2 <-- link.target.$y.map(_.fold("")(_.toString))
-            ))
+            )),
+          nodes.map(node =>
+            circle(
+              r := "20",
+              cx <-- node.$x.map(_.fold("")(_.toString)),
+              cy <-- node.$y.map(_.fold("")(_.toString)),
+              fill := "#69b3a2"))
         )
       )
     }
 
-    val container =
-      div(
-        width := "800px",
-        height := "600px",
-        className := "border border-3",
-        illustration)
+    val linkDistance = Var(100d)
+    val linkStrength = Var(0.1d)
+    val link: Link[SimNode, SimLink] =
+      d3.forceLink[SimNode, SimLink](links.toJSArray)
+        .distance(linkDistance.now())
+        .strength(linkStrength.now())
 
-    d3.forceSimulation(nodes.toJSArray)
-      .force("link", d3.forceLink(links.toJSArray))
-      .force("charge", d3.forceManyBody().strength(-400))
-      .force("center", d3.forceCenter(400, 300))
+    val chargeStrength = Var(-100d)
+    val charge: ManyBody[SimNode] =
+      d3.forceManyBody()
+        .strength(chargeStrength.now())
+
+    val centeringX = Var(400)
+    val centeringY = Var(300)
+    val centering: Centering[SimNode] =
+      d3.forceCenter(centeringX.now(), centeringY.now())
+
+    val collision: Collision[SimNode] =
+      d3.forceCollide()
+        .strength(.2)
+        .radius(_ => 30)
+
+    val simulation =
+      d3.forceSimulation(nodes.toJSArray)
+        .force("link", link)
+        .force("charge", charge)
+        .force("center", centering)
+    //.force("collide", collision)
+
+    val onEnterPress = onKeyPress.filter(_.keyCode == KeyCode.Enter)
 
     div(
-      h1("Resume"),
-      container)
+      width := "100%",
+      height := "600px",
+      className := "border border-3",
+      illustration,
+      div(
+        span("Link Distance: "),
+        input(
+          value <-- linkDistance.signal.map(_.toString),
+          inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toDouble) --> linkDistance.writer)),
+        span("Link Strength: "),
+        input(
+          value <-- linkStrength.signal.map(_.toString),
+          inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toDouble) --> linkStrength.writer))
+      ),
+      div(
+        span("Charge Strength: "),
+        input(
+          value <-- chargeStrength.signal.map(_.toString),
+          inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toDouble) --> chargeStrength.writer))
+      ),
+      div(
+        span("Centering X: "),
+        input(
+          value <-- centeringX.signal.map(_.toString),
+          inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toInt) --> centeringX.writer)),
+        span("Centering Y: "),
+        input(
+          value <-- centeringY.signal.map(_.toString),
+          inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toInt) --> centeringY.writer))
+      ),
+      onMountCallback { context =>
+        import context.owner
+        linkDistance.signal.foreach(link.distance(_))
+        linkDistance.signal.mapToValue(1d).foreach(simulation.alphaTarget(_).restart())
+
+        linkStrength.signal.foreach(link.strength(_))
+        linkStrength.signal.mapToValue(1d).foreach(simulation.alphaTarget(_).restart())
+
+        chargeStrength.signal.foreach(charge.strength(_))
+        chargeStrength.signal.mapToValue(1d).foreach(simulation.alphaTarget(_).restart())
+
+        centeringX.signal.foreach(centering.x(_))
+        centeringX.signal.mapToValue(1d).foreach(simulation.alphaTarget(_).restart())
+
+        centeringY.signal.foreach(centering.y(_))
+        centeringY.signal.mapToValue(1d).foreach(simulation.alphaTarget(_).restart())
+      }
+      //inContext { el =>
+      //  windowEvents.onResize.mapToValue(el.ref.clientWidth / 2) --> centeringX.writer ::
+      //    windowEvents.onResize.mapToValue(el.ref.clientHeight / 2) --> centeringY.writer ::
+      //    Nil
+      //}
+    )
   }
 
 }
