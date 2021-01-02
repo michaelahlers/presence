@@ -137,10 +137,15 @@ object ResumePage {
         .map(SimNode(_, 100d.some, 300d.some, none, none, none, none))
 
     val links: Seq[SimLink] =
-      SimLink(0.some, nodes(0), nodes(1)) ::
-        SimLink(2.some, nodes(0), nodes(2)) ::
-        SimLink(1.some, nodes(1), nodes(2)) ::
-        Nil
+      nodes
+        .sliding(2)
+        .zipWithIndex
+        .map {
+          case (Seq(source, target), index) =>
+            SimLink(index.some, source, target)
+        }
+        .toSeq :+
+        SimLink(4.some, nodes.head, nodes.last)
 
     val illustration = {
       import svg._
@@ -184,9 +189,10 @@ object ResumePage {
     val centering: Centering[SimNode] =
       d3.forceCenter(centeringX.now(), centeringY.now())
 
+    val collisionStrength = Var(1d)
     val collision: Collision[SimNode] =
       d3.forceCollide()
-        .strength(.2)
+        .strength(collisionStrength.now())
         .radius(_ => 30)
 
     val simulation =
@@ -220,6 +226,12 @@ object ResumePage {
           inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toDouble) --> chargeStrength.writer))
       ),
       div(
+        span("Collision Strength: "),
+        input(
+          value <-- collisionStrength.signal.map(_.toString),
+          inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toDouble) --> collisionStrength.writer))
+      ),
+      div(
         span("Centering X: "),
         input(
           value <-- centeringX.signal.map(_.toString),
@@ -239,6 +251,9 @@ object ResumePage {
 
         chargeStrength.signal.foreach(charge.strength(_))
         chargeStrength.signal.mapToValue(1d).foreach(simulation.alphaTarget(_).restart())
+
+        collisionStrength.signal.foreach(collision.strength(_))
+        collisionStrength.signal.mapToValue(1d).foreach(simulation.alphaTarget(_).restart())
 
         centeringX.signal.foreach(centering.x(_))
         centeringX.signal.mapToValue(1d).foreach(simulation.alphaTarget(_).restart())
