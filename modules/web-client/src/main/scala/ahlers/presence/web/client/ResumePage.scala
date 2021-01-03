@@ -116,6 +116,11 @@ object ResumePage {
   }
 
   def apply(): HtmlElement = {
+    val linkDistance = Var(10d)
+    val linkStrength = Var(0.01d)
+    val chargeStrength = Var(-25d)
+    val centeringX = Var(400)
+    val centeringY = Var(300)
 
     val illustration = {
       import svg._
@@ -149,24 +154,34 @@ object ResumePage {
                 style := "15px sans-serif",
                 node.id)
             ))
-        )
+        ),
+        inContext { thisNode =>
+          val $width =
+            windowEvents
+              .onResize
+              .mapTo(thisNode.ref.clientWidth)
+
+          val $height =
+            windowEvents
+              .onResize
+              .mapTo(thisNode.ref.clientHeight)
+
+          $width.map(_ / 2) --> centeringX.writer ::
+            $height.map(_ / 2) --> centeringY.writer ::
+            Nil
+        }
       )
     }
 
-    val linkDistance = Var(10d)
-    val linkStrength = Var(0.01d)
     val link: Link[ExperienceNode, ExperienceLink] =
       d3.forceLink[ExperienceNode, ExperienceLink](links.toJSArray)
         .distance(linkDistance.now())
         .strength(linkStrength.now())
 
-    val chargeStrength = Var(-25d)
     val charge: ManyBody[ExperienceNode] =
       d3.forceManyBody()
         .strength(chargeStrength.now())
 
-    val centeringX = Var(400)
-    val centeringY = Var(300)
     val centering: Centering[ExperienceNode] =
       d3.forceCenter(centeringX.now(), centeringY.now())
 
@@ -260,12 +275,10 @@ object ResumePage {
 
         centeringY.signal.foreach(centering.y(_))
         centeringY.signal.mapToValue(1d).foreach(simulation.alphaTarget(_).restart())
+
+      //windowEvents.onResize.mapToValue(context.thisNode.ref.clientWidth / 2).foreach(centeringX.set(_))
+      //windowEvents.onResize.mapToValue(context.thisNode.ref.clientHeight / 2).foreach(centeringY.set(_))
       }
-      //inContext { el =>
-      //  windowEvents.onResize.mapToValue(el.ref.clientWidth / 2) --> centeringX.writer ::
-      //    windowEvents.onResize.mapToValue(el.ref.clientHeight / 2) --> centeringY.writer ::
-      //    Nil
-      //}
     )
   }
 
