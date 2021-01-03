@@ -166,15 +166,15 @@ object ResumePage {
         .strength(chargeStrength.now())
 
     val centeringX = Var(400)
-    val centeringY = Var(350)
+    val centeringY = Var(300)
     val centering: Centering[ExperienceNode] =
       d3.forceCenter(centeringX.now(), centeringY.now())
 
-    val collisionStrength = Var(1d)
-    val collision: Collision[ExperienceNode] =
-      d3.forceCollide()
-        .strength(collisionStrength.now())
-        .radius(_ => 30)
+    //val collisionStrength = Var(1d)
+    //val collision: Collision[ExperienceNode] =
+    //  d3.forceCollide()
+    //    .strength(collisionStrength.now())
+    //    .radius(_ => 30)
 
     val simulation =
       d3.forceSimulation(experiences.nodes.toJSArray)
@@ -190,7 +190,7 @@ object ResumePage {
       div(
         className := "row",
         div(
-          height := "700px",
+          height := "600px",
           className := "col-12",
           illustration)),
       div(
@@ -216,16 +216,16 @@ object ResumePage {
               inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toDouble) --> chargeStrength.writer))
           )
         ),
-        div(
-          className := "row",
-          div(
-            className := "col-12",
-            span("Collision Strength: "),
-            input(
-              value <-- collisionStrength.signal.map(_.toString),
-              inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toDouble) --> collisionStrength.writer))
-          )
-        ),
+        //div(
+        //  className := "row",
+        //  div(
+        //    className := "col-12",
+        //    span("Collision Strength: "),
+        //    input(
+        //      value <-- collisionStrength.signal.map(_.toString),
+        //      inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toDouble) --> collisionStrength.writer))
+        //  )
+        //),
         div(
           className := "row",
           div(
@@ -252,8 +252,8 @@ object ResumePage {
         chargeStrength.signal.foreach(charge.strength(_))
         chargeStrength.signal.mapToValue(1d).foreach(simulation.alphaTarget(_).restart())
 
-        collisionStrength.signal.foreach(collision.strength(_))
-        collisionStrength.signal.mapToValue(1d).foreach(simulation.alphaTarget(_).restart())
+        //collisionStrength.signal.foreach(collision.strength(_))
+        //collisionStrength.signal.mapToValue(1d).foreach(simulation.alphaTarget(_).restart())
 
         centeringX.signal.foreach(centering.x(_))
         centeringX.signal.mapToValue(1d).foreach(simulation.alphaTarget(_).restart())
