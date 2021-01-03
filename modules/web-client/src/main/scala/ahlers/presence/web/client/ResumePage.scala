@@ -1,11 +1,13 @@
 package ahlers.presence.web.client
 
+import ahlers.presence.web.client.resume.{ ExperienceLink, ExperienceNode }
 import cats.syntax.option._
 import com.raquo.laminar.api.L._
 import d3v4._
 import d3v4.d3force.{ Centering, Collision, Force, Link, ManyBody }
 import org.scalajs.dom.ext.KeyCode
 
+import java.util.concurrent.atomic.AtomicInteger
 import scala.scalajs.js.JSConverters._
 import scala.scalajs.js.UndefOr
 
@@ -15,137 +17,105 @@ import scala.scalajs.js.UndefOr
  */
 object ResumePage {
 
-  case class SimNode(
-    _index: Var[Option[Index]],
-    _x: Var[Option[Double]],
-    _y: Var[Option[Double]],
-    _vx: Var[Option[Double]],
-    _vy: Var[Option[Double]],
-    _fx: Var[Option[Double]],
-    _fy: Var[Option[Double]])
-    extends SimulationNode {
+  object experiences {
 
-    val $index = _index.signal
-    override def index = _index.now().orUndefined
-    override def index_=(index: UndefOr[Index]) = _index.set(index.toOption)
+    private val nextIndex: () => Int = {
+      val next = new AtomicInteger()
+      () => next.getAndIncrement()
+    }
 
-    val $x = _x.signal
-    override def x = _x.now().orUndefined
-    override def x_=(x: UndefOr[Double]) = _x.set(x.toOption)
+    val `Akka` = ExperienceNode.skill("akka", "Akka", nextIndex().some)
+    val `Bootstrap` = ExperienceNode.skill("bootstrap", "Bootstrap", nextIndex().some)
+    val `Cascading Style Sheets` = ExperienceNode.skill("css", "CSS", nextIndex().some)
+    val `Flyway` = ExperienceNode.skill("flyway", "Flyway", nextIndex().some)
+    val `SBT` = ExperienceNode.skill("sbt", "SBT", nextIndex().some)
+    val `Scala` = ExperienceNode.skill("scala", "Scala", nextIndex().some)
+    val `Slick` = ExperienceNode.skill("slick", "Slick", nextIndex().some)
+    val `Lagom` = ExperienceNode.skill("lagom", "Lagom", nextIndex().some)
+    val `Play Framework` = ExperienceNode.skill("play-framework", "Play Framework", nextIndex().some)
+    val `PostgreSQL` = ExperienceNode.skill("postgresql", "PostgreSQL", nextIndex().some)
 
-    val $y = _y.signal
-    override def y = _y.now().orUndefined
-    override def y_=(y: UndefOr[Double]) = _y.set(y.toOption)
+    val `LiveSafe` =
+      ExperienceNode.employment(
+        "livesafe",
+        ExperienceNode.Employment.Company(
+          "LiveSafe",
+          "Rosslyn",
+          "Virginia"),
+        nextIndex().some)
 
-    val $vx = _vx.signal
-    override def vx = _vx.now().orUndefined
-    override def vx_=(vx: UndefOr[Double]) = _vx.set(vx.toOption)
+    val `Thompson-Reuters Special Services` =
+      ExperienceNode.employment(
+        "trss",
+        ExperienceNode.Employment.Company(
+          "Thompson-Reuters Special Services",
+          "McLean",
+          "Virginia"),
+        nextIndex().some)
 
-    val $vy = _vy.signal
-    override def vy = _vy.now().orUndefined
-    override def vy_=(vy: UndefOr[Double]) = _vy.set(vy.toOption)
+    val `Verizon Business` =
+      ExperienceNode.employment(
+        "verizon-business",
+        ExperienceNode.Employment.Company(
+          "Verizon Business",
+          "Ashburn",
+          "Virginia"),
+        nextIndex().some)
 
-    val $fx = _fx.signal
-    override def fx = _fx.now().orUndefined
-    override def fx_=(fx: UndefOr[Double]) = _fx.set(fx.toOption)
-
-    val $fy = _fy.signal
-    override def fy = _fy.now().orUndefined
-    override def fy_=(fy: UndefOr[Double]) = _fy.set(fy.toOption)
-
-  }
-
-  object SimNode {
-
-    def apply(
-      index: Option[Index],
-      x: Option[Double],
-      y: Option[Double],
-      vx: Option[Double],
-      vy: Option[Double],
-      fx: Option[Double],
-      fy: Option[Double]
-    ): SimNode =
-      SimNode(
-        Var(index),
-        Var(x),
-        Var(y),
-        Var(vx),
-        Var(vy),
-        Var(fx),
-        Var(fy))
-
-    def apply(
-      index: Index,
-      x: Double,
-      y: Double,
-      vx: Double,
-      vy: Double,
-      fx: Double,
-      fy: Double
-    ): SimNode =
-      SimNode(
-        index.some,
-        x.some,
-        y.some,
-        vx.some,
-        vy.some,
-        fx.some,
-        fy.some)
+    val nodes: Seq[ExperienceNode] =
+      `Akka` ::
+        `Bootstrap` ::
+        `Cascading Style Sheets` ::
+        `Flyway` ::
+        `Lagom` ::
+        `Play Framework` ::
+        `PostgreSQL` ::
+        `SBT` ::
+        `Scala` ::
+        `Slick` ::
+        `LiveSafe` ::
+        `Thompson-Reuters Special Services` ::
+        `Verizon Business` ::
+        Nil
 
   }
 
-  case class SimLink(
-    _index: Var[Option[Index]],
-    source: SimNode,
-    target: SimNode)
-    extends SimulationLink[SimNode, SimNode] {
+  val links = {
+    import experiences._
 
-    override def index = _index.now().orUndefined
-    override def index_=(index: UndefOr[Index]) = _index.set(index.toOption)
+    val nextIndex: () => Int = {
+      val next = new AtomicInteger()
+      () => next.getAndIncrement()
+    }
 
+    ExperienceLink(nextIndex().some, `Akka`, `LiveSafe`) ::
+      ExperienceLink(nextIndex().some, `Akka`, `Scala`) ::
+      ExperienceLink(nextIndex().some, `Akka`, `Play Framework`) ::
+      ExperienceLink(nextIndex().some, `Akka`, `Thompson-Reuters Special Services`) ::
+      ExperienceLink(nextIndex().some, `Bootstrap`, `Thompson-Reuters Special Services`) ::
+      ExperienceLink(nextIndex().some, `Cascading Style Sheets`, `Thompson-Reuters Special Services`) ::
+      ExperienceLink(nextIndex().some, `Flyway`, `LiveSafe`) ::
+      ExperienceLink(nextIndex().some, `Flyway`, `PostgreSQL`) ::
+      ExperienceLink(nextIndex().some, `Lagom`, `LiveSafe`) ::
+      ExperienceLink(nextIndex().some, `Lagom`, `Scala`) ::
+      ExperienceLink(nextIndex().some, `Play Framework`, `LiveSafe`) ::
+      ExperienceLink(nextIndex().some, `Play Framework`, `Thompson-Reuters Special Services`) ::
+      ExperienceLink(nextIndex().some, `Play Framework`, `Verizon Business`) ::
+      ExperienceLink(nextIndex().some, `PostgreSQL`, `LiveSafe`) ::
+      ExperienceLink(nextIndex().some, `SBT`, `LiveSafe`) ::
+      ExperienceLink(nextIndex().some, `SBT`, `Thompson-Reuters Special Services`) ::
+      ExperienceLink(nextIndex().some, `SBT`, `Verizon Business`) ::
+      ExperienceLink(nextIndex().some, `Scala`, `LiveSafe`) ::
+      ExperienceLink(nextIndex().some, `Scala`, `Play Framework`) ::
+      ExperienceLink(nextIndex().some, `Scala`, `SBT`) ::
+      ExperienceLink(nextIndex().some, `Scala`, `Slick`) ::
+      ExperienceLink(nextIndex().some, `Scala`, `Thompson-Reuters Special Services`) ::
+      ExperienceLink(nextIndex().some, `Scala`, `Verizon Business`) ::
+      ExperienceLink(nextIndex().some, `Slick`, `LiveSafe`) ::
+      Nil
   }
 
-  object SimLink {
-
-    def apply(
-      index: Option[Index],
-      source: SimNode,
-      target: SimNode
-    ): SimLink =
-      SimLink(
-        Var(index),
-        source,
-        target)
-
-    def apply(
-      index: Index,
-      source: SimNode,
-      target: SimNode
-    ): SimLink =
-      SimLink(
-        index.some,
-        source,
-        target)
-
-  }
-
-  def apply(): Div = {
-    val nodes: Seq[SimNode] =
-      (0 until 5)
-        .map(_.some)
-        .map(SimNode(_, 100d.some, 300d.some, none, none, none, none))
-
-    val links: Seq[SimLink] =
-      nodes
-        .sliding(2)
-        .zipWithIndex
-        .map {
-          case (Seq(source, target), index) =>
-            SimLink(index.some, source, target)
-        }
-        .toSeq :+
-        SimLink(4.some, nodes.head, nodes.last)
+  def apply(): HtmlElement = {
 
     val illustration = {
       import svg._
@@ -162,41 +132,52 @@ object ResumePage {
               x2 <-- link.target.$x.map(_.fold("")(_.toString)),
               y2 <-- link.target.$y.map(_.fold("")(_.toString))
             )),
-          nodes.map(node =>
-            circle(
-              r := "20",
-              cx <-- node.$x.map(_.fold("")(_.toString)),
-              cy <-- node.$y.map(_.fold("")(_.toString)),
-              fill := "#69b3a2"))
+          experiences.nodes.map(node =>
+            g(
+              circle(
+                r := "20",
+                cx <-- node.$x.map(_.fold("")(_.toString)),
+                cy <-- node.$y.map(_.fold("")(_.toString)),
+                fill := (node match {
+                  case _: ExperienceNode.Skill => "blue"
+                  case _: ExperienceNode.Employment => "green"
+                })
+              ),
+              text(
+                x <-- node.$x.map(_.fold("")(_.toString)),
+                y <-- node.$y.map(_.fold("")(_.toString)),
+                style := "15px sans-serif",
+                node.id)
+            ))
         )
       )
     }
 
     val linkDistance = Var(100d)
-    val linkStrength = Var(0.1d)
-    val link: Link[SimNode, SimLink] =
-      d3.forceLink[SimNode, SimLink](links.toJSArray)
+    val linkStrength = Var(0.05d)
+    val link: Link[ExperienceNode, ExperienceLink] =
+      d3.forceLink[ExperienceNode, ExperienceLink](links.toJSArray)
         .distance(linkDistance.now())
         .strength(linkStrength.now())
 
-    val chargeStrength = Var(-100d)
-    val charge: ManyBody[SimNode] =
+    val chargeStrength = Var(-50d)
+    val charge: ManyBody[ExperienceNode] =
       d3.forceManyBody()
         .strength(chargeStrength.now())
 
     val centeringX = Var(400)
-    val centeringY = Var(300)
-    val centering: Centering[SimNode] =
+    val centeringY = Var(350)
+    val centering: Centering[ExperienceNode] =
       d3.forceCenter(centeringX.now(), centeringY.now())
 
     val collisionStrength = Var(1d)
-    val collision: Collision[SimNode] =
+    val collision: Collision[ExperienceNode] =
       d3.forceCollide()
         .strength(collisionStrength.now())
         .radius(_ => 30)
 
     val simulation =
-      d3.forceSimulation(nodes.toJSArray)
+      d3.forceSimulation(experiences.nodes.toJSArray)
         .force("link", link)
         .force("charge", charge)
         .force("center", centering)
@@ -204,42 +185,61 @@ object ResumePage {
 
     val onEnterPress = onKeyPress.filter(_.keyCode == KeyCode.Enter)
 
-    div(
-      width := "100%",
-      height := "600px",
-      className := "border border-3",
-      illustration,
+    article(
+      className := "container-fluid",
       div(
-        span("Link Distance: "),
-        input(
-          value <-- linkDistance.signal.map(_.toString),
-          inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toDouble) --> linkDistance.writer)),
-        span("Link Strength: "),
-        input(
-          value <-- linkStrength.signal.map(_.toString),
-          inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toDouble) --> linkStrength.writer))
-      ),
+        className := "row",
+        div(
+          height := "700px",
+          className := "col-12",
+          illustration)),
       div(
-        span("Charge Strength: "),
-        input(
-          value <-- chargeStrength.signal.map(_.toString),
-          inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toDouble) --> chargeStrength.writer))
-      ),
-      div(
-        span("Collision Strength: "),
-        input(
-          value <-- collisionStrength.signal.map(_.toString),
-          inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toDouble) --> collisionStrength.writer))
-      ),
-      div(
-        span("Centering X: "),
-        input(
-          value <-- centeringX.signal.map(_.toString),
-          inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toInt) --> centeringX.writer)),
-        span("Centering Y: "),
-        input(
-          value <-- centeringY.signal.map(_.toString),
-          inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toInt) --> centeringY.writer))
+        className := "row",
+        div(
+          className := "col-12",
+          span("Link Distance: "),
+          input(
+            value <-- linkDistance.signal.map(_.toString),
+            inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toDouble) --> linkDistance.writer)),
+          span("Link Strength: "),
+          input(
+            value <-- linkStrength.signal.map(_.toString),
+            inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toDouble) --> linkStrength.writer))
+        ),
+        div(
+          className := "row",
+          div(
+            className := "col-12",
+            span("Charge Strength: "),
+            input(
+              value <-- chargeStrength.signal.map(_.toString),
+              inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toDouble) --> chargeStrength.writer))
+          )
+        ),
+        div(
+          className := "row",
+          div(
+            className := "col-12",
+            span("Collision Strength: "),
+            input(
+              value <-- collisionStrength.signal.map(_.toString),
+              inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toDouble) --> collisionStrength.writer))
+          )
+        ),
+        div(
+          className := "row",
+          div(
+            className := "col-12",
+            span("Centering X: "),
+            input(
+              value <-- centeringX.signal.map(_.toString),
+              inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toInt) --> centeringX.writer)),
+            span("Centering Y: "),
+            input(
+              value <-- centeringY.signal.map(_.toString),
+              inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toInt) --> centeringY.writer))
+          )
+        )
       ),
       onMountCallback { context =>
         import context.owner
