@@ -153,14 +153,14 @@ object ResumePage {
       )
     }
 
-    val linkDistance = Var(100d)
-    val linkStrength = Var(0.05d)
+    val linkDistance = Var(10d)
+    val linkStrength = Var(0.01d)
     val link: Link[ExperienceNode, ExperienceLink] =
       d3.forceLink[ExperienceNode, ExperienceLink](links.toJSArray)
         .distance(linkDistance.now())
         .strength(linkStrength.now())
 
-    val chargeStrength = Var(-50d)
+    val chargeStrength = Var(-25d)
     val charge: ManyBody[ExperienceNode] =
       d3.forceManyBody()
         .strength(chargeStrength.now())
