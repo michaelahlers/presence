@@ -1,6 +1,6 @@
 package ahlers.presence.web.client
 
-import ahlers.presence.web.client.resume.{ ExperienceLink, ExperienceNode }
+import ahlers.presence.web.client.resume.{ ExperienceDetail, SimulationLinkRx, SimulationNodeRx }
 import cats.syntax.option._
 import com.raquo.laminar.api.L._
 import d3v4._
@@ -8,6 +8,7 @@ import d3v4.d3force.{ Centering, Collision, Force, Link, ManyBody }
 import org.scalajs.dom.ext.KeyCode
 
 import java.util.concurrent.atomic.AtomicInteger
+import scala.scalajs.js
 import scala.scalajs.js.JSConverters._
 import scala.scalajs.js.UndefOr
 
@@ -19,50 +20,60 @@ object ResumePage {
 
   object experiences {
 
-    private val nextIndex: () => Int = {
-      val next = new AtomicInteger()
-      () => next.getAndIncrement()
-    }
-
-    val `Akka` = ExperienceNode.skill("akka", "Akka", nextIndex().some)
-    val `Bootstrap` = ExperienceNode.skill("bootstrap", "Bootstrap", nextIndex().some)
-    val `Cascading Style Sheets` = ExperienceNode.skill("css", "CSS", nextIndex().some)
-    val `Flyway` = ExperienceNode.skill("flyway", "Flyway", nextIndex().some)
-    val `SBT` = ExperienceNode.skill("sbt", "SBT", nextIndex().some)
-    val `Scala` = ExperienceNode.skill("scala", "Scala", nextIndex().some)
-    val `Slick` = ExperienceNode.skill("slick", "Slick", nextIndex().some)
-    val `Lagom` = ExperienceNode.skill("lagom", "Lagom", nextIndex().some)
-    val `Play Framework` = ExperienceNode.skill("play-framework", "Play Framework", nextIndex().some)
-    val `PostgreSQL` = ExperienceNode.skill("postgresql", "PostgreSQL", nextIndex().some)
+    val `Akka` = ExperienceDetail.skill("akka", "Akka", "scala", "play-framework")
+    val `Bootstrap` = ExperienceDetail.skill("bootstrap", "Bootstrap", "css")
+    val `Cascading Style Sheets` = ExperienceDetail.skill("css", "CSS")
+    val `Flyway` = ExperienceDetail.skill("flyway", "Flyway", "postgresql")
+    val `SBT` = ExperienceDetail.skill("sbt", "SBT", "scala")
+    val `Scala` = ExperienceDetail.skill("scala", "Scala", "akka", "play-framework", "sbt", "slick")
+    val `Slick` = ExperienceDetail.skill("slick", "Slick", "scala", "postgresql")
+    val `Lagom` = ExperienceDetail.skill("lagom", "Lagom", "akka", "scala", "play-framework")
+    val `Play Framework` = ExperienceDetail.skill("play-framework", "Play Framework", "scala")
+    val `PostgreSQL` = ExperienceDetail.skill("postgresql", "PostgreSQL", "flyway", "slick")
 
     val `LiveSafe` =
-      ExperienceNode.employment(
+      ExperienceDetail.employment(
         "livesafe",
-        ExperienceNode.Employment.Company(
+        ExperienceDetail.Employment.Company(
           "LiveSafe",
           "Rosslyn",
           "Virginia"),
-        nextIndex().some)
+        "akka",
+        "sbt",
+        "scala",
+        "lagom",
+        "play-framework",
+        "postgresql",
+        "slick",
+        "postgresql",
+        "flyway"
+      )
 
     val `Thompson-Reuters Special Services` =
-      ExperienceNode.employment(
+      ExperienceDetail.employment(
         "trss",
-        ExperienceNode.Employment.Company(
+        ExperienceDetail.Employment.Company(
           "Thompson-Reuters Special Services",
           "McLean",
           "Virginia"),
-        nextIndex().some)
+        "akka",
+        "bootstrap",
+        "sbt",
+        "scala",
+        "play-framework")
 
     val `Verizon Business` =
-      ExperienceNode.employment(
+      ExperienceDetail.employment(
         "verizon-business",
-        ExperienceNode.Employment.Company(
+        ExperienceDetail.Employment.Company(
           "Verizon Business",
           "Ashburn",
           "Virginia"),
-        nextIndex().some)
+        "sbt",
+        "scala",
+        "play-framework")
 
-    val nodes: Seq[ExperienceNode] =
+    val details: Seq[ExperienceDetail] =
       `Akka` ::
         `Bootstrap` ::
         `Cascading Style Sheets` ::
@@ -78,41 +89,30 @@ object ResumePage {
         `Verizon Business` ::
         Nil
 
-  }
+    val nodes: Seq[SimulationNodeRx[ExperienceDetail]] =
+      details
+        .zipWithIndex
+        .map { case (detail, index) =>
+          SimulationNodeRx(index, detail)
+        }
 
-  val links = {
-    import experiences._
+    val links: Seq[SimulationLinkRx[SimulationNodeRx[ExperienceDetail], SimulationNodeRx[ExperienceDetail]]] = {
+      val nodeById =
+        nodes
+          .groupBy(_.payload.id)
+          .view
+          .mapValues(_.head)
 
-    val nextIndex: () => Int = {
-      val next = new AtomicInteger()
-      () => next.getAndIncrement()
+      nodes
+        .map { node =>
+          (node, nodeById(node.payload.id))
+        }
+        .zipWithIndex
+        .map { case ((source, target), index) =>
+          SimulationLinkRx(index, source, target)
+        }
     }
 
-    ExperienceLink(nextIndex().some, `Akka`, `LiveSafe`) ::
-      ExperienceLink(nextIndex().some, `Akka`, `Scala`) ::
-      ExperienceLink(nextIndex().some, `Akka`, `Play Framework`) ::
-      ExperienceLink(nextIndex().some, `Akka`, `Thompson-Reuters Special Services`) ::
-      ExperienceLink(nextIndex().some, `Bootstrap`, `Thompson-Reuters Special Services`) ::
-      ExperienceLink(nextIndex().some, `Cascading Style Sheets`, `Thompson-Reuters Special Services`) ::
-      ExperienceLink(nextIndex().some, `Flyway`, `LiveSafe`) ::
-      ExperienceLink(nextIndex().some, `Flyway`, `PostgreSQL`) ::
-      ExperienceLink(nextIndex().some, `Lagom`, `LiveSafe`) ::
-      ExperienceLink(nextIndex().some, `Lagom`, `Scala`) ::
-      ExperienceLink(nextIndex().some, `Play Framework`, `LiveSafe`) ::
-      ExperienceLink(nextIndex().some, `Play Framework`, `Thompson-Reuters Special Services`) ::
-      ExperienceLink(nextIndex().some, `Play Framework`, `Verizon Business`) ::
-      ExperienceLink(nextIndex().some, `PostgreSQL`, `LiveSafe`) ::
-      ExperienceLink(nextIndex().some, `SBT`, `LiveSafe`) ::
-      ExperienceLink(nextIndex().some, `SBT`, `Thompson-Reuters Special Services`) ::
-      ExperienceLink(nextIndex().some, `SBT`, `Verizon Business`) ::
-      ExperienceLink(nextIndex().some, `Scala`, `LiveSafe`) ::
-      ExperienceLink(nextIndex().some, `Scala`, `Play Framework`) ::
-      ExperienceLink(nextIndex().some, `Scala`, `SBT`) ::
-      ExperienceLink(nextIndex().some, `Scala`, `Slick`) ::
-      ExperienceLink(nextIndex().some, `Scala`, `Thompson-Reuters Special Services`) ::
-      ExperienceLink(nextIndex().some, `Scala`, `Verizon Business`) ::
-      ExperienceLink(nextIndex().some, `Slick`, `LiveSafe`) ::
-      Nil
   }
 
   def apply(): HtmlElement = {
@@ -130,13 +130,13 @@ object ResumePage {
         width := "100%",
         height := "100%",
         g(
-          links.map(link =>
+          experiences.links.map(link =>
             line(
-              style := "stroke: #aaa",
-              x1 <-- link.source.$x.map(_.fold("")(_.toString)),
-              y1 <-- link.source.$y.map(_.fold("")(_.toString)),
-              x2 <-- link.target.$x.map(_.fold("")(_.toString)),
-              y2 <-- link.target.$y.map(_.fold("")(_.toString))
+              style := "stroke: black",
+              x1 <-- link.$source.flatMap(_.$x).map(_.fold("")(_.toString)),
+              y1 <-- link.$source.flatMap(_.$y).map(_.fold("")(_.toString)),
+              x2 <-- link.$target.flatMap(_.$x).map(_.fold("")(_.toString)),
+              y2 <-- link.$target.flatMap(_.$y).map(_.fold("")(_.toString))
             )),
           experiences.nodes.map(node =>
             g(
@@ -144,16 +144,16 @@ object ResumePage {
                 r <-- nodeRadius.signal.map(_.toString),
                 cx <-- node.$x.map(_.fold("")(_.toString)),
                 cy <-- node.$y.map(_.fold("")(_.toString)),
-                fill := (node match {
-                  case _: ExperienceNode.Skill => "blue"
-                  case _: ExperienceNode.Employment => "green"
+                fill := (node.payload match {
+                  case _: ExperienceDetail.Skill => "blue"
+                  case _: ExperienceDetail.Employment => "green"
                 })
               ),
               text(
                 x <-- node.$x.map(_.fold("")(_.toString)),
                 y <-- node.$y.map(_.fold("")(_.toString)),
                 style := "15px sans-serif",
-                node.id)
+                node.payload.id)
             ))
         ),
         inContext { thisNode =>
@@ -174,20 +174,20 @@ object ResumePage {
       )
     }
 
-    val link: Link[ExperienceNode, ExperienceLink] =
-      d3.forceLink[ExperienceNode, ExperienceLink](links.toJSArray)
+    val link: Link[SimulationNodeRx[ExperienceDetail], SimulationLinkRx[SimulationNodeRx[ExperienceDetail], SimulationNodeRx[ExperienceDetail]]] =
+      d3.forceLink[SimulationNodeRx[ExperienceDetail], SimulationLinkRx[SimulationNodeRx[ExperienceDetail], SimulationNodeRx[ExperienceDetail]]](js.Array()) //experiences.links.toJSArray)
         .distance(linkDistance.now())
         .strength(linkStrength.now())
 
-    val charge: ManyBody[ExperienceNode] =
+    val charge: ManyBody[SimulationNodeRx[ExperienceDetail]] =
       d3.forceManyBody()
         .strength(chargeStrength.now())
 
-    val centering: Centering[ExperienceNode] =
+    val centering: Centering[SimulationNodeRx[ExperienceDetail]] =
       d3.forceCenter(centeringX.now(), centeringY.now())
 
     val collisionStrength = Var(1d)
-    val collision: Collision[ExperienceNode] =
+    val collision: Collision[SimulationNodeRx[ExperienceDetail]] =
       d3.forceCollide()
         .strength(collisionStrength.now())
         .radius(_ => nodeRadius.now() + 10)
