@@ -116,9 +116,10 @@ object ResumePage {
   }
 
   def apply(): HtmlElement = {
+    val nodeRadius = Var(50)
     val linkDistance = Var(10d)
     val linkStrength = Var(0.01d)
-    val chargeStrength = Var(-25d)
+    val chargeStrength = Var(1d)
     val centeringX = Var(400)
     val centeringY = Var(300)
 
@@ -140,7 +141,7 @@ object ResumePage {
           experiences.nodes.map(node =>
             g(
               circle(
-                r := "20",
+                r <-- nodeRadius.signal.map(_.toString),
                 cx <-- node.$x.map(_.fold("")(_.toString)),
                 cy <-- node.$y.map(_.fold("")(_.toString)),
                 fill := (node match {
@@ -185,18 +186,18 @@ object ResumePage {
     val centering: Centering[ExperienceNode] =
       d3.forceCenter(centeringX.now(), centeringY.now())
 
-    //val collisionStrength = Var(1d)
-    //val collision: Collision[ExperienceNode] =
-    //  d3.forceCollide()
-    //    .strength(collisionStrength.now())
-    //    .radius(_ => 30)
+    val collisionStrength = Var(1d)
+    val collision: Collision[ExperienceNode] =
+      d3.forceCollide()
+        .strength(collisionStrength.now())
+        .radius(_ => nodeRadius.now() + 10)
 
     val simulation =
       d3.forceSimulation(experiences.nodes.toJSArray)
-        .force("link", link)
+      //.force("link", link)
         .force("charge", charge)
         .force("center", centering)
-    //.force("collide", collision)
+        .force("collide", collision)
 
     val onEnterPress = onKeyPress.filter(_.keyCode == KeyCode.Enter)
 
@@ -210,6 +211,13 @@ object ResumePage {
           illustration)),
       div(
         className := "row",
+        div(
+          className := "col-12",
+          span("Node Radius: "),
+          input(
+            value <-- nodeRadius.signal.map(_.toString),
+            inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toInt) --> nodeRadius.writer))
+        ),
         div(
           className := "col-12",
           span("Link Distance: "),
@@ -231,16 +239,16 @@ object ResumePage {
               inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toDouble) --> chargeStrength.writer))
           )
         ),
-        //div(
-        //  className := "row",
-        //  div(
-        //    className := "col-12",
-        //    span("Collision Strength: "),
-        //    input(
-        //      value <-- collisionStrength.signal.map(_.toString),
-        //      inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toDouble) --> collisionStrength.writer))
-        //  )
-        //),
+        div(
+          className := "row",
+          div(
+            className := "col-12",
+            span("Collision Strength: "),
+            input(
+              value <-- collisionStrength.signal.map(_.toString),
+              inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toDouble) --> collisionStrength.writer))
+          )
+        ),
         div(
           className := "row",
           div(
@@ -256,28 +264,20 @@ object ResumePage {
           )
         )
       ),
-      onMountCallback { context =>
-        import context.owner
-        linkDistance.signal.foreach(link.distance(_))
-        linkDistance.signal.mapToValue(1d).foreach(simulation.alphaTarget(_).restart())
-
-        linkStrength.signal.foreach(link.strength(_))
-        linkStrength.signal.mapToValue(1d).foreach(simulation.alphaTarget(_).restart())
-
-        chargeStrength.signal.foreach(charge.strength(_))
-        chargeStrength.signal.mapToValue(1d).foreach(simulation.alphaTarget(_).restart())
-
-        //collisionStrength.signal.foreach(collision.strength(_))
-        //collisionStrength.signal.mapToValue(1d).foreach(simulation.alphaTarget(_).restart())
-
-        centeringX.signal.foreach(centering.x(_))
-        centeringX.signal.mapToValue(1d).foreach(simulation.alphaTarget(_).restart())
-
-        centeringY.signal.foreach(centering.y(_))
-        centeringY.signal.mapToValue(1d).foreach(simulation.alphaTarget(_).restart())
-
-      //windowEvents.onResize.mapToValue(context.thisNode.ref.clientWidth / 2).foreach(centeringX.set(_))
-      //windowEvents.onResize.mapToValue(context.thisNode.ref.clientHeight / 2).foreach(centeringY.set(_))
+      inContext { _ =>
+        linkDistance.signal --> (link.distance(_)) ::
+          linkDistance.signal.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
+          linkStrength.signal --> (link.strength(_)) ::
+          linkStrength.signal.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
+          chargeStrength.signal --> (charge.strength(_)) ::
+          chargeStrength.signal.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
+          collisionStrength.signal --> (collision.strength(_)) ::
+          collisionStrength.signal.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
+          centeringX.signal --> (centering.x(_)) ::
+          centeringX.signal.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
+          centeringY.signal --> (centering.y(_)) ::
+          centeringY.signal.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
+          Nil
       }
     )
   }
