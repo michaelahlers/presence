@@ -265,7 +265,9 @@ object ResumePage {
         )
       ),
       inContext { _ =>
-        linkDistance.signal --> (link.distance(_)) ::
+        nodeRadius.signal --> (nodeRadius => collision.radius(_ => nodeRadius + 10)) ::
+          nodeRadius.signal.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
+          linkDistance.signal --> (link.distance(_)) ::
           linkDistance.signal.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
           linkStrength.signal --> (link.strength(_)) ::
           linkStrength.signal.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
