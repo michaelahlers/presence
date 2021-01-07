@@ -11,7 +11,7 @@ object ContactInformationView {
   def apply(): HtmlElement = {
     val channelLabelAnchors: Seq[(String, HtmlElement, HtmlElement)] =
       ("mailto:michael@ahlers.consulting", i(className := "fas fa-envelope-square"), span(className := "ms-1", "michael@ahlers.consulting")) ::
-        ("tel:+1-571-830-0258", i(className := "fas fa-phone-square"), span(className := "ms-1", "(571) 830-0258")) ::
+        ("tel:+1-571-279-9825", i(className := "fas fa-phone-square"), span(className := "ms-1", "(571) 279-9825")) ::
         Nil
 
     val socialLabelAnchors: Seq[(String, HtmlElement, HtmlElement)] =
