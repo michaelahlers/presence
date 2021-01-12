@@ -1,16 +1,13 @@
 package ahlers.presence.web.client
 
-import ahlers.presence.web.client.resume.{ ExperienceDetail, SimulationLinkRx, SimulationNodeRx }
-import cats.syntax.option._
+import ahlers.presence.web.client.resume._
 import com.raquo.laminar.api.L._
 import d3v4._
-import d3v4.d3force.{ Centering, Collision, Force, Link, ManyBody }
+import d3v4.d3force.{ Centering, Collision, Link, ManyBody }
 import org.scalajs.dom.ext.KeyCode
 
-import java.util.concurrent.atomic.AtomicInteger
 import scala.scalajs.js
 import scala.scalajs.js.JSConverters._
-import scala.scalajs.js.UndefOr
 
 /**
  * @since December 22, 2020
@@ -20,96 +17,96 @@ object ResumePage {
 
   object experiences {
 
-    val `Akka` = ExperienceDetail.skill("akka", "Akka", "scala", "play-framework")
-    val `Bootstrap` = ExperienceDetail.skill("bootstrap", "Bootstrap", "css")
-    val `Cascading Style Sheets` = ExperienceDetail.skill("css", "CSS")
-    val `Flyway` = ExperienceDetail.skill("flyway", "Flyway", "postgresql")
-    val `SBT` = ExperienceDetail.skill("sbt", "SBT", "scala")
-    val `Scala` = ExperienceDetail.skill("scala", "Scala", "akka", "play-framework", "sbt", "slick")
-    val `Slick` = ExperienceDetail.skill("slick", "Slick", "scala", "postgresql")
-    val `Lagom` = ExperienceDetail.skill("lagom", "Lagom", "akka", "scala", "play-framework")
-    val `Play Framework` = ExperienceDetail.skill("play-framework", "Play Framework", "scala")
-    val `PostgreSQL` = ExperienceDetail.skill("postgresql", "PostgreSQL", "flyway", "slick")
+    val Akka = ExperienceDescription.skill(ExperienceId("akka"), ExperienceName("Akka"))
+    val Bootstrap = ExperienceDescription.skill(ExperienceId("bootstrap"), ExperienceName("Bootstrap"))
+    val CSS = ExperienceDescription.skill(ExperienceId("css"), ExperienceName("CSS"))
+    val Flyway = ExperienceDescription.skill(ExperienceId("flyway"), ExperienceName("Flyway"))
+    val SBT = ExperienceDescription.skill(ExperienceId("sbt"), ExperienceName("SBT"))
+    val Scala = ExperienceDescription.skill(ExperienceId("scala"), ExperienceName("Scala"))
+    val Slick = ExperienceDescription.skill(ExperienceId("slick"), ExperienceName("Slick"))
+    val Lagom = ExperienceDescription.skill(ExperienceId("lagom"), ExperienceName("Lagom"))
+    val PlayFramework = ExperienceDescription.skill(ExperienceId("play-framework"), ExperienceName("Play Framework"))
+    val PostgreSQL = ExperienceDescription.skill(ExperienceId("postgresql"), ExperienceName("PostgreSQL"))
 
-    val `LiveSafe` =
-      ExperienceDetail.employment(
-        "livesafe",
-        ExperienceDetail.Employment.Company(
+    val LiveSafe =
+      ExperienceDescription.employment(
+        ExperienceId("livesafe"),
+        ExperienceDescription.Employment.Company(
           "LiveSafe",
           "Rosslyn",
-          "Virginia"),
-        "akka",
-        "sbt",
-        "scala",
-        "lagom",
-        "play-framework",
-        "postgresql",
-        "slick",
-        "postgresql",
-        "flyway"
-      )
+          "Virginia"))
 
-    val `Thompson-Reuters Special Services` =
-      ExperienceDetail.employment(
-        "trss",
-        ExperienceDetail.Employment.Company(
+    val ThompsonReutersSpecialServices =
+      ExperienceDescription.employment(
+        ExperienceId("trss"),
+        ExperienceDescription.Employment.Company(
           "Thompson-Reuters Special Services",
           "McLean",
-          "Virginia"),
-        "akka",
-        "bootstrap",
-        "sbt",
-        "scala",
-        "play-framework")
+          "Virginia"))
 
-    val `Verizon Business` =
-      ExperienceDetail.employment(
-        "verizon-business",
-        ExperienceDetail.Employment.Company(
+    val VerizonBusiness =
+      ExperienceDescription.employment(
+        ExperienceId("verizon-business"),
+        ExperienceDescription.Employment.Company(
           "Verizon Business",
           "Ashburn",
-          "Virginia"),
-        "sbt",
-        "scala",
-        "play-framework")
+          "Virginia"))
 
-    val details: Seq[ExperienceDetail] =
-      `Akka` ::
-        `Bootstrap` ::
-        `Cascading Style Sheets` ::
-        `Flyway` ::
-        `Lagom` ::
-        `Play Framework` ::
-        `PostgreSQL` ::
-        `SBT` ::
-        `Scala` ::
-        `Slick` ::
-        `LiveSafe` ::
-        `Thompson-Reuters Special Services` ::
-        `Verizon Business` ::
+    val descriptions: Seq[ExperienceDescription] =
+      Akka ::
+        Bootstrap ::
+        CSS ::
+        Flyway ::
+        Lagom ::
+        PlayFramework ::
+        PostgreSQL ::
+        SBT ::
+        Scala ::
+        Slick ::
+        LiveSafe ::
+        ThompsonReutersSpecialServices ::
+        VerizonBusiness ::
         Nil
 
-    val nodes: Seq[SimulationNodeRx[ExperienceDetail]] =
-      details
+    val nodes: Seq[SimulationNodeRx[ExperienceDescription]] =
+      descriptions
         .zipWithIndex
         .map { case (detail, index) =>
           SimulationNodeRx(index, detail)
         }
 
-    val links: Seq[SimulationLinkRx[SimulationNodeRx[ExperienceDetail], SimulationNodeRx[ExperienceDetail]]] = {
-      val nodeById =
+    val relationSets: Seq[Set[_ <: ExperienceRef]] =
+      Set(Akka, Lagom, PlayFramework, Scala, Slick) ::
+        Set(Bootstrap, CSS) ::
+        Set(Flyway, PostgreSQL, Slick) ::
+        Set(LiveSafe, Akka, Lagom, SBT, Scala) ::
+        Set(ThompsonReutersSpecialServices, PlayFramework, SBT, Scala) ::
+        Set(VerizonBusiness, Bootstrap, CSS, PlayFramework, SBT, Scala) ::
+        Nil
+
+    val links: Seq[SimulationLinkRx[SimulationNodeRx[ExperienceDescription], SimulationNodeRx[ExperienceDescription]]] = {
+      val byId: Map[ExperienceId, SimulationNodeRx[ExperienceDescription]] =
         nodes
           .groupBy(_.payload.id)
-          .view
-          .mapValues(_.head)
+          .view.mapValues(_.head)
+          .toMap
 
-      nodes
-        .map { node =>
-          (node, nodeById(node.payload.id))
-        }
+      val (relations, _) =
+        (for {
+          rs <- relationSets
+          a <- rs
+          b <- rs
+          if a != b
+        } yield (a, b))
+          .foldLeft((List.empty[(ExperienceRef, ExperienceRef)], Set.empty[(ExperienceRef, ExperienceRef)])) {
+            case (a @ (_, visits), r) if visits(r) => a
+            case ((a, visits), r) => (r :: a, visits + r + r.swap)
+          }
+
+      relations
         .zipWithIndex
-        .map { case ((source, target), index) =>
-          SimulationLinkRx(index, source, target)
+        .map { case ((a, b), index) =>
+          SimulationLinkRx(index, byId(a.id), byId(b.id))
         }
     }
 
@@ -145,15 +142,15 @@ object ResumePage {
                 cx <-- node.$x.map(_.fold("")(_.toString)),
                 cy <-- node.$y.map(_.fold("")(_.toString)),
                 fill := (node.payload match {
-                  case _: ExperienceDetail.Skill => "blue"
-                  case _: ExperienceDetail.Employment => "green"
+                  case _: ExperienceDescription.Skill => "blue"
+                  case _: ExperienceDescription.Employment => "green"
                 })
               ),
               text(
                 x <-- node.$x.map(_.fold("")(_.toString)),
                 y <-- node.$y.map(_.fold("")(_.toString)),
                 style := "15px sans-serif",
-                node.payload.id)
+                node.payload.id.toText)
             ))
         ),
         inContext { thisNode =>
@@ -174,20 +171,20 @@ object ResumePage {
       )
     }
 
-    val link: Link[SimulationNodeRx[ExperienceDetail], SimulationLinkRx[SimulationNodeRx[ExperienceDetail], SimulationNodeRx[ExperienceDetail]]] =
-      d3.forceLink[SimulationNodeRx[ExperienceDetail], SimulationLinkRx[SimulationNodeRx[ExperienceDetail], SimulationNodeRx[ExperienceDetail]]](js.Array()) //experiences.links.toJSArray)
+    val link: Link[SimulationNodeRx[ExperienceDescription], SimulationLinkRx[SimulationNodeRx[ExperienceDescription], SimulationNodeRx[ExperienceDescription]]] =
+      d3.forceLink[SimulationNodeRx[ExperienceDescription], SimulationLinkRx[SimulationNodeRx[ExperienceDescription], SimulationNodeRx[ExperienceDescription]]](js.Array()) //experiences.links.toJSArray)
         .distance(linkDistance.now())
         .strength(linkStrength.now())
 
-    val charge: ManyBody[SimulationNodeRx[ExperienceDetail]] =
+    val charge: ManyBody[SimulationNodeRx[ExperienceDescription]] =
       d3.forceManyBody()
         .strength(chargeStrength.now())
 
-    val centering: Centering[SimulationNodeRx[ExperienceDetail]] =
+    val centering: Centering[SimulationNodeRx[ExperienceDescription]] =
       d3.forceCenter(centeringX.now(), centeringY.now())
 
     val collisionStrength = Var(1d)
-    val collision: Collision[SimulationNodeRx[ExperienceDetail]] =
+    val collision: Collision[SimulationNodeRx[ExperienceDescription]] =
       d3.forceCollide()
         .strength(collisionStrength.now())
         .radius(_ => nodeRadius.now() + 10)
