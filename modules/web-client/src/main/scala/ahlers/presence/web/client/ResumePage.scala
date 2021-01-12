@@ -3,7 +3,7 @@ package ahlers.presence.web.client
 import ahlers.presence.web.client.resume._
 import com.raquo.laminar.api.L._
 import d3v4._
-import d3v4.d3force.{ Centering, Collision, Link, ManyBody }
+import d3v4.d3force.{ Centering, Collision, Link, ManyBody, PositioningX, PositioningY }
 import org.scalajs.dom.ext.KeyCode
 
 import scala.scalajs.js
@@ -90,6 +90,12 @@ object ResumePage {
     val centering: Centering[SimulationNodeRx[ExperienceDescription]] =
       d3.forceCenter(centeringX.now(), centeringY.now())
 
+    val centerX: PositioningX[SimulationNodeRx[ExperienceDescription]] =
+      d3.forceX(centeringX.now()).strength(0.2d)
+
+    val centerY: PositioningY[SimulationNodeRx[ExperienceDescription]] =
+      d3.forceY(centeringY.now()).strength(0.3d)
+
     val collisionStrength = Var(1d)
     val collision: Collision[SimulationNodeRx[ExperienceDescription]] =
       d3.forceCollide()
@@ -101,6 +107,8 @@ object ResumePage {
       //.force("link", link)
         .force("charge", charge)
         .force("center", centering)
+        //.force("foo", centerX)
+        //.force("bear", centerY)
         .force("collide", collision)
 
     val onEnterPress = onKeyPress.filter(_.keyCode == KeyCode.Enter)
@@ -182,6 +190,10 @@ object ResumePage {
           centeringX.signal --> (centering.x(_)) ::
           centeringX.signal.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
           centeringY.signal --> (centering.y(_)) ::
+          centeringY.signal.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
+          centeringX.signal --> (centerX.x(_)) ::
+          centeringX.signal.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
+          centeringY.signal --> (centerY.y(_)) ::
           centeringY.signal.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
           Nil
       }
