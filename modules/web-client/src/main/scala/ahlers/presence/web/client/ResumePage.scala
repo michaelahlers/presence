@@ -20,8 +20,8 @@ object ResumePage {
     val linkDistance = Var(10d)
     val linkStrength = Var(0.01d)
     val chargeStrength = Var(1d)
-    val centeringX = Var(400)
-    val centeringY = Var(300)
+    val centeringX = Var(0)
+    val centeringY = Var(0)
 
     val illustration = {
       import svg._
@@ -70,6 +70,10 @@ object ResumePage {
           $width.map(_ / 2) --> centeringX.writer ::
             $height.map(_ / 2) --> centeringY.writer ::
             Nil
+        },
+        onMountCallback { context =>
+          centeringX.set(context.thisNode.ref.clientWidth / 2)
+          centeringY.set(context.thisNode.ref.clientHeight / 2)
         }
       )
     }
