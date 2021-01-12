@@ -91,23 +91,19 @@ object ResumePage {
           .view.mapValues(_.head)
           .toMap
 
-      val (relations, _) =
-        (for {
-          rs <- relationSets
-          a <- rs
-          b <- rs
-          if a != b
-        } yield (a, b))
-          .foldLeft((List.empty[(ExperienceRef, ExperienceRef)], Set.empty[(ExperienceRef, ExperienceRef)])) {
-            case (a @ (_, visits), r) if visits(r) => a
-            case ((a, visits), r) => (r :: a, visits + r + r.swap)
-          }
-
-      relations
+      (for {
+        rs <- relationSets
+        a <- rs
+        b <- rs
+        if a != b
+      } yield (a, b))
+        .groupBy { case (a, b) => Set(a, b) }
+        .values
         .zipWithIndex
-        .map { case ((a, b), index) =>
+        .map { case (Seq((a, b), _ @_*), index) =>
           SimulationLinkRx(index, byId(a.id), byId(b.id))
         }
+        .toList
     }
 
   }
