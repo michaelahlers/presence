@@ -23,6 +23,8 @@ object ResumePage {
     val centeringX = Var(0)
     val centeringY = Var(0)
 
+    val hoverIds = Var(Set.empty[ExperienceId])
+
     val illustration = {
       import svg._
 
@@ -41,7 +43,10 @@ object ResumePage {
           experiences.nodes.map(node =>
             g(
               circle(
-                r <-- nodeRadius.signal.map(_.toString),
+                r <-- (for {
+                  nr <- nodeRadius.signal
+                  hr <- hoverIds.signal.map(_.contains(node.payload.id)).map(if (_) 10 else 0)
+                } yield (nr + hr).toString),
                 cx <-- node.$x.map(_.fold("")(_.toString)),
                 cy <-- node.$y.map(_.fold("")(_.toString)),
                 fill := (node.payload match {
@@ -53,7 +58,10 @@ object ResumePage {
                 x <-- node.$x.map(_.fold("")(_.toString)),
                 y <-- node.$y.map(_.fold("")(_.toString)),
                 style := "15px sans-serif",
-                node.payload.id.toText)
+                node.payload.id.toText
+              ),
+              onMouseEnter.mapTo(hoverIds.now() + node.payload.id) --> hoverIds.writer,
+              onMouseLeave.mapTo(hoverIds.now() - node.payload.id) --> hoverIds.writer
             ))
         ),
         inContext { thisNode =>
