@@ -1,4 +1,7 @@
 package ahlers.presence.web.client.resume
+import com.raquo.airstream.signal.Var
+import d3.laminar.{ SimulationLinkRx, SimulationNodeRx }
+import d3v4.Index
 
 /**
  * @since January 03, 2021
@@ -52,3 +55,20 @@ object ExperienceDescription {
       company)
 
 }
+
+case class ExperienceLinkUi(
+  indexVar: Var[Option[Index]],
+  sourceVar: Var[ExperienceNodeUi],
+  targetVar: Var[ExperienceNodeUi])
+  extends SimulationLinkRx[ExperienceNodeUi, ExperienceNodeUi]
+
+case class ExperienceNodeUi(
+  indexVar: Var[Option[Index]],
+  xVar: Var[Option[Double]],
+  yVar: Var[Option[Double]],
+  vxVar: Var[Option[Double]],
+  vyVar: Var[Option[Double]],
+  fxVar: Var[Option[Double]],
+  fyVar: Var[Option[Double]],
+  payloadVar: Var[ExperienceDescription])
+  extends SimulationNodeRx[ExperienceDescription]

@@ -1,5 +1,8 @@
 package ahlers.presence.web.client
 
+import cats.syntax.option._
+import com.raquo.airstream.signal.Var
+
 /**
  * @since January 11, 2021
  * @author <a href="mailto:michael@ahlers.consulting">Michael Ahlers</a>
@@ -59,11 +62,19 @@ package object resume {
         VerizonBusiness ::
         Nil
 
-    val nodes: Seq[SimulationNodeRx[ExperienceDescription]] =
+    val nodes: Seq[ExperienceNodeUi] =
       descriptions
         .zipWithIndex
         .map { case (detail, index) =>
-          SimulationNodeRx(index, detail)
+          ExperienceNodeUi(
+            Var(index.some),
+            Var(none),
+            Var(none),
+            Var(none),
+            Var(none),
+            Var(none),
+            Var(none),
+            Var(detail))
         }
 
     val relationSets: Seq[Set[_ <: ExperienceRef]] =
@@ -75,8 +86,8 @@ package object resume {
         Set(VerizonBusiness, Bootstrap, CSS, PlayFramework, SBT, Scala) ::
         Nil
 
-    val links: Seq[SimulationLinkRx[SimulationNodeRx[ExperienceDescription], SimulationNodeRx[ExperienceDescription]]] = {
-      val byId: Map[ExperienceId, SimulationNodeRx[ExperienceDescription]] =
+    val links: Seq[ExperienceLinkUi] = {
+      val byId: Map[ExperienceId, ExperienceNodeUi] =
         nodes
           .groupBy(_.payload.id)
           .view.mapValues(_.head)
@@ -92,7 +103,10 @@ package object resume {
         .values
         .zipWithIndex
         .map { case (Seq((a, b), _ @_*), index) =>
-          SimulationLinkRx(index, byId(a.id), byId(b.id))
+          ExperienceLinkUi(
+            Var(index.some),
+            Var(byId(a.id)),
+            Var(byId(b.id)))
         }
         .toList
     }

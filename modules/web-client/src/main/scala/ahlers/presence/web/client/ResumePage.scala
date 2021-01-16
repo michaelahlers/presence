@@ -2,8 +2,9 @@ package ahlers.presence.web.client
 
 import ahlers.presence.web.client.resume._
 import com.raquo.laminar.api.L._
+import d3.laminar.SimulationLinkRx
 import d3v4._
-import d3v4.d3force.{ Centering, Collision, Link, ManyBody, PositioningX, PositioningY }
+import d3v4.d3force._
 import org.scalajs.dom.ext.KeyCode
 
 import scala.scalajs.js
@@ -86,26 +87,26 @@ object ResumePage {
       )
     }
 
-    val link: Link[SimulationNodeRx[ExperienceDescription], SimulationLinkRx[SimulationNodeRx[ExperienceDescription], SimulationNodeRx[ExperienceDescription]]] =
-      d3.forceLink[SimulationNodeRx[ExperienceDescription], SimulationLinkRx[SimulationNodeRx[ExperienceDescription], SimulationNodeRx[ExperienceDescription]]](js.Array()) //experiences.links.toJSArray)
+    val link: Link[ExperienceNodeUi, SimulationLinkRx[ExperienceNodeUi, ExperienceNodeUi]] =
+      d3.forceLink[ExperienceNodeUi, SimulationLinkRx[ExperienceNodeUi, ExperienceNodeUi]](js.Array()) //experiences.links.toJSArray)
         .distance(linkDistance.now())
         .strength(linkStrength.now())
 
-    val charge: ManyBody[SimulationNodeRx[ExperienceDescription]] =
+    val charge: ManyBody[ExperienceNodeUi] =
       d3.forceManyBody()
         .strength(chargeStrength.now())
 
-    val centering: Centering[SimulationNodeRx[ExperienceDescription]] =
+    val centering: Centering[ExperienceNodeUi] =
       d3.forceCenter(centeringX.now(), centeringY.now())
 
-    val centerX: PositioningX[SimulationNodeRx[ExperienceDescription]] =
+    val centerX: PositioningX[ExperienceNodeUi] =
       d3.forceX(centeringX.now()).strength(0.2d)
 
-    val centerY: PositioningY[SimulationNodeRx[ExperienceDescription]] =
+    val centerY: PositioningY[ExperienceNodeUi] =
       d3.forceY(centeringY.now()).strength(0.3d)
 
     val collisionStrength = Var(1d)
-    val collision: Collision[SimulationNodeRx[ExperienceDescription]] =
+    val collision: Collision[ExperienceNodeUi] =
       d3.forceCollide()
         .strength(collisionStrength.now())
         .radius(_ => nodeRadius.now() + 10)
