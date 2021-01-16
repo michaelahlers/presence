@@ -1,11 +1,14 @@
 package ahlers.presence.web.client
 
 import ahlers.presence.web.client.resume._
+import com.raquo.airstream.core.Observer
+import com.raquo.airstream.signal.Var
 import com.raquo.laminar.api.L._
+import com.raquo.laminar.nodes.ReactiveElement
 import d3.laminar.SimulationLinkRx
 import d3v4._
 import d3v4.d3force._
-import d3v4.d3zoom.Transform
+import d3v4.d3zoom.{ Transform, ZoomEvent }
 import org.scalajs.dom.ext.KeyCode
 
 import scala.scalajs.js
@@ -17,6 +20,37 @@ import scala.scalajs.js.JSConverters._
  */
 object ResumePage {
 
+  object onZoom {
+
+    @inline def -->(observer: Observer[ZoomEvent]): Binder[ReactiveElement.Base] =
+      ReactiveElement.bindSubscription(_) { context =>
+        val selection = d3.select(context.thisNode.ref)
+
+        d3.zoom()
+          .on("zoom", () => observer.onNext(d3.event))
+          .apply(selection)
+
+        new Subscription(
+          context.owner,
+          cleanup = () =>
+            d3.zoom()
+              .on("zoom", null)
+              .apply(selection))
+      }
+
+    // And so on…
+
+    //@inline def -->(onNext: ZoomEvent => Unit): Binder[ReactiveElement.Base] =
+    //  -->(Observer(onNext))
+
+    //@inline def -->(eventBus: EventBus[ZoomEvent]): Binder[ReactiveElement.Base] =
+    //  -->(eventBus.writer)
+
+    //@inline def -->(targetVar: Var[ZoomEvent]): Binder[ReactiveElement.Base] =
+    //  -->(targetVar.writer)
+
+  }
+
   def apply(): HtmlElement = {
     val nodeRadius = Var(50)
     val linkDistance = Var(10d)
@@ -25,7 +59,7 @@ object ResumePage {
     val centeringX = Var(0)
     val centeringY = Var(0)
 
-    val hoverIds = Var(Set.empty[ExperienceId])
+    //val hoverIds = Var(Set.empty[ExperienceId])
 
     val illustration = {
       import svg._
@@ -35,11 +69,7 @@ object ResumePage {
       svg(
         width := "100%",
         height := "100%",
-        onMountCallback { context =>
-          d3.zoom()
-            .on("zoom", () => transformVar.set(d3.event.transform))
-            .apply(d3.select(context.thisNode.ref))
-        },
+        onZoom --> transformVar.writer.contramap[ZoomEvent](_.transform),
         g(
           transform <-- transformVar.signal.map(_.toString()),
           experiences.links.map(link =>
@@ -53,10 +83,7 @@ object ResumePage {
           experiences.nodes.map(node =>
             g(
               circle(
-                r <-- (for {
-                  nr <- nodeRadius.signal
-                  hr <- hoverIds.signal.map(_.contains(node.payload.id)).map(if (_) 10 else 0)
-                } yield (nr + hr).toString),
+                r <-- nodeRadius.signal.map(_.toString()),
                 cx <-- node.$x.map(_.fold("")(_.toString)),
                 cy <-- node.$y.map(_.fold("")(_.toString)),
                 fill := (node.payload match {
@@ -65,13 +92,13 @@ object ResumePage {
                 })
               ),
               text(
-                x <-- node.$x.map(_.fold("")(_.toString)),
-                y <-- node.$y.map(_.fold("")(_.toString)),
+                x <-- node.$x.map(_.fold("")(_.toString())),
+                y <-- node.$y.map(_.fold("")(_.toString())),
                 style := "15px sans-serif",
                 node.payload.id.toText
-              ),
-              onMouseEnter.mapTo(hoverIds.now() + node.payload.id) --> hoverIds.writer,
-              onMouseLeave.mapTo(hoverIds.now() - node.payload.id) --> hoverIds.writer
+              ) //,
+              //onMouseEnter.mapTo(hoverIds.now() + node.payload.id) --> hoverIds.writer,
+              //onMouseLeave.mapTo(hoverIds.now() - node.payload.id) --> hoverIds.writer
             ))
         ),
         inContext { thisNode =>
