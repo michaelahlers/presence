@@ -5,6 +5,7 @@ import com.raquo.laminar.api.L._
 import d3.laminar.SimulationLinkRx
 import d3v4._
 import d3v4.d3force._
+import d3v4.d3zoom.Transform
 import org.scalajs.dom.ext.KeyCode
 
 import scala.scalajs.js
@@ -29,10 +30,18 @@ object ResumePage {
     val illustration = {
       import svg._
 
+      val transformVar: Var[Transform] = Var(d3zoom.zoomIdentity)
+
       svg(
         width := "100%",
         height := "100%",
+        onMountCallback { context =>
+          d3.zoom()
+            .on("zoom", () => transformVar.set(d3.event.transform))
+            .apply(d3.select(context.thisNode.ref))
+        },
         g(
+          transform <-- transformVar.signal.map(_.toString()),
           experiences.links.map(link =>
             line(
               style := "stroke: black",
