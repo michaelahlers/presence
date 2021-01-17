@@ -1,5 +1,8 @@
 package ahlers.presence.web.client
 
+import cats.syntax.semigroup._
+import cats.instances.map._
+import cats.instances.set._
 import cats.syntax.option._
 import com.raquo.airstream.signal.Var
 
@@ -82,7 +85,7 @@ package object resume {
         Set(Bootstrap, CSS) ::
         Set(Flyway, PostgreSQL, Slick) ::
         Set(LiveSafe, Akka, Lagom, SBT, Scala) ::
-        Set(ThompsonReutersSpecialServices, PlayFramework, SBT, Scala) ::
+        Set(ThompsonReutersSpecialServices, Bootstrap, CSS, PlayFramework, SBT, Scala) ::
         Set(VerizonBusiness, Bootstrap, CSS, PlayFramework, SBT, Scala) ::
         Nil
 
@@ -110,6 +113,15 @@ package object resume {
         }
         .toList
     }
+
+    val adjacentRefs: Map[ExperienceRef, Set[ExperienceRef]] =
+      links
+        .foldLeft(Map.empty[ExperienceRef, Set[ExperienceRef]]) { case (a, link) =>
+          a |+| Map(
+            (link.source.payload, Set(link.target.payload)),
+            (link.target.payload, Set(link.source.payload)))
+        }
+        .withDefaultValue(Set.empty)
 
   }
 
