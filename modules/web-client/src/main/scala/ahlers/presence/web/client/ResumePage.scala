@@ -53,17 +53,38 @@ object ResumePage {
   }
 
   def apply(): HtmlElement = {
-    val nodeRadius = Var(50)
+    val nodeRadiusVar = Var(50)
+    val $nodeRadius = nodeRadiusVar.signal
+
     val linkDistance = Var(10d)
     val linkStrength = Var(0.01d)
     val chargeStrength = Var(1d)
     val centeringX = Var(0)
     val centeringY = Var(0)
 
+    val focusedExperienceVar: Var[Option[ExperienceNodeUi]] = Var(none)
+    val $focusedExperience = focusedExperienceVar.signal
+
+    val $adjacentLinks: Signal[Seq[ExperienceLinkUi]] =
+      $focusedExperience.map(_
+        .map(node => experiences.links.filter(link => link.source == node || link.target == node))
+        .getOrElse(Seq.empty))
+
     val diagram = {
       import svg._
 
       val transformViewVar: Var[Option[Transform]] = Var(none)
+
+      val $adjacentLines: Signal[Seq[SvgElement]] =
+        $adjacentLinks.map(_.toSeq.map(link =>
+          line(
+            style := "stroke: black",
+            x1 <-- link.$source.flatMap(_.$x).map(_.fold("")(_.toString)),
+            y1 <-- link.$source.flatMap(_.$y).map(_.fold("")(_.toString)),
+            x2 <-- link.$target.flatMap(_.$x).map(_.fold("")(_.toString)),
+            y2 <-- link.$target.flatMap(_.$y).map(_.fold("")(_.toString))
+          )))
+      //.toStreamOrSignalChanges
 
       svg(
         width := "100%",
@@ -71,20 +92,16 @@ object ResumePage {
         onZoom --> transformViewVar.writer.contramap[ZoomEvent](_.transform.some),
         g(
           transform <-- transformViewVar.signal.map(_.fold("")(_.toString())),
-          experiences.links.map(link =>
-            line(
-              style := "stroke: black",
-              x1 <-- link.$source.flatMap(_.$x).map(_.fold("")(_.toString)),
-              y1 <-- link.$source.flatMap(_.$y).map(_.fold("")(_.toString)),
-              x2 <-- link.$target.flatMap(_.$x).map(_.fold("")(_.toString)),
-              y2 <-- link.$target.flatMap(_.$y).map(_.fold("")(_.toString))
-            )),
+          children <-- $adjacentLines,
           experiences.nodes.map { node =>
             //val transformNodeVar: Var[Transform] = Var(d3.zoomIdentity)
             g(
               //transform <-- transformNodeVar.signal.map(_.toString()),
               circle(
-                r <-- nodeRadius.signal.map(_.toString()),
+                r <-- (for {
+                  r <- $nodeRadius
+                  fn <- $focusedExperience
+                } yield r - fn.filter(_ == node).fold(10)(_ => 0)).map(_.toString),
                 cx <-- node.$x.map(_.fold("")(_.toString)),
                 cy <-- node.$y.map(_.fold("")(_.toString)),
                 fill := (node.payload match {
@@ -107,7 +124,7 @@ object ResumePage {
                 y <-- node.$y.map(_.fold("")(_.toString())),
                 style := "15px sans-serif",
                 node.payload.id.toText
-              ) //,
+              ),
               //onMountCallback { context =>
               //  import context.thisNode
               //
@@ -118,8 +135,7 @@ object ResumePage {
               //  zoom.scaleBy(d3.select(thisNode.ref), 1.1d)
               //
               //}
-              //onMouseEnter.mapTo(hoverIds.now() + node.payload.id) --> hoverIds.writer,
-              //onMouseLeave.mapTo(hoverIds.now() - node.payload.id) --> hoverIds.writer,
+              onClick.mapToValue(node.some) --> focusedExperienceVar
             )
           }
         ),
@@ -161,37 +177,45 @@ object ResumePage {
       )
     }
 
-    val link: Link[ExperienceNodeUi, SimulationLinkRx[ExperienceNodeUi, ExperienceNodeUi]] =
-      d3.forceLink[ExperienceNodeUi, SimulationLinkRx[ExperienceNodeUi, ExperienceNodeUi]](js.Array()) //experiences.links.toJSArray)
+    val link: Link[ExperienceNodeUi, ExperienceLinkUi] =
+      d3.forceLink[ExperienceNodeUi, ExperienceLinkUi](js.Array()) //experiences.links.toJSArray)
         .distance(linkDistance.now())
         .strength(linkStrength.now())
+
+    $adjacentLinks
+      .map(_.toJSArray)
+      .foreach(link.links(_))(unsafeWindowOwner)
 
     val charge: ManyBody[ExperienceNodeUi] =
       d3.forceManyBody()
         .strength(chargeStrength.now())
 
-    val centering: Centering[ExperienceNodeUi] =
-      d3.forceCenter(centeringX.now(), centeringY.now())
+    //val centering: Centering[ExperienceNodeUi] =
+    //  d3.forceCenter(centeringX.now(), centeringY.now())
 
     val centerX: PositioningX[ExperienceNodeUi] =
-      d3.forceX(centeringX.now()).strength(0.2d)
+      d3.forceX(centeringX.now()).strength(0.05d)
 
     val centerY: PositioningY[ExperienceNodeUi] =
-      d3.forceY(centeringY.now()).strength(0.3d)
+      d3.forceY(centeringY.now()).strength(0.05d)
 
     val collisionStrength = Var(1d)
     val collision: Collision[ExperienceNodeUi] =
       d3.forceCollide()
         .strength(collisionStrength.now())
-        .radius(_ => nodeRadius.now() + 10)
+        .radius { node =>
+          val r = $nodeRadius.now()
+          val fn = $focusedExperience.now()
+          r + fn.filter(_ == node).fold(10)(_ => 0)
+        }
 
     val simulation =
       d3.forceSimulation(experiences.nodes.toJSArray)
-      //.force("link", link)
+        .force("link", link)
         .force("charge", charge)
-        .force("center", centering)
-        //.force("foo", centerX)
-        //.force("bear", centerY)
+        //.force("center", centering)
+        .force("centerX", centerX)
+        .force("centerY", centerY)
         .force("collide", collision)
 
     val onEnterPress = onKeyPress.filter(_.keyCode == KeyCode.Enter)
@@ -210,8 +234,8 @@ object ResumePage {
           className := "col-12",
           span("Node Radius: "),
           input(
-            value <-- nodeRadius.signal.map(_.toString),
-            inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toInt) --> nodeRadius.writer))
+            value <-- $nodeRadius.map(_.toString),
+            inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toInt) --> nodeRadiusVar.writer))
         ),
         div(
           className := "col-12",
@@ -260,8 +284,8 @@ object ResumePage {
         )
       ),
       inContext { _ =>
-        nodeRadius.signal --> (nodeRadius => collision.radius(_ => nodeRadius + 10)) ::
-          nodeRadius.signal.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
+        $nodeRadius --> (nodeRadius => collision.radius(_ => nodeRadius + 10)) ::
+          $nodeRadius.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
           linkDistance.signal --> (link.distance(_)) ::
           linkDistance.signal.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
           linkStrength.signal --> (link.strength(_)) ::
@@ -270,10 +294,10 @@ object ResumePage {
           chargeStrength.signal.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
           collisionStrength.signal --> (collision.strength(_)) ::
           collisionStrength.signal.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
-          centeringX.signal --> (centering.x(_)) ::
-          centeringX.signal.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
-          centeringY.signal --> (centering.y(_)) ::
-          centeringY.signal.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
+          //centeringX.signal --> (centering.x(_)) ::
+          //centeringX.signal.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
+          //centeringY.signal --> (centering.y(_)) ::
+          //centeringY.signal.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
           centeringX.signal --> (centerX.x(_)) ::
           centeringX.signal.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
           centeringY.signal --> (centerY.y(_)) ::
