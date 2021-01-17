@@ -1,6 +1,7 @@
 package ahlers.presence.web.client
 
 import ahlers.presence.web.client.resume._
+import cats.syntax.option._
 import com.raquo.airstream.core.Observer
 import com.raquo.airstream.signal.Var
 import com.raquo.laminar.api.L._
@@ -59,19 +60,17 @@ object ResumePage {
     val centeringX = Var(0)
     val centeringY = Var(0)
 
-    //val hoverIds = Var(Set.empty[ExperienceId])
-
     val illustration = {
       import svg._
 
-      val transformVar: Var[Transform] = Var(d3zoom.zoomIdentity)
+      val transformViewVar: Var[Option[Transform]] = Var(none)
 
       svg(
         width := "100%",
         height := "100%",
-        onZoom --> transformVar.writer.contramap[ZoomEvent](_.transform),
+        onZoom --> transformViewVar.writer.contramap[ZoomEvent](_.transform.some),
         g(
-          transform <-- transformVar.signal.map(_.toString()),
+          transform <-- transformViewVar.signal.map(_.fold("")(_.toString())),
           experiences.links.map(link =>
             line(
               style := "stroke: black",
@@ -80,8 +79,10 @@ object ResumePage {
               x2 <-- link.$target.flatMap(_.$x).map(_.fold("")(_.toString)),
               y2 <-- link.$target.flatMap(_.$y).map(_.fold("")(_.toString))
             )),
-          experiences.nodes.map(node =>
+          experiences.nodes.map { node =>
+            //val transformNodeVar: Var[Transform] = Var(d3.zoomIdentity)
             g(
+              //transform <-- transformNodeVar.signal.map(_.toString()),
               circle(
                 r <-- nodeRadius.signal.map(_.toString()),
                 cx <-- node.$x.map(_.fold("")(_.toString)),
@@ -90,6 +91,16 @@ object ResumePage {
                   case _: ExperienceDescription.Skill => "blue"
                   case _: ExperienceDescription.Employment => "green"
                 })
+                //inContext { thisNode =>
+                //  onMouseEnter.mapTo {
+                //    println(d3.select(thisNode.ref))
+                //    println(d3.zoom().scaleBy(d3.select(thisNode.ref), 1.5d))
+                //    d3.zoom()
+                //      .scaleBy(
+                //        d3.select(thisNode.ref),
+                //        1.5d)
+                //  } --> transformNodeVar.writer
+                //}
               ),
               text(
                 x <-- node.$x.map(_.fold("")(_.toString())),
@@ -97,9 +108,20 @@ object ResumePage {
                 style := "15px sans-serif",
                 node.payload.id.toText
               ) //,
+              //onMountCallback { context =>
+              //  import context.thisNode
+              //
+              //  val zoom: ZoomBehavior[dom.EventTarget] =
+              //    d3.zoom()
+              //      .on("zoom", () => transformNodeVar.set(d3.event.transform))
+              //
+              //  zoom.scaleBy(d3.select(thisNode.ref), 1.1d)
+              //
+              //}
               //onMouseEnter.mapTo(hoverIds.now() + node.payload.id) --> hoverIds.writer,
-              //onMouseLeave.mapTo(hoverIds.now() - node.payload.id) --> hoverIds.writer
-            ))
+              //onMouseLeave.mapTo(hoverIds.now() - node.payload.id) --> hoverIds.writer,
+            )
+          }
         ),
         inContext { thisNode =>
           val $width =
@@ -117,8 +139,24 @@ object ResumePage {
             Nil
         },
         onMountCallback { context =>
-          centeringX.set(context.thisNode.ref.clientWidth / 2)
-          centeringY.set(context.thisNode.ref.clientHeight / 2)
+          import context.thisNode
+
+          //val circle: Selection[dom.EventTarget] =
+          //  d3.select(thisNode.ref)
+          //    .append("circle")
+          //    .attr("r", 20)
+          //    .attr("cx", 100)
+          //    .attr("cy", 100)
+          //    .attr("fill", "red")
+
+          //val zoom: ZoomBehavior[dom.EventTarget] =
+          //  d3.zoom()
+          //    .on("zoom", () => circle.attr("transform", d3.event.transform.toString()))
+
+          //zoom.scaleBy(circle, 3.0d)
+
+          centeringX.set(thisNode.ref.clientWidth / 2)
+          centeringY.set(thisNode.ref.clientHeight / 2)
         }
       )
     }
