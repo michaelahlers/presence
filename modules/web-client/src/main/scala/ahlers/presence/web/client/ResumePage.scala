@@ -212,7 +212,7 @@ object ResumePage {
     val simulation =
       d3.forceSimulation(experiences.nodes.toJSArray)
         .force("link", link)
-        .force("charge", charge)
+        //.force("charge", charge)
         //.force("center", centering)
         .force("centerX", centerX)
         .force("centerY", centerY)
