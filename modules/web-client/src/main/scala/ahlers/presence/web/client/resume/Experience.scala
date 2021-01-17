@@ -1,7 +1,9 @@
 package ahlers.presence.web.client.resume
-import com.raquo.airstream.signal.Var
+import com.raquo.airstream.signal.{ Signal, StrictSignal, Var }
 import d3.laminar.{ SimulationLinkRx, SimulationNodeRx }
 import d3v4.Index
+import cats.syntax.option._
+import com.raquo.laminar.api.L._
 
 /**
  * @since January 03, 2021

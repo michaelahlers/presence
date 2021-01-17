@@ -5,11 +5,12 @@ import cats.syntax.option._
 import com.raquo.airstream.core.Observer
 import com.raquo.airstream.signal.Var
 import com.raquo.laminar.api.L._
-import com.raquo.laminar.nodes.ReactiveElement
+import com.raquo.laminar.nodes.{ ReactiveElement, ReactiveSvgElement }
 import d3.laminar.SimulationLinkRx
 import d3v4._
 import d3v4.d3force._
 import d3v4.d3zoom.{ Transform, ZoomEvent }
+import org.scalajs.dom
 import org.scalajs.dom.ext.KeyCode
 
 import scala.scalajs.js
@@ -56,18 +57,19 @@ object ResumePage {
     val nodeRadiusVar = Var(50)
     val $nodeRadius = nodeRadiusVar.signal
 
-    val linkDistance = Var(10d)
-    val linkStrength = Var(0.01d)
-    val chargeStrength = Var(1d)
-    val centeringX = Var(0)
-    val centeringY = Var(0)
+    val linkDistanceVar = Var(10d)
+    val linkStrengthVar = Var(0.01d)
+    val chargeStrengthVar = Var(1d)
+    val centeringXVar = Var(0)
+    val centeringYVar = Var(0)
 
-    val focusedExperienceVar: Var[Option[ExperienceNodeUi]] = Var(none)
-    val $focusedExperience = focusedExperienceVar.signal
+    val focusedRefVar: Var[Option[ExperienceRef]] = Var(none)
+
+    val $focusedRef: Signal[Option[ExperienceRef]] = focusedRefVar.signal
 
     val $adjacentLinks: Signal[Seq[ExperienceLinkUi]] =
-      $focusedExperience.map(_
-        .map(node => experiences.links.filter(link => link.source == node || link.target == node))
+      $focusedRef.map(_
+        .map(ref => experiences.links.filter(link => link.source.payload == ref || link.target.payload == ref))
         .getOrElse(Seq.empty))
 
     val diagram = {
@@ -76,15 +78,8 @@ object ResumePage {
       val transformViewVar: Var[Option[Transform]] = Var(none)
 
       val $adjacentLines: Signal[Seq[SvgElement]] =
-        $adjacentLinks.map(_.toSeq.map(link =>
-          line(
-            style := "stroke: black",
-            x1 <-- link.$source.flatMap(_.$x).map(_.fold("")(_.toString)),
-            y1 <-- link.$source.flatMap(_.$y).map(_.fold("")(_.toString)),
-            x2 <-- link.$target.flatMap(_.$x).map(_.fold("")(_.toString)),
-            y2 <-- link.$target.flatMap(_.$y).map(_.fold("")(_.toString))
-          )))
-      //.toStreamOrSignalChanges
+        $adjacentLinks.map(_
+          .map(_.render()))
 
       svg(
         width := "100%",
@@ -93,51 +88,11 @@ object ResumePage {
         g(
           transform <-- transformViewVar.signal.map(_.fold("")(_.toString())),
           children <-- $adjacentLines,
-          experiences.nodes.map { node =>
-            //val transformNodeVar: Var[Transform] = Var(d3.zoomIdentity)
-            g(
-              //transform <-- transformNodeVar.signal.map(_.toString()),
-              circle(
-                r <-- (for {
-                  r <- $nodeRadius
-                  fn <- $focusedExperience
-                } yield r - fn.filter(_ == node).fold(10)(_ => 0)).map(_.toString),
-                cx <-- node.$x.map(_.fold("")(_.toString)),
-                cy <-- node.$y.map(_.fold("")(_.toString)),
-                fill := (node.payload match {
-                  case _: ExperienceDescription.Skill => "blue"
-                  case _: ExperienceDescription.Employment => "green"
-                })
-                //inContext { thisNode =>
-                //  onMouseEnter.mapTo {
-                //    println(d3.select(thisNode.ref))
-                //    println(d3.zoom().scaleBy(d3.select(thisNode.ref), 1.5d))
-                //    d3.zoom()
-                //      .scaleBy(
-                //        d3.select(thisNode.ref),
-                //        1.5d)
-                //  } --> transformNodeVar.writer
-                //}
-              ),
-              text(
-                x <-- node.$x.map(_.fold("")(_.toString())),
-                y <-- node.$y.map(_.fold("")(_.toString())),
-                style := "15px sans-serif",
-                node.payload.id.toText
-              ),
-              //onMountCallback { context =>
-              //  import context.thisNode
-              //
-              //  val zoom: ZoomBehavior[dom.EventTarget] =
-              //    d3.zoom()
-              //      .on("zoom", () => transformNodeVar.set(d3.event.transform))
-              //
-              //  zoom.scaleBy(d3.select(thisNode.ref), 1.1d)
-              //
-              //}
-              onClick.mapToValue(node.some) --> focusedExperienceVar
-            )
-          }
+          experiences.nodes.map(node =>
+            node.render(
+              $nodeRadius,
+              $focusedRef,
+              onClick.mapToValue(node.payload.some) --> focusedRefVar.writer))
         ),
         inContext { thisNode =>
           val $width =
@@ -150,8 +105,8 @@ object ResumePage {
               .onResize
               .mapTo(thisNode.ref.clientHeight)
 
-          $width.map(_ / 2) --> centeringX.writer ::
-            $height.map(_ / 2) --> centeringY.writer ::
+          $width.map(_ / 2) --> centeringXVar.writer ::
+            $height.map(_ / 2) --> centeringYVar.writer ::
             Nil
         },
         onMountCallback { context =>
@@ -171,16 +126,16 @@ object ResumePage {
 
           //zoom.scaleBy(circle, 3.0d)
 
-          centeringX.set(thisNode.ref.clientWidth / 2)
-          centeringY.set(thisNode.ref.clientHeight / 2)
+          centeringXVar.set(thisNode.ref.clientWidth / 2)
+          centeringYVar.set(thisNode.ref.clientHeight / 2)
         }
       )
     }
 
     val link: Link[ExperienceNodeUi, ExperienceLinkUi] =
       d3.forceLink[ExperienceNodeUi, ExperienceLinkUi](js.Array()) //experiences.links.toJSArray)
-        .distance(linkDistance.now())
-        .strength(linkStrength.now())
+        .distance(linkDistanceVar.now())
+        .strength(linkStrengthVar.now())
 
     $adjacentLinks
       .map(_.toJSArray)
@@ -188,26 +143,22 @@ object ResumePage {
 
     val charge: ManyBody[ExperienceNodeUi] =
       d3.forceManyBody()
-        .strength(chargeStrength.now())
+        .strength(chargeStrengthVar.now())
 
     //val centering: Centering[ExperienceNodeUi] =
     //  d3.forceCenter(centeringX.now(), centeringY.now())
 
     val centerX: PositioningX[ExperienceNodeUi] =
-      d3.forceX(centeringX.now()).strength(0.05d)
+      d3.forceX(centeringXVar.now()).strength(0.05d)
 
     val centerY: PositioningY[ExperienceNodeUi] =
-      d3.forceY(centeringY.now()).strength(0.05d)
+      d3.forceY(centeringYVar.now()).strength(0.05d)
 
     val collisionStrength = Var(1d)
     val collision: Collision[ExperienceNodeUi] =
       d3.forceCollide()
         .strength(collisionStrength.now())
-        .radius { node =>
-          val r = $nodeRadius.now()
-          val fn = $focusedExperience.now()
-          r + fn.filter(_ == node).fold(10)(_ => 0)
-        }
+        .radius(_ => $nodeRadius.now())
 
     val simulation =
       d3.forceSimulation(experiences.nodes.toJSArray)
@@ -241,12 +192,12 @@ object ResumePage {
           className := "col-12",
           span("Link Distance: "),
           input(
-            value <-- linkDistance.signal.map(_.toString),
-            inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toDouble) --> linkDistance.writer)),
+            value <-- linkDistanceVar.signal.map(_.toString),
+            inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toDouble) --> linkDistanceVar.writer)),
           span("Link Strength: "),
           input(
-            value <-- linkStrength.signal.map(_.toString),
-            inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toDouble) --> linkStrength.writer))
+            value <-- linkStrengthVar.signal.map(_.toString),
+            inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toDouble) --> linkStrengthVar.writer))
         ),
         div(
           className := "row",
@@ -254,8 +205,8 @@ object ResumePage {
             className := "col-12",
             span("Charge Strength: "),
             input(
-              value <-- chargeStrength.signal.map(_.toString),
-              inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toDouble) --> chargeStrength.writer))
+              value <-- chargeStrengthVar.signal.map(_.toString),
+              inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toDouble) --> chargeStrengthVar.writer))
           )
         ),
         div(
@@ -274,37 +225,113 @@ object ResumePage {
             className := "col-12",
             span("Centering X: "),
             input(
-              value <-- centeringX.signal.map(_.toString),
-              inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toInt) --> centeringX.writer)),
+              value <-- centeringXVar.signal.map(_.toString),
+              inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toInt) --> centeringXVar.writer)),
             span("Centering Y: "),
             input(
-              value <-- centeringY.signal.map(_.toString),
-              inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toInt) --> centeringY.writer))
+              value <-- centeringYVar.signal.map(_.toString),
+              inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toInt) --> centeringYVar.writer))
           )
         )
       ),
       inContext { _ =>
         $nodeRadius --> (nodeRadius => collision.radius(_ => nodeRadius + 10)) ::
           $nodeRadius.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
-          linkDistance.signal --> (link.distance(_)) ::
-          linkDistance.signal.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
-          linkStrength.signal --> (link.strength(_)) ::
-          linkStrength.signal.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
-          chargeStrength.signal --> (charge.strength(_)) ::
-          chargeStrength.signal.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
+          linkDistanceVar.signal --> (link.distance(_)) ::
+          linkDistanceVar.signal.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
+          linkStrengthVar.signal --> (link.strength(_)) ::
+          linkStrengthVar.signal.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
+          chargeStrengthVar.signal --> (charge.strength(_)) ::
+          chargeStrengthVar.signal.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
           collisionStrength.signal --> (collision.strength(_)) ::
           collisionStrength.signal.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
           //centeringX.signal --> (centering.x(_)) ::
           //centeringX.signal.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
           //centeringY.signal --> (centering.y(_)) ::
           //centeringY.signal.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
-          centeringX.signal --> (centerX.x(_)) ::
-          centeringX.signal.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
-          centeringY.signal --> (centerY.y(_)) ::
-          centeringY.signal.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
+          centeringXVar.signal --> (centerX.x(_)) ::
+          centeringXVar.signal.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
+          centeringYVar.signal --> (centerY.y(_)) ::
+          centeringYVar.signal.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
           Nil
       }
     )
+  }
+
+  implicit class ExperienceLinkSyntax(private val link: ExperienceLinkUi) extends AnyVal {
+
+    @inline def render() = {
+      import svg._
+      line(
+        style := "stroke: black",
+        x1 <-- link.$source.flatMap(_.$x).map(_.fold("")(_.toString)),
+        y1 <-- link.$source.flatMap(_.$y).map(_.fold("")(_.toString)),
+        x2 <-- link.$target.flatMap(_.$x).map(_.fold("")(_.toString)),
+        y2 <-- link.$target.flatMap(_.$y).map(_.fold("")(_.toString))
+      )
+    }
+
+  }
+
+  implicit class ExperienceNodeSyntax(private val node: ExperienceNodeUi) extends AnyVal {
+
+    @inline def render(
+      $nodeRadius: Signal[Int],
+      $focusedRef: Signal[Option[ExperienceRef]],
+      modifiers: Modifier[ReactiveSvgElement[dom.raw.SVGElement]]*
+    ) = {
+      import svg._
+      g(
+        //transform <-- transformNodeVar.signal.map(_.toString()),
+        circle(
+          r <-- $nodeRadius.map(_.toString()),
+          //r <-- node.$status
+          //  .flatMap {
+          //    case ExperienceNodeUi.Status.Idle => $nodeRadius
+          //    case ExperienceNodeUi.Status.Focus => $nodeRadius.map(_ + 10)
+          //    case ExperienceNodeUi.Status.Adjacent => $nodeRadius.map(_ + 5)
+          //    case ExperienceNodeUi.Status.Irrelevant => $nodeRadius.map(_ - 5)
+          //  }
+          //  .map(_.toString),
+          cx <-- node.$x.map(_.fold("")(_.toString)),
+          cy <-- node.$y.map(_.fold("")(_.toString)),
+          fill <-- node.$payload
+            .map {
+              case _: ExperienceDescription.Skill => "blue"
+              case _: ExperienceDescription.Employment => "green"
+            }
+          //inContext { thisNode =>
+          //  onMouseEnter.mapTo {
+          //    println(d3.select(thisNode.ref))
+          //    println(d3.zoom().scaleBy(d3.select(thisNode.ref), 1.5d))
+          //    d3.zoom()
+          //      .scaleBy(
+          //        d3.select(thisNode.ref),
+          //        1.5d)
+          //  } --> transformNodeVar.writer
+          //}
+        ),
+        text(
+          x <-- node.$x.map(_.fold("")(_.toString())),
+          y <-- node.$y.map(_.fold("")(_.toString())),
+          style := "15px sans-serif",
+          node.payload.id.toText + " " + experiences.adjacentRefs(node.payload).map(_.id.toText).mkString("[", ", ", "]")
+        ),
+        //onMountCallback { context =>
+        //  import context.thisNode
+        //
+        //  val zoom: ZoomBehavior[dom.EventTarget] =
+        //    d3.zoom()
+        //      .on("zoom", () => transformNodeVar.set(d3.event.transform))
+        //
+        //  zoom.scaleBy(d3.select(thisNode.ref), 1.1d)
+        //
+        //}
+        //onClick.mapToValue(node.some) --> focusedExperienceVar
+        modifiers
+      )
+    }
+
   }
 
 }
