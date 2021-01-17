@@ -60,7 +60,7 @@ object ResumePage {
     val centeringX = Var(0)
     val centeringY = Var(0)
 
-    val illustration = {
+    val diagram = {
       import svg._
 
       val transformViewVar: Var[Option[Transform]] = Var(none)
@@ -203,7 +203,7 @@ object ResumePage {
         div(
           height := "600px",
           className := "col-12",
-          illustration)),
+          diagram)),
       div(
         className := "row",
         div(
