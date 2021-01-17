@@ -67,7 +67,7 @@ package object resume {
         .zipWithIndex
         .map { case (detail, index) =>
           ExperienceNodeUi(
-            Var(index.some),
+            Var(index.toDouble.some),
             Var(none),
             Var(none),
             Var(none),
@@ -104,7 +104,7 @@ package object resume {
         .zipWithIndex
         .map { case (Seq((a, b), _ @_*), index) =>
           ExperienceLinkUi(
-            Var(index.some),
+            Var(index.toDouble.some),
             Var(byId(a.id)),
             Var(byId(b.id)))
         }

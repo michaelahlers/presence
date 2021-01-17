@@ -1,7 +1,7 @@
 package d3.laminar
 
 import com.raquo.airstream.signal.Var
-import d3v4.{ Index, SimulationLink, SimulationNode }
+import typings.d3Force.mod.{ SimulationLinkDatum, SimulationNodeDatum }
 
 import scala.scalajs.js.JSConverters._
 import scala.scalajs.js.UndefOr
@@ -10,20 +10,23 @@ import scala.scalajs.js.UndefOr
  * @since January 03, 2021
  * @author <a href="mailto:michael@ahlers.consulting">Michael Ahlers</a>
  */
-trait SimulationLinkRx[Source <: SimulationNode, Target <: SimulationNode] extends SimulationLink[Source, Target] {
-  def indexVar: Var[Option[Index]]
-  def sourceVar: Var[Source]
-  def targetVar: Var[Target]
+trait SimulationLinkRx[NodeDatum <: SimulationNodeDatum] extends SimulationLinkDatum[NodeDatum] {
+
+  def indexVar: Var[Option[Double]]
+  def sourceVar: Var[NodeDatum]
+  def targetVar: Var[NodeDatum]
 
   final def $index = indexVar.signal
-  final override def index = indexVar.now().orUndefined
-  final override def index_=(index: UndefOr[Index]) = indexVar.set(index.toOption)
+  final override var index = indexVar.now().orUndefined
+  final def index_=(index: UndefOr[Double]) = indexVar.set(index.toOption)
 
   final def $source = sourceVar.signal
-  final override def source = sourceVar.now()
+  final override var source = sourceVar.now()
+  final def source_=(source: NodeDatum) = sourceVar.set(source)
 
   final def $target = targetVar.signal
-  final override def target = targetVar.now()
+  final override var target = targetVar.now()
+  final def target_=(target: NodeDatum) = targetVar.set(target)
 
 }
 

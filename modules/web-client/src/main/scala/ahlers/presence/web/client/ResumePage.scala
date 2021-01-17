@@ -6,9 +6,17 @@ import com.raquo.airstream.signal.Var
 import com.raquo.laminar.api.L._
 import com.raquo.laminar.nodes.ReactiveElement
 import d3.laminar.SimulationLinkRx
-import d3v4._
-import d3v4.d3force._
-import d3v4.d3zoom.{ Transform, ZoomEvent }
+import org.scalajs.dom
+import typings.d3
+import typings.d3Force.mod.{ Force, ForceCenter_, ForceCollide_, ForceLink_, ForceManyBody_, Simulation }
+import typings.d3Zoom.mod.{ D3ZoomEvent, ZoomTransform_ }
+import typings.d3Zoom
+import typings.d3Force
+
+import scala.scalajs.js.|
+//import d3v4._
+//import d3v4.d3force._
+//import d3v4.d3zoom.{ Transform, ZoomEvent }
 import org.scalajs.dom.ext.KeyCode
 
 import scala.scalajs.js
@@ -22,18 +30,19 @@ object ResumePage {
 
   object onZoom {
 
-    @inline def -->(observer: Observer[ZoomEvent]): Binder[ReactiveElement.Base] =
+    @inline def -->(observer: Observer[D3ZoomEvent[dom.Element, AnyRef]]): Binder[ReactiveElement.Base] =
       ReactiveElement.bindSubscription(_) { context =>
-        val selection = d3.select(context.thisNode.ref)
+        val selection = d3.mod.select(context.thisNode.ref)
 
-        d3.zoom()
-          .on("zoom", () => observer.onNext(d3.event))
-          .apply(selection)
+        d3.mod.zoom()
+        //.on("zoom", () => observer.onNext(d3.mod.event))
+          .on("zoom", (ref: dom.Element, event: Any, datum: AnyRef) => observer.onNext(event.asInstanceOf[D3ZoomEvent[dom.Element, AnyRef]]))
+        //.apply(selection)
 
         new Subscription(
           context.owner,
           cleanup = () =>
-            d3.zoom()
+            d3.mod.zoom()
               .on("zoom", null)
               .apply(selection))
       }
@@ -64,12 +73,12 @@ object ResumePage {
     val illustration = {
       import svg._
 
-      val transformVar: Var[Transform] = Var(d3zoom.zoomIdentity)
+      val transformVar: Var[ZoomTransform_] = Var(d3Zoom.mod.zoomIdentity)
 
       svg(
         width := "100%",
         height := "100%",
-        onZoom --> transformVar.writer.contramap[ZoomEvent](_.transform),
+        onZoom --> transformVar.writer.contramap(_.transform),
         g(
           transform <-- transformVar.signal.map(_.toString()),
           experiences.links.map(link =>
@@ -123,37 +132,35 @@ object ResumePage {
       )
     }
 
-    val link: Link[ExperienceNodeUi, SimulationLinkRx[ExperienceNodeUi, ExperienceNodeUi]] =
-      d3.forceLink[ExperienceNodeUi, SimulationLinkRx[ExperienceNodeUi, ExperienceNodeUi]](js.Array()) //experiences.links.toJSArray)
-        .distance(linkDistance.now())
-        .strength(linkStrength.now())
+    //val link: ForceLink_[ExperienceNodeUi, SimulationLinkRx[ExperienceNodeUi]] =
+    //  d3.mod.forceLink[ExperienceNodeUi, SimulationLinkRx[ExperienceNodeUi]](js.Array()) //experiences.links.toJSArray)
+    //    .distance(linkDistance.now())
+    //    .strength(linkStrength.now())
 
-    val charge: ManyBody[ExperienceNodeUi] =
-      d3.forceManyBody()
+    val charge: ForceManyBody_[ExperienceNodeUi] =
+      d3.mod.forceManyBody()
         .strength(chargeStrength.now())
 
-    val centering: Centering[ExperienceNodeUi] =
-      d3.forceCenter(centeringX.now(), centeringY.now())
+    val centering: Force[ExperienceNodeUi, js.Any] = //ForceCenter_[ExperienceNodeUi] =
+      d3Force.mod.forceCenter(centeringX.now(), centeringY.now())
 
-    val centerX: PositioningX[ExperienceNodeUi] =
-      d3.forceX(centeringX.now()).strength(0.2d)
+    //val centerX: ForcePositioningX[ExperienceNodeUi] =
+    //  d3.forceX(centeringX.now()).strength(0.2d)
 
-    val centerY: PositioningY[ExperienceNodeUi] =
-      d3.forceY(centeringY.now()).strength(0.3d)
+    //val centerY: PositioningY[ExperienceNodeUi] =
+    //  d3.forceY(centeringY.now()).strength(0.3d)
 
     val collisionStrength = Var(1d)
-    val collision: Collision[ExperienceNodeUi] =
-      d3.forceCollide()
+    val collision: ForceCollide_[ExperienceNodeUi] =
+      d3.mod.forceCollide()
         .strength(collisionStrength.now())
-        .radius(_ => nodeRadius.now() + 10)
+        .radius(nodeRadius.now() + 10)
 
     val simulation =
-      d3.forceSimulation(experiences.nodes.toJSArray)
+      d3Force.mod.forceSimulation(experiences.nodes.toJSArray)
       //.force("link", link)
         .force("charge", charge)
         .force("center", centering)
-        //.force("foo", centerX)
-        //.force("bear", centerY)
         .force("collide", collision)
 
     val onEnterPress = onKeyPress.filter(_.keyCode == KeyCode.Enter)
@@ -222,12 +229,12 @@ object ResumePage {
         )
       ),
       inContext { _ =>
-        nodeRadius.signal --> (nodeRadius => collision.radius(_ => nodeRadius + 10)) ::
+        nodeRadius.signal --> (nodeRadius => collision.radius(nodeRadius + 10)) ::
           nodeRadius.signal.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
-          linkDistance.signal --> (link.distance(_)) ::
-          linkDistance.signal.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
-          linkStrength.signal --> (link.strength(_)) ::
-          linkStrength.signal.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
+          //linkDistance.signal --> (link.distance(_)) ::
+          //linkDistance.signal.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
+          //linkStrength.signal --> (link.strength(_)) ::
+          //linkStrength.signal.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
           chargeStrength.signal --> (charge.strength(_)) ::
           chargeStrength.signal.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
           collisionStrength.signal --> (collision.strength(_)) ::
@@ -236,10 +243,10 @@ object ResumePage {
           centeringX.signal.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
           centeringY.signal --> (centering.y(_)) ::
           centeringY.signal.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
-          centeringX.signal --> (centerX.x(_)) ::
-          centeringX.signal.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
-          centeringY.signal --> (centerY.y(_)) ::
-          centeringY.signal.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
+          //centeringX.signal --> (centerX.x(_)) ::
+          //centeringX.signal.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
+          //centeringY.signal --> (centerY.y(_)) ::
+          //centeringY.signal.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
           Nil
       }
     )

@@ -1,14 +1,15 @@
 enablePlugins(ScalaJSBundlerPlugin)
 enablePlugins(ScalaJSPlugin)
-//enablePlugins(ScalablyTypedConverterPlugin)
+enablePlugins(ScalablyTypedConverterPlugin)
 //enablePlugins(TzdbPlugin)
 
 scalaJSUseMainModuleInitializer := true
 
 /* Defeats interoperability with Laminar, which is married to Scala.js DOM. */
 //stUseScalaJsDom := false
+stEnableScalaJsDefined := Selection.All
 
-//useYarn := true
+useYarn := true
 
 // TODO: Configure caching for Scalably Typed artifacts.
 
