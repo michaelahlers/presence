@@ -69,7 +69,7 @@ object ResumePage {
 
     val $adjacentLinks: Signal[Seq[ExperienceLinkUi]] =
       $focusedRef.map(_
-        .map(ref => experiences.links.filter(link => link.source.description == ref || link.target.description == ref))
+        .map(ref => experiences.links.filter(_.contains(ref)))
         .getOrElse(Seq.empty))
 
     val diagram = {
@@ -92,7 +92,7 @@ object ResumePage {
             node.render(
               $nodeRadius,
               $focusedRef,
-              onClick.mapToValue(node.description.some) --> focusedRefVar.writer))
+              onClick.mapToValue(node.experience.some) --> focusedRefVar.writer))
         ),
         inContext { thisNode =>
           val $width =
@@ -295,7 +295,7 @@ object ResumePage {
           //  .map(_.toString),
           cx <-- node.$x.map(_.fold("")(_.toString)),
           cy <-- node.$y.map(_.fold("")(_.toString)),
-          fill := (node.description match {
+          fill := (node.experience match {
             case _: ExperienceDescription.Skill => "blue"
             case _: ExperienceDescription.Employment => "green"
           })
@@ -314,7 +314,7 @@ object ResumePage {
           x <-- node.$x.map(_.fold("")(_.toString())),
           y <-- node.$y.map(_.fold("")(_.toString())),
           style := "15px sans-serif",
-          node.description.id.toText + " " + experiences.adjacentRefs(node.description).map(_.id.toText).mkString("[", ", ", "]")
+          node.experience.id.toText + " " + experiences.adjacentRefs(node.experience).map(_.id.toText).mkString("[", ", ", "]")
         ),
         //onMountCallback { context =>
         //  import context.thisNode

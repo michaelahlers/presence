@@ -85,7 +85,7 @@ package object resume {
     val links: Seq[ExperienceLinkUi] = {
       val byId: Map[ExperienceId, ExperienceNodeUi] =
         nodes
-          .groupBy(_.description.id)
+          .groupBy(_.experience.id)
           .view.mapValues(_.head)
           .toMap
 
@@ -109,8 +109,8 @@ package object resume {
       links
         .foldLeft(Map.empty[ExperienceRef, Set[ExperienceRef]]) { case (a, link) =>
           a |+| Map(
-            (link.source.description, Set(link.target.description)),
-            (link.target.description, Set(link.source.description)))
+            (link.source.experience, Set(link.target.experience)),
+            (link.target.experience, Set(link.source.experience)))
         }
         .withDefaultValue(Set.empty)
 
