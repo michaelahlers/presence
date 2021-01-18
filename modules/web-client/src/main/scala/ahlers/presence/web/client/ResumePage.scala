@@ -1,6 +1,8 @@
 package ahlers.presence.web.client
 
 import ahlers.presence.web.client.resume._
+import cats.instances.option._
+import cats.syntax.apply._
 import cats.syntax.option._
 import com.raquo.airstream.core.Observer
 import com.raquo.airstream.signal.Var
@@ -22,20 +24,23 @@ import scala.scalajs.js.JSConverters._
  */
 object ResumePage {
 
-  object onZoom {
+  val zb: ZoomBehavior[dom.EventTarget] = d3.zoom()
+
+  case class onZoom(behavior: ZoomBehavior[dom.EventTarget]) {
 
     @inline def -->(observer: Observer[ZoomEvent]): Binder[ReactiveElement.Base] =
       ReactiveElement.bindSubscription(_) { context =>
         val selection = d3.select(context.thisNode.ref)
 
-        d3.zoom()
+        behavior
+          .scaleExtent(Seq(1d, 10d).toJSArray)
           .on("zoom", () => observer.onNext(d3.event))
           .apply(selection)
 
         new Subscription(
           context.owner,
           cleanup = () =>
-            d3.zoom()
+            behavior
               .on("zoom", null)
               .apply(selection))
       }
@@ -71,10 +76,16 @@ object ResumePage {
 
       val transformDiagramVar: Var[Option[Transform]] = Var(none)
 
+      val focusedNodeVar: Var[Option[ExperienceNodeUi]] = Var(none)
+      val $focusedNode: Signal[Option[ExperienceNodeUi]] = focusedNodeVar.signal
+
+      $focusedNode.foreach(println(_))(unsafeWindowOwner)
+
       svg(
         width := "100%",
         height := "100%",
-        onZoom --> transformDiagramVar.writer.contramap[ZoomEvent](_.transform.some),
+        onZoom(zb) --> transformDiagramVar.writer.contramap[ZoomEvent](_.transform.some),
+        onClick.mapToValue(none) --> focusedNodeVar.writer,
         g(
           transform <-- transformDiagramVar.signal.map(_.fold("")(_.toString())),
           //experiences.links.map(link =>
@@ -82,7 +93,8 @@ object ResumePage {
           //    $focusedNode)),
           experiences.nodes.map(node =>
             node.render(
-              $nodeRadius))
+              $nodeRadius,
+              onClick.map(_.stopPropagation()).mapToValue(node.some) --> focusedNodeVar.writer))
           //$focusedNode,
           //onClick.mapToValue(node.some) --> focusedNodeVar.writer))
         ),
@@ -91,13 +103,72 @@ object ResumePage {
             windowEvents
               .onResize
               .mapTo(thisNode.ref.clientWidth)
+              .toSignal(thisNode.ref.clientWidth)
 
           val $height =
             windowEvents
               .onResize
               .mapTo(thisNode.ref.clientHeight)
+              .toSignal(thisNode.ref.clientHeight)
 
-          $width.map(_ / 2) --> centeringXVar.writer ::
+          //val arrange = {
+          //  val theta = Math.PI * (3 - Math.sqrt(5))
+          //
+          //  for {
+          //    nodeRadius <- $nodeRadius
+          //    width <- $width
+          //    height <- $height
+          //  } yield {
+          //    val step = nodeRadius.getOrElse(0d) * 1.5d
+          //    experiences
+          //      .nodes
+          //      .zipWithIndex
+          //      .foreach { case (node, i) =>
+          //        val radius = step * Math.sqrt(i + 0.5d)
+          //        val a = theta * (i + 0.5d)
+          //        node.x = width / 2 + radius * Math.cos(a)
+          //        node.y = height / 2 + radius * Math.sin(a)
+          //      }
+          //  }
+          //}
+
+          //val $transform =
+          //  for {
+          //    xF <- $focusedNode.flatMap(_.map(_.$x).getOrElse(Val(none)))
+          //    yF <- $focusedNode.flatMap(_.map(_.$y).getOrElse(Val(none)))
+          //  } yield {
+          //    val width = thisNode.ref.clientWidth
+          //    val height = thisNode.ref.clientHeight
+          //    (xF, yF)
+          //      .mapN((x, y) =>
+          //        d3.zoomIdentity
+          //          .translate(width / 2, height / 2)
+          //          .scale(2)
+          //          .translate(-x, -y))
+          //      .getOrElse(d3.zoomIdentity)
+          //  }
+
+          val $transform =
+            for {
+              centerX <- centeringXVar.signal
+              centerY <- centeringYVar.signal
+              focusedNodeF <- $focusedNode
+            } yield focusedNodeF match {
+              case None => d3.zoomIdentity
+              case Some(focusedNode) =>
+                val xF = focusedNode.$x.now()
+                val yF = focusedNode.$y.now()
+                (xF, yF)
+                  .mapN((x, y) =>
+                    d3.zoomIdentity
+                      .translate(centerX, centerY)
+                      .scale(2)
+                      .translate(-x, -y))
+                  .getOrElse(d3.zoomIdentity)
+            }
+
+          $transform --> (zb.transform(d3.select(thisNode.ref), _)) ::
+            $width.map(_ / 2) --> centeringXVar.writer ::
             $height.map(_ / 2) --> centeringYVar.writer ::
             Nil
         },
@@ -156,7 +227,7 @@ object ResumePage {
     //  node.radiusVar.now().getOrElse(0d)
     //}
 
-    val simulation =
+    val simulation: Simulation[ExperienceNodeUi] =
       d3.forceSimulation(experiences.nodes.toJSArray)
       //.force("link", link)
         .force("charge", charge)
