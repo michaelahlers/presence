@@ -67,7 +67,12 @@ object ResumePage {
 
     val $focusedNode: Signal[Option[ExperienceNodeUi]] = focusedNodeVar.signal
 
-    val $adjacentLinks: Signal[Seq[ExperienceLinkUi]] =
+    val $focusedAdjacentNodes: Signal[Seq[ExperienceNodeUi]] =
+      $focusedNode.map(_
+        .map(node => experiences.adjacentNodes(node).toSeq)
+        .getOrElse(Seq.empty))
+
+    val $focusedAdjacentLinks: Signal[Seq[ExperienceLinkUi]] =
       $focusedNode.map(_
         .map(node => experiences.links.filter(_.contains(node)))
         .getOrElse(Seq.empty))
@@ -78,7 +83,7 @@ object ResumePage {
       val transformDiagramVar: Var[Option[Transform]] = Var(none)
 
       val $adjacentLines: Signal[Seq[SvgElement]] =
-        $adjacentLinks.map(_
+        $focusedAdjacentLinks.map(_
           .map(_.render()))
 
       svg(
@@ -137,7 +142,7 @@ object ResumePage {
         .distance(linkDistanceVar.now())
         .strength(linkStrengthVar.now())
 
-    $adjacentLinks
+    $focusedAdjacentLinks
       .map(_.toJSArray)
       .foreach(link.links(_))(unsafeWindowOwner)
 
@@ -315,7 +320,7 @@ object ResumePage {
           x <-- node.$x.map(_.fold("")(_.toString())),
           y <-- node.$y.map(_.fold("")(_.toString())),
           style := "15px sans-serif",
-          node.experience.id.toText + " " + experiences.adjacentRefs(node.experience).map(_.id.toText).mkString("[", ", ", "]")
+          node.experience.id.toText + " " + experiences.adjacentNodes(node).map(_.experience.id.toText).mkString("[", ", ", "]")
         ),
         //onMountCallback { context =>
         //  import context.thisNode
