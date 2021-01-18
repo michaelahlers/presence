@@ -19,7 +19,7 @@ object LandingPageView {
 
   def apply(): HtmlElement =
     article(
-      className := "container-fluid",
+      className := "container-fluid mt-5 pt-3",
       div(
         className := "row d-flex justify-content-center mt-3",
         div(
