@@ -6,8 +6,8 @@ import com.raquo.airstream.core.Observer
 import com.raquo.airstream.signal.Var
 import com.raquo.laminar.api.L._
 import com.raquo.laminar.nodes.{ ReactiveElement, ReactiveSvgElement }
-//import d3.laminar.SimulationLinkRx
 import d3v4._
+import d3v4.d3.ZoomBehavior
 import d3v4.d3force._
 import d3v4.d3zoom.{ Transform, ZoomEvent }
 import org.scalajs.dom
@@ -281,6 +281,7 @@ object ResumePage {
       modifiers: Modifier[ReactiveSvgElement[dom.raw.SVGElement]]*
     ) = {
       import svg._
+      //val transformNodeVar: Var[Transform] = Var(d3.zoomIdentity)
       g(
         //transform <-- transformNodeVar.signal.map(_.toString()),
         circle(
@@ -319,13 +320,11 @@ object ResumePage {
         //onMountCallback { context =>
         //  import context.thisNode
         //
-        //  val zoom: ZoomBehavior[dom.EventTarget] =
-        //    d3.zoom()
-        //      .on("zoom", () => transformNodeVar.set(d3.event.transform))
+        //  d3.zoom()
+        //    .on("zoom", () => transformNodeVar.set(d3.event.transform))
+        //    .scaleBy(d3.select(thisNode.ref), 1.1d)
         //
-        //  zoom.scaleBy(d3.select(thisNode.ref), 1.1d)
-        //
-        //}
+        //},
         //onClick.mapToValue(node.some) --> focusedExperienceVar
         modifiers
       )
