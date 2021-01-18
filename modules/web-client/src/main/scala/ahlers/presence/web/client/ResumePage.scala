@@ -82,8 +82,7 @@ object ResumePage {
       $focusedNode.foreach(println(_))(unsafeWindowOwner)
 
       svg(
-        width := "100%",
-        height := "100%",
+        className := "d-flex flex-grow-1 bg-dark",
         onZoom(zb) --> transformDiagramVar.writer.contramap[ZoomEvent](_.transform.some),
         onClick.mapToValue(none) --> focusedNodeVar.writer,
         g(
@@ -239,68 +238,66 @@ object ResumePage {
     val onEnterPress = onKeyPress.filter(_.keyCode == KeyCode.Enter)
 
     article(
-      className := "container-fluid",
-      div(
-        className := "row",
-        div(
-          height := "600px",
-          className := "col-12",
-          diagram)),
-      div(
-        className := "row",
-        div(
-          className := "col-12",
-          span("Node Radius: "),
-          input(
-            value <-- $nodeRadius.map(_.fold("")(_.toString())),
-            inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toDouble.some) --> nodeRadiusVar.writer))
-        ),
-        //div(
-        //  className := "col-12",
-        //  span("Link Distance: "),
-        //  input(
-        //    value <-- linkDistanceVar.signal.map(_.toString),
-        //    inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toDouble) --> linkDistanceVar.writer)),
-        //  span("Link Strength: "),
-        //  input(
-        //    value <-- linkStrengthVar.signal.map(_.toString),
-        //    inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toDouble) --> linkStrengthVar.writer))
-        //),
-        div(
-          className := "row",
-          div(
-            className := "col-12",
-            span("Charge Strength: "),
-            input(
-              value <-- chargeStrengthVar.signal.map(_.toString),
-              inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toDouble) --> chargeStrengthVar.writer))
-          )
-        ),
-        div(
-          className := "row",
-          div(
-            className := "col-12",
-            span("Collision Strength: "),
-            input(
-              value <-- collisionStrength.signal.map(_.toString),
-              inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toDouble) --> collisionStrength.writer))
-          )
-        ),
-        div(
-          className := "row",
-          div(
-            className := "col-12",
-            span("Centering X: "),
-            input(
-              value <-- centeringXVar.signal.map(_.toString),
-              inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toInt) --> centeringXVar.writer)),
-            span("Centering Y: "),
-            input(
-              value <-- centeringYVar.signal.map(_.toString),
-              inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toInt) --> centeringYVar.writer))
-          )
-        )
-      ),
+      className := "d-flex flex-grow-1",
+      diagram,
+      //div(
+      //  className := "container-fluid",
+      //  div(
+      //    className := "row",
+      //    div(
+      //      className := "col-12",
+      //      span("Node Radius: "),
+      //      input(
+      //        value <-- $nodeRadius.map(_.fold("")(_.toString())),
+      //        inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toDouble.some) --> nodeRadiusVar.writer))
+      //    ),
+      //    //div(
+      //    //  className := "col-12",
+      //    //  span("Link Distance: "),
+      //    //  input(
+      //    //    value <-- linkDistanceVar.signal.map(_.toString),
+      //    //    inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toDouble) --> linkDistanceVar.writer)),
+      //    //  span("Link Strength: "),
+      //    //  input(
+      //    //    value <-- linkStrengthVar.signal.map(_.toString),
+      //    //    inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toDouble) --> linkStrengthVar.writer))
+      //    //),
+      //    div(
+      //      className := "row",
+      //      div(
+      //        className := "col-12",
+      //        span("Charge Strength: "),
+      //        input(
+      //          value <-- chargeStrengthVar.signal.map(_.toString),
+      //          inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toDouble) --> chargeStrengthVar.writer))
+      //      )
+      //    ),
+      //    div(
+      //      className := "row",
+      //      div(
+      //        className := "col-12",
+      //        span("Collision Strength: "),
+      //        input(
+      //          value <-- collisionStrength.signal.map(_.toString),
+      //          inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toDouble) --> collisionStrength.writer))
+      //      )
+      //    ),
+      //    div(
+      //      className := "row",
+      //      div(
+      //        className := "col-12",
+      //        span("Centering X: "),
+      //        input(
+      //          value <-- centeringXVar.signal.map(_.toString),
+      //          inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toInt) --> centeringXVar.writer)),
+      //        span("Centering Y: "),
+      //        input(
+      //          value <-- centeringYVar.signal.map(_.toString),
+      //          inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toInt) --> centeringYVar.writer))
+      //      )
+      //    )
+      //  ),
+      //),
       inContext { _ =>
         $nodeRadius --> (nodeRadius => collision.radius(_ => nodeRadius.getOrElse(0d) * 1.1d)) ::
           $nodeRadius.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
@@ -323,6 +320,7 @@ object ResumePage {
           Nil
       }
     )
+
   }
 
   implicit class ExperienceLinkSyntax(private val link: ExperienceLinkUi) extends AnyVal {
