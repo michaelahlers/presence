@@ -102,15 +102,24 @@ package object resume {
           ExperienceLinkUi(byId(a.id), byId(b.id))
             .withIndex(index)
         }
-        .toList
+        .toSeq
     }
 
-    val adjacentRefs: Map[ExperienceRef, Set[ExperienceRef]] =
+    val adjacentLinks: Map[ExperienceNodeUi, Set[ExperienceLinkUi]] =
       links
-        .foldLeft(Map.empty[ExperienceRef, Set[ExperienceRef]]) { case (a, link) =>
+        .foldLeft(Map.empty[ExperienceNodeUi, Set[ExperienceLinkUi]]) { case (a, link) =>
           a |+| Map(
-            (link.source.experience, Set(link.target.experience)),
-            (link.target.experience, Set(link.source.experience)))
+            (link.source, Set(link)),
+            (link.target, Set(link)))
+        }
+        .withDefaultValue(Set.empty)
+
+    val adjacentNodes: Map[ExperienceNodeUi, Set[ExperienceNodeUi]] =
+      links
+        .foldLeft(Map.empty[ExperienceNodeUi, Set[ExperienceNodeUi]]) { case (a, link) =>
+          a |+| Map(
+            (link.source, Set(link.target)),
+            (link.target, Set(link.source)))
         }
         .withDefaultValue(Set.empty)
 
