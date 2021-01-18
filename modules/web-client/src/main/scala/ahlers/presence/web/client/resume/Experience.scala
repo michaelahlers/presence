@@ -2,6 +2,7 @@ package ahlers.presence.web.client.resume
 import cats.Eq
 import cats.syntax.option._
 import cats.syntax.eq._
+import com.raquo.airstream.signal.{ Signal, Var }
 import d3.laminar.{ SimulationLinkRx, SimulationNodeRx }
 import d3v4.Index
 
@@ -100,6 +101,9 @@ object ExperienceLinkUi {
 case class ExperienceNodeUi(
   experience: ExperienceDescription)
   extends SimulationNodeRx {
+
+  //val radiusVar: Var[Option[Double]] = Var(none)
+  //val $radius: Signal[Option[Double]] = radiusVar.signal
 
   /** For method chaining. */
   // TODO: Factor out syntax for sim. node.
