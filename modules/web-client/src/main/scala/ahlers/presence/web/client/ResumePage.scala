@@ -124,11 +124,11 @@ object ResumePage {
                 val y = focusedNode.yFor(nodeRadius, centerY)
                 d3.zoomIdentity
                   .translate(centerX, centerY)
-                  .scale(2)
+                  .scale(5)
                   .translate(-x, -y)
             }
 
-          $transform --> (zb.transform(d3.select(thisNode.ref), _)) ::
+          $transform --> (zb.transform(d3.select(thisNode.ref).transition().duration(2000d), _)) ::
             $width.map(_ / 2) --> centeringXVar.writer ::
             $height.map(_ / 2) --> centeringYVar.writer ::
             Nil
@@ -243,12 +243,16 @@ object ResumePage {
             case _: ExperienceDescription.Employment => "green"
           })
         ),
-        //text(
-        //  x <-- $x.map(_.toString()),
-        //  y <-- $y.map(_.toString()),
-        //  style := "15px sans-serif",
-        //  node.experience.id.toText // + " " + experiences.adjacentNodes(node).map(_.experience.id.toText).mkString("[", ", ", "]")
-        //),
+        text(
+          x <-- $x.map(_.toString()),
+          y <-- $y.map(_.toString()),
+          style := "15px sans-serif",
+          (node.experience match {
+            case ExperienceDescription.Blank => ""
+            case experience: ExperienceDescription.Skill => experience.id.toText
+            case experience: ExperienceDescription.Employment => experience.id.toText
+          })
+        ),
         //inContext { context =>
         //  $radius.map(_.some) --> node.radiusVar.writer ::
         //    $fx --> node.fxVar.writer ::
