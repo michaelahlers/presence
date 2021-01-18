@@ -59,7 +59,7 @@ object ResumePage {
   }
 
   def apply(): HtmlElement = {
-    val nodeRadiusVar: Var[Option[Double]] = Var(50d.some)
+    val nodeRadiusVar: Var[Double] = Var(50d)
     val $nodeRadius = nodeRadiusVar.signal
 
     //val linkDistanceVar = Var(50d)
@@ -299,7 +299,7 @@ object ResumePage {
       //  ),
       //),
       inContext { _ =>
-        $nodeRadius --> (nodeRadius => collision.radius(_ => nodeRadius.getOrElse(0d) * 1.1d)) ::
+        $nodeRadius --> (nodeRadius => collision.radius(_ => nodeRadius * 1.1d)) ::
           $nodeRadius.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
           //linkDistanceVar.signal --> (link.distance(_)) ::
           //linkDistanceVar.signal.mapToValue(1d) --> (simulation.alphaTarget(_).restart()) ::
@@ -351,7 +351,7 @@ object ResumePage {
   implicit class ExperienceNodeSyntax(private val node: ExperienceNodeUi) extends AnyVal {
 
     @inline def render(
-      $nodeRadius: Signal[Option[Double]],
+      $nodeRadius: Signal[Double],
       //$focusedNode: Signal[Option[ExperienceNodeUi]],
       modifiers: Modifier[ReactiveSvgElement[dom.raw.SVGElement]]*
     ) = {
@@ -386,7 +386,7 @@ object ResumePage {
         //transform <-- transformNodeVar.signal.map(_.toString()),
         circle(
           //r <-- node.$radius.map(_.fold("")(_.toString)),
-          r <-- $nodeRadius.map(_.fold("")(_.toString)),
+          r <-- $nodeRadius.map(_.toString),
           cx <-- node.$x.map(_.fold("")(_.toString)),
           cy <-- node.$y.map(_.fold("")(_.toString)),
           fill := (node.experience match {
