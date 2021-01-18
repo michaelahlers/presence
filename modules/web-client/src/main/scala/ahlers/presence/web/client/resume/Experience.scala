@@ -28,9 +28,11 @@ sealed trait ExperienceRef {
   def id: ExperienceId
 }
 
-sealed trait ExperienceDescription extends ExperienceRef
+sealed trait ExperienceDescription //extends ExperienceRef
 
 object ExperienceDescription {
+
+  case object Blank extends ExperienceDescription
 
   case class Skill(
     id: ExperienceId,
@@ -69,50 +71,35 @@ object ExperienceDescription {
 
 }
 
-case class ExperienceLinkUi(
-  source: ExperienceNodeUi,
-  target: ExperienceNodeUi)
-  extends SimulationLinkRx[ExperienceNodeUi, ExperienceNodeUi] {
+//case class ExperienceLinkUi(
+//  source: ExperienceNodeUi,
+//  target: ExperienceNodeUi)
+//  extends SimulationLinkRx[ExperienceNodeUi, ExperienceNodeUi] {
+//
+//  /** For method chaining. */
+//  // TODO: Factor out syntax for sim. node.
+//  def withIndex(index: Option[Index]): ExperienceLinkUi = {
+//    this.index = index.orUndefined
+//    this
+//  }
+//
+//  def withIndex(index: Index): ExperienceLinkUi =
+//    withIndex(index.some)
+//
+//}
 
-  /** For method chaining. */
-  // TODO: Factor out syntax for sim. node.
-  def withIndex(index: Option[Index]): ExperienceLinkUi = {
-    this.index = index.orUndefined
-    this
-  }
-
-  def withIndex(index: Index): ExperienceLinkUi =
-    withIndex(index.some)
-
-}
-
-object ExperienceLinkUi {
-
-  implicit class Syntax(private val self: ExperienceLinkUi) extends AnyVal {
-    import self.source
-    import self.target
-    def contains(node: ExperienceNodeUi): Boolean =
-      (source == node) ||
-        (target == node)
-  }
-
-}
+//object ExperienceLinkUi {
+//
+//  implicit class Syntax(private val self: ExperienceLinkUi) extends AnyVal {
+//    import self.source
+//    import self.target
+//    def contains(node: ExperienceNodeUi): Boolean =
+//      (source == node) ||
+//        (target == node)
+//  }
+//
+//}
 
 case class ExperienceNodeUi(
+  index: Int,
   experience: ExperienceDescription)
-  extends SimulationNodeRx {
-
-  //val radiusVar: Var[Option[Double]] = Var(none)
-  //val $radius: Signal[Option[Double]] = radiusVar.signal
-
-  /** For method chaining. */
-  // TODO: Factor out syntax for sim. node.
-  def withIndex(index: Option[Index]): ExperienceNodeUi = {
-    this.index = index.orUndefined
-    this
-  }
-
-  def withIndex(index: Index): ExperienceNodeUi =
-    withIndex(index.some)
-
-}

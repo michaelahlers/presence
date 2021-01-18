@@ -66,14 +66,13 @@ package object resume {
         Nil
 
     val nodes: Seq[ExperienceNodeUi] =
-      descriptions
+      (descriptions ++ Seq.fill(1000)(ExperienceDescription.Blank))
         .zipWithIndex
         .map { case (detail, index) =>
-          ExperienceNodeUi(detail)
-            .withIndex(index)
+          ExperienceNodeUi(index, detail)
         }
 
-    val relationSets: Seq[Set[_ <: ExperienceRef]] =
+    val relationSets: Seq[Set[_ <: ExperienceDescription]] =
       Set(Akka, Lagom, PlayFramework, Scala, Slick) ::
         Set(Bootstrap, CSS) ::
         Set(Flyway, PostgreSQL, Slick) ::
@@ -82,46 +81,46 @@ package object resume {
         Set(VerizonBusiness, Bootstrap, CSS, PlayFramework, SBT, Scala) ::
         Nil
 
-    val links: Seq[ExperienceLinkUi] = {
-      val byId: Map[ExperienceId, ExperienceNodeUi] =
-        nodes
-          .groupBy(_.experience.id)
-          .view.mapValues(_.head)
-          .toMap
+    //val links: Seq[ExperienceLinkUi] = {
+    //  val byId: Map[ExperienceId, ExperienceNodeUi] =
+    //    nodes
+    //      .groupBy(_.experience.id)
+    //      .view.mapValues(_.head)
+    //      .toMap
+    //
+    //  (for {
+    //    rs <- relationSets
+    //    a <- rs
+    //    b <- rs
+    //    if a != b
+    //  } yield (a, b))
+    //    .groupBy { case (a, b) => Set(a, b) }
+    //    .values
+    //    .zipWithIndex
+    //    .map { case (Seq((a, b), _ @_*), index) =>
+    //      ExperienceLinkUi(byId(a.id), byId(b.id))
+    //        .withIndex(index)
+    //    }
+    //    .toSeq
+    //}
 
-      (for {
-        rs <- relationSets
-        a <- rs
-        b <- rs
-        if a != b
-      } yield (a, b))
-        .groupBy { case (a, b) => Set(a, b) }
-        .values
-        .zipWithIndex
-        .map { case (Seq((a, b), _ @_*), index) =>
-          ExperienceLinkUi(byId(a.id), byId(b.id))
-            .withIndex(index)
-        }
-        .toSeq
-    }
+    //val adjacentLinks: Map[ExperienceNodeUi, Set[ExperienceLinkUi]] =
+    //  links
+    //    .foldLeft(Map.empty[ExperienceNodeUi, Set[ExperienceLinkUi]]) { case (a, link) =>
+    //      a |+| Map(
+    //        (link.source, Set(link)),
+    //        (link.target, Set(link)))
+    //    }
+    //    .withDefaultValue(Set.empty)
 
-    val adjacentLinks: Map[ExperienceNodeUi, Set[ExperienceLinkUi]] =
-      links
-        .foldLeft(Map.empty[ExperienceNodeUi, Set[ExperienceLinkUi]]) { case (a, link) =>
-          a |+| Map(
-            (link.source, Set(link)),
-            (link.target, Set(link)))
-        }
-        .withDefaultValue(Set.empty)
-
-    val adjacentNodes: Map[ExperienceNodeUi, Set[ExperienceNodeUi]] =
-      links
-        .foldLeft(Map.empty[ExperienceNodeUi, Set[ExperienceNodeUi]]) { case (a, link) =>
-          a |+| Map(
-            (link.source, Set(link.target)),
-            (link.target, Set(link.source)))
-        }
-        .withDefaultValue(Set.empty)
+    //val adjacentNodes: Map[ExperienceNodeUi, Set[ExperienceNodeUi]] =
+    //  links
+    //    .foldLeft(Map.empty[ExperienceNodeUi, Set[ExperienceNodeUi]]) { case (a, link) =>
+    //      a |+| Map(
+    //        (link.source, Set(link.target)),
+    //        (link.target, Set(link.source)))
+    //    }
+    //    .withDefaultValue(Set.empty)
 
   }
 
