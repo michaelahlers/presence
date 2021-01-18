@@ -6,7 +6,7 @@ import com.raquo.airstream.core.Observer
 import com.raquo.airstream.signal.Var
 import com.raquo.laminar.api.L._
 import com.raquo.laminar.nodes.{ ReactiveElement, ReactiveSvgElement }
-import d3.laminar.SimulationLinkRx
+//import d3.laminar.SimulationLinkRx
 import d3v4._
 import d3v4.d3force._
 import d3v4.d3zoom.{ Transform, ZoomEvent }
@@ -69,7 +69,7 @@ object ResumePage {
 
     val $adjacentLinks: Signal[Seq[ExperienceLinkUi]] =
       $focusedRef.map(_
-        .map(ref => experiences.links.filter(link => link.source.payload == ref || link.target.payload == ref))
+        .map(ref => experiences.links.filter(link => link.source.description == ref || link.target.description == ref))
         .getOrElse(Seq.empty))
 
     val diagram = {
@@ -92,7 +92,7 @@ object ResumePage {
             node.render(
               $nodeRadius,
               $focusedRef,
-              onClick.mapToValue(node.payload.some) --> focusedRefVar.writer))
+              onClick.mapToValue(node.description.some) --> focusedRefVar.writer))
         ),
         inContext { thisNode =>
           val $width =
@@ -163,7 +163,7 @@ object ResumePage {
     val simulation =
       d3.forceSimulation(experiences.nodes.toJSArray)
         .force("link", link)
-        //.force("charge", charge)
+        .force("charge", charge)
         //.force("center", centering)
         .force("centerX", centerX)
         .force("centerY", centerY)
@@ -264,10 +264,10 @@ object ResumePage {
       import svg._
       line(
         style := "stroke: black",
-        x1 <-- link.$source.flatMap(_.$x).map(_.fold("")(_.toString)),
-        y1 <-- link.$source.flatMap(_.$y).map(_.fold("")(_.toString)),
-        x2 <-- link.$target.flatMap(_.$x).map(_.fold("")(_.toString)),
-        y2 <-- link.$target.flatMap(_.$y).map(_.fold("")(_.toString))
+        x1 <-- link.source.$x.map(_.fold("")(_.toString)),
+        y1 <-- link.source.$y.map(_.fold("")(_.toString)),
+        x2 <-- link.target.$x.map(_.fold("")(_.toString)),
+        y2 <-- link.target.$y.map(_.fold("")(_.toString))
       )
     }
 
@@ -295,11 +295,10 @@ object ResumePage {
           //  .map(_.toString),
           cx <-- node.$x.map(_.fold("")(_.toString)),
           cy <-- node.$y.map(_.fold("")(_.toString)),
-          fill <-- node.$payload
-            .map {
-              case _: ExperienceDescription.Skill => "blue"
-              case _: ExperienceDescription.Employment => "green"
-            }
+          fill := (node.description match {
+            case _: ExperienceDescription.Skill => "blue"
+            case _: ExperienceDescription.Employment => "green"
+          })
           //inContext { thisNode =>
           //  onMouseEnter.mapTo {
           //    println(d3.select(thisNode.ref))
@@ -315,7 +314,7 @@ object ResumePage {
           x <-- node.$x.map(_.fold("")(_.toString())),
           y <-- node.$y.map(_.fold("")(_.toString())),
           style := "15px sans-serif",
-          node.payload.id.toText + " " + experiences.adjacentRefs(node.payload).map(_.id.toText).mkString("[", ", ", "]")
+          node.description.id.toText + " " + experiences.adjacentRefs(node.description).map(_.id.toText).mkString("[", ", ", "]")
         ),
         //onMountCallback { context =>
         //  import context.thisNode

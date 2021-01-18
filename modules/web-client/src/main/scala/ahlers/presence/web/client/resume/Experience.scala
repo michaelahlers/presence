@@ -1,9 +1,9 @@
 package ahlers.presence.web.client.resume
-import com.raquo.airstream.signal.{ Signal, StrictSignal, Var }
+import cats.syntax.option._
 import d3.laminar.{ SimulationLinkRx, SimulationNodeRx }
 import d3v4.Index
-import cats.syntax.option._
-import com.raquo.laminar.api.L._
+
+import scala.scalajs.js.JSConverters.JSRichOption
 
 /**
  * @since January 03, 2021
@@ -59,18 +59,34 @@ object ExperienceDescription {
 }
 
 case class ExperienceLinkUi(
-  indexVar: Var[Option[Index]],
-  sourceVar: Var[ExperienceNodeUi],
-  targetVar: Var[ExperienceNodeUi])
-  extends SimulationLinkRx[ExperienceNodeUi, ExperienceNodeUi]
+  source: ExperienceNodeUi,
+  target: ExperienceNodeUi)
+  extends SimulationLinkRx[ExperienceNodeUi, ExperienceNodeUi] {
+
+  /** For method chaining. */
+  // TODO: Factor out syntax for sim. node.
+  def withIndex(index: Option[Index]): ExperienceLinkUi = {
+    this.index = index.orUndefined
+    this
+  }
+
+  def withIndex(index: Index): ExperienceLinkUi =
+    withIndex(index.some)
+
+}
 
 case class ExperienceNodeUi(
-  indexVar: Var[Option[Index]],
-  xVar: Var[Option[Double]],
-  yVar: Var[Option[Double]],
-  vxVar: Var[Option[Double]],
-  vyVar: Var[Option[Double]],
-  fxVar: Var[Option[Double]],
-  fyVar: Var[Option[Double]],
-  payloadVar: Var[ExperienceDescription])
-  extends SimulationNodeRx[ExperienceDescription]
+  description: ExperienceDescription)
+  extends SimulationNodeRx {
+
+  /** For method chaining. */
+  // TODO: Factor out syntax for sim. node.
+  def withIndex(index: Option[Index]): ExperienceNodeUi = {
+    this.index = index.orUndefined
+    this
+  }
+
+  def withIndex(index: Index): ExperienceNodeUi =
+    withIndex(index.some)
+
+}

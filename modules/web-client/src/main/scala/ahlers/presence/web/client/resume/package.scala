@@ -69,15 +69,8 @@ package object resume {
       descriptions
         .zipWithIndex
         .map { case (detail, index) =>
-          ExperienceNodeUi(
-            Var(index.some),
-            Var(none),
-            Var(none),
-            Var(none),
-            Var(none),
-            Var(none),
-            Var(none),
-            Var(detail))
+          ExperienceNodeUi(detail)
+            .withIndex(index)
         }
 
     val relationSets: Seq[Set[_ <: ExperienceRef]] =
@@ -92,7 +85,7 @@ package object resume {
     val links: Seq[ExperienceLinkUi] = {
       val byId: Map[ExperienceId, ExperienceNodeUi] =
         nodes
-          .groupBy(_.payload.id)
+          .groupBy(_.description.id)
           .view.mapValues(_.head)
           .toMap
 
@@ -106,10 +99,8 @@ package object resume {
         .values
         .zipWithIndex
         .map { case (Seq((a, b), _ @_*), index) =>
-          ExperienceLinkUi(
-            Var(index.some),
-            Var(byId(a.id)),
-            Var(byId(b.id)))
+          ExperienceLinkUi(byId(a.id), byId(b.id))
+            .withIndex(index)
         }
         .toList
     }
@@ -118,8 +109,8 @@ package object resume {
       links
         .foldLeft(Map.empty[ExperienceRef, Set[ExperienceRef]]) { case (a, link) =>
           a |+| Map(
-            (link.source.payload, Set(link.target.payload)),
-            (link.target.payload, Set(link.source.payload)))
+            (link.source.description, Set(link.target.description)),
+            (link.target.description, Set(link.source.description)))
         }
         .withDefaultValue(Set.empty)
 
