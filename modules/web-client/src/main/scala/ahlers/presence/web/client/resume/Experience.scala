@@ -1,15 +1,25 @@
 package ahlers.presence.web.client.resume
+import cats.Eq
 import cats.syntax.option._
+import cats.syntax.eq._
 import d3.laminar.{ SimulationLinkRx, SimulationNodeRx }
 import d3v4.Index
 
 import scala.scalajs.js.JSConverters.JSRichOption
+import scala.language.postfixOps
 
 /**
  * @since January 03, 2021
  * @author <a href="mailto:michael@ahlers.consulting">Michael Ahlers</a>
  */
 case class ExperienceId(toText: String) extends AnyVal
+
+object ExperienceId {
+
+  implicit val eqExperienceId: Eq[ExperienceId] =
+    Eq.by(_.toText)
+
+}
 
 case class ExperienceName(toText: String) extends AnyVal
 
@@ -75,8 +85,20 @@ case class ExperienceLinkUi(
 
 }
 
+object ExperienceLinkUi {
+
+  implicit class Syntax(private val self: ExperienceLinkUi) extends AnyVal {
+    import self.source
+    import self.target
+    def contains(experience: ExperienceRef): Boolean =
+      (source.experience.id === experience.id) ||
+        (target.experience.id === experience.id)
+  }
+
+}
+
 case class ExperienceNodeUi(
-  description: ExperienceDescription)
+  experience: ExperienceDescription)
   extends SimulationNodeRx {
 
   /** For method chaining. */
