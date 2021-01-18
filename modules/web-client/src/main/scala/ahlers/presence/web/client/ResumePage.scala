@@ -64,27 +64,12 @@ object ResumePage {
     val centeringYVar = Var(0)
 
     val focusedNodeVar: Var[Option[ExperienceNodeUi]] = Var(none)
-
     val $focusedNode: Signal[Option[ExperienceNodeUi]] = focusedNodeVar.signal
-
-    val $focusedAdjacentNodes: Signal[Seq[ExperienceNodeUi]] =
-      $focusedNode.map(_
-        .map(node => experiences.adjacentNodes(node).toSeq)
-        .getOrElse(Seq.empty))
-
-    val $focusedAdjacentLinks: Signal[Seq[ExperienceLinkUi]] =
-      $focusedNode.map(_
-        .map(node => experiences.links.filter(_.contains(node)))
-        .getOrElse(Seq.empty))
 
     val diagram = {
       import svg._
 
       val transformDiagramVar: Var[Option[Transform]] = Var(none)
-
-      val $adjacentLines: Signal[Seq[SvgElement]] =
-        $focusedAdjacentLinks.map(_
-          .map(_.render()))
 
       svg(
         width := "100%",
@@ -92,11 +77,13 @@ object ResumePage {
         onZoom --> transformDiagramVar.writer.contramap[ZoomEvent](_.transform.some),
         g(
           transform <-- transformDiagramVar.signal.map(_.fold("")(_.toString())),
-          children <-- $adjacentLines,
+          experiences.links.map(link =>
+            link.render(
+              $focusedNode)),
           experiences.nodes.map(node =>
             node.render(
               $nodeRadius,
-              //$focusedRef,
+              $focusedNode,
               onClick.mapToValue(node.some) --> focusedNodeVar.writer))
         ),
         inContext { thisNode =>
@@ -142,9 +129,10 @@ object ResumePage {
         .distance(linkDistanceVar.now())
         .strength(linkStrengthVar.now())
 
-    $focusedAdjacentLinks
-      .map(_.toJSArray)
-      .foreach(link.links(_))(unsafeWindowOwner)
+    $focusedNode.foreach {
+      case Some(focusedNode) => link.links(experiences.adjacentLinks(focusedNode).toJSArray)
+      case _ => link.links(js.Array())
+    }(unsafeWindowOwner)
 
     val charge: ManyBody[ExperienceNodeUi] =
       d3.forceManyBody()
@@ -265,10 +253,20 @@ object ResumePage {
 
   implicit class ExperienceLinkSyntax(private val link: ExperienceLinkUi) extends AnyVal {
 
-    @inline def render() = {
+    @inline def render(
+      $focusedNode: Signal[Option[ExperienceNodeUi]]
+    ) = {
       import svg._
+
+      val $display =
+        $focusedNode.map {
+          case Some(focusedNode) if experiences.adjacentLinks(focusedNode).contains(link) => "inline"
+          case _ => "none"
+        }
+
       line(
-        style := "stroke: black",
+        display <-- $display,
+        stroke := "black",
         x1 <-- link.source.$x.map(_.fold("")(_.toString)),
         y1 <-- link.source.$y.map(_.fold("")(_.toString)),
         x2 <-- link.target.$x.map(_.fold("")(_.toString)),
@@ -282,23 +280,21 @@ object ResumePage {
 
     @inline def render(
       $nodeRadius: Signal[Int],
-      //$focusedRef: Signal[Option[ExperienceRef]],
+      $focusedNode: Signal[Option[ExperienceNodeUi]],
       modifiers: Modifier[ReactiveSvgElement[dom.raw.SVGElement]]*
     ) = {
       import svg._
+
+      val $adjustedNodeRadius: Signal[Int] =
+        for {
+          nodeRadius <- $nodeRadius
+        } yield nodeRadius
+
       //val transformNodeVar: Var[Transform] = Var(d3.zoomIdentity)
       g(
         //transform <-- transformNodeVar.signal.map(_.toString()),
         circle(
-          r <-- $nodeRadius.map(_.toString()),
-          //r <-- node.$status
-          //  .flatMap {
-          //    case ExperienceNodeUi.Status.Idle => $nodeRadius
-          //    case ExperienceNodeUi.Status.Focus => $nodeRadius.map(_ + 10)
-          //    case ExperienceNodeUi.Status.Adjacent => $nodeRadius.map(_ + 5)
-          //    case ExperienceNodeUi.Status.Irrelevant => $nodeRadius.map(_ - 5)
-          //  }
-          //  .map(_.toString),
+          r <-- $adjustedNodeRadius.map(_.toString()),
           cx <-- node.$x.map(_.fold("")(_.toString)),
           cy <-- node.$y.map(_.fold("")(_.toString)),
           fill := (node.experience match {
