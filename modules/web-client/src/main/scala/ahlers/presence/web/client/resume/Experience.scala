@@ -90,9 +90,9 @@ object ExperienceLinkUi {
   implicit class Syntax(private val self: ExperienceLinkUi) extends AnyVal {
     import self.source
     import self.target
-    def contains(experience: ExperienceRef): Boolean =
-      (source.experience.id === experience.id) ||
-        (target.experience.id === experience.id)
+    def contains(node: ExperienceNodeUi): Boolean =
+      (source == node) ||
+        (target == node)
   }
 
 }

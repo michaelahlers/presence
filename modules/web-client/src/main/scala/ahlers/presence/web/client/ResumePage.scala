@@ -63,19 +63,19 @@ object ResumePage {
     val centeringXVar = Var(0)
     val centeringYVar = Var(0)
 
-    val focusedRefVar: Var[Option[ExperienceRef]] = Var(none)
+    val focusedNodeVar: Var[Option[ExperienceNodeUi]] = Var(none)
 
-    val $focusedRef: Signal[Option[ExperienceRef]] = focusedRefVar.signal
+    val $focusedNode: Signal[Option[ExperienceNodeUi]] = focusedNodeVar.signal
 
     val $adjacentLinks: Signal[Seq[ExperienceLinkUi]] =
-      $focusedRef.map(_
-        .map(ref => experiences.links.filter(_.contains(ref)))
+      $focusedNode.map(_
+        .map(node => experiences.links.filter(_.contains(node)))
         .getOrElse(Seq.empty))
 
     val diagram = {
       import svg._
 
-      val transformViewVar: Var[Option[Transform]] = Var(none)
+      val transformDiagramVar: Var[Option[Transform]] = Var(none)
 
       val $adjacentLines: Signal[Seq[SvgElement]] =
         $adjacentLinks.map(_
@@ -84,15 +84,15 @@ object ResumePage {
       svg(
         width := "100%",
         height := "100%",
-        onZoom --> transformViewVar.writer.contramap[ZoomEvent](_.transform.some),
+        onZoom --> transformDiagramVar.writer.contramap[ZoomEvent](_.transform.some),
         g(
-          transform <-- transformViewVar.signal.map(_.fold("")(_.toString())),
+          transform <-- transformDiagramVar.signal.map(_.fold("")(_.toString())),
           children <-- $adjacentLines,
           experiences.nodes.map(node =>
             node.render(
               $nodeRadius,
-              $focusedRef,
-              onClick.mapToValue(node.experience.some) --> focusedRefVar.writer))
+              //$focusedRef,
+              onClick.mapToValue(node.some) --> focusedNodeVar.writer))
         ),
         inContext { thisNode =>
           val $width =
@@ -277,7 +277,7 @@ object ResumePage {
 
     @inline def render(
       $nodeRadius: Signal[Int],
-      $focusedRef: Signal[Option[ExperienceRef]],
+      //$focusedRef: Signal[Option[ExperienceRef]],
       modifiers: Modifier[ReactiveSvgElement[dom.raw.SVGElement]]*
     ) = {
       import svg._
