@@ -7,7 +7,7 @@ libraryDependencies ++=
     Nil
 
 libraryDependencies ++=
-  "com.github.fdietze.scala-js-d3v4" %%% "scala-js-d3v4" % "1.0.0-SNAPSHOT" ::
+  "com.github.fdietze.scala-js-d3v4" %%% "scala-js-d3v4" % "4864742723" ::
     "com.github.japgolly.scalacss" %%% "core" % "0.6.1" ::
     "com.github.julien-truffaut" %%% "monocle-core" % "2.1.0" ::
     "com.github.julien-truffaut" %%% "monocle-macro" % "2.1.0" ::
