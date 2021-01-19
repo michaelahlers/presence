@@ -14,16 +14,28 @@ package object resume {
 
   object experiences {
 
-    val Akka = ExperienceDescription.skill(ExperienceId("akka"), ExperienceName("Akka"))
-    val Bootstrap = ExperienceDescription.skill(ExperienceId("bootstrap"), ExperienceName("Bootstrap"))
-    val CSS = ExperienceDescription.skill(ExperienceId("css"), ExperienceName("CSS"))
+    val Akka = ExperienceDescription.skill(ExperienceId("akka"), ExperienceName("Akka"), "https://seeklogo.com/images/A/akka-logo-24316F492F-seeklogo.com.png")
+    val Bootstrap = ExperienceDescription.skill(
+      ExperienceId("bootstrap"),
+      ExperienceName("Bootstrap"),
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Bootstrap_logo.svg/1024px-Bootstrap_logo.svg.png"
+    )
+    val CSS = ExperienceDescription.skill(ExperienceId("css"), ExperienceName("CSS"), "https://cdn.worldvectorlogo.com/logos/css3.svg")
     val Flyway = ExperienceDescription.skill(ExperienceId("flyway"), ExperienceName("Flyway"))
     val SBT = ExperienceDescription.skill(ExperienceId("sbt"), ExperienceName("SBT"))
-    val Scala = ExperienceDescription.skill(ExperienceId("scala"), ExperienceName("Scala"))
+    val Scala = ExperienceDescription.skill(ExperienceId("scala"), ExperienceName("Scala"), "https://www.scala-lang.org/resources/img/frontpage/scala-spiral.png")
     val Slick = ExperienceDescription.skill(ExperienceId("slick"), ExperienceName("Slick"))
-    val Lagom = ExperienceDescription.skill(ExperienceId("lagom"), ExperienceName("Lagom"))
-    val PlayFramework = ExperienceDescription.skill(ExperienceId("play-framework"), ExperienceName("Play Framework"))
-    val PostgreSQL = ExperienceDescription.skill(ExperienceId("postgresql"), ExperienceName("PostgreSQL"))
+    val Lagom = ExperienceDescription.skill(ExperienceId("lagom"), ExperienceName("Lagom"), "https://avatars3.githubusercontent.com/u/17168851?s=280&v=4")
+    val PlayFramework = ExperienceDescription.skill(
+      ExperienceId("play-framework"),
+      ExperienceName("Play Framework"),
+      "https://www.playframework.com/assets/images/logos/1d627942f0b2f115f8638936a212244a-play_icon_full_color.png"
+    )
+    val PostgreSQL = ExperienceDescription.skill(
+      ExperienceId("postgresql"),
+      ExperienceName("PostgreSQL"),
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Postgresql_elephant.svg/1200px-Postgresql_elephant.svg.png"
+    )
 
     val LiveSafe =
       ExperienceDescription.employment(
@@ -31,7 +43,9 @@ package object resume {
         ExperienceDescription.Employment.Company(
           "LiveSafe",
           "Rosslyn",
-          "Virginia"))
+          "Virginia"),
+        "https://media.glassdoor.com/sqll/968163/livesafe-squarelogo-1498735659534.png"
+      )
 
     val ThompsonReutersSpecialServices =
       ExperienceDescription.employment(

@@ -36,10 +36,31 @@ object ExperienceDescription {
 
   case class Skill(
     id: ExperienceId,
-    name: ExperienceName)
+    name: ExperienceName,
+    logo: Option[String])
     extends ExperienceDescription
 
   object Skill {}
+
+  def skill(
+    id: ExperienceId,
+    name: ExperienceName,
+    logo: Option[String]
+  ): Skill =
+    Skill(
+      id,
+      name,
+      logo)
+
+  def skill(
+    id: ExperienceId,
+    name: ExperienceName,
+    logo: String
+  ): Skill =
+    Skill(
+      id,
+      name,
+      logo.some)
 
   def skill(
     id: ExperienceId,
@@ -47,11 +68,13 @@ object ExperienceDescription {
   ): Skill =
     Skill(
       id,
-      name)
+      name,
+      none)
 
   case class Employment(
     id: ExperienceId,
-    company: Employment.Company)
+    company: Employment.Company,
+    logo: Option[String])
     extends ExperienceDescription
 
   object Employment {
@@ -63,11 +86,32 @@ object ExperienceDescription {
 
   def employment(
     id: ExperienceId,
+    company: Employment.Company,
+    logo: Option[String]
+  ): Employment =
+    Employment(
+      id,
+      company,
+      logo)
+
+  def employment(
+    id: ExperienceId,
+    company: Employment.Company,
+    logo: String
+  ): Employment =
+    Employment(
+      id,
+      company,
+      logo.some)
+
+  def employment(
+    id: ExperienceId,
     company: Employment.Company
   ): Employment =
     Employment(
       id,
-      company)
+      company,
+      none)
 
 }
 
