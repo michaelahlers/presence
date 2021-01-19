@@ -266,18 +266,40 @@ object ResumePage {
           cy <-- $y.map(_.toString()),
           fill := (node.experience match {
             case ExperienceDescription.Blank => "#333"
-            case _: ExperienceDescription.Skill => "blue"
-            case _: ExperienceDescription.Employment => "green"
+            case _: ExperienceDescription.Skill => "white"
+            case _: ExperienceDescription.Employment => "white"
           })
         ),
+        child.maybe <-- Val(node.experience match {
+          case experience: ExperienceDescription.Skill =>
+            experience.logo.map(logo =>
+              image(
+                x <-- $nodeRadius.flatMap(nodeRadius => $x.map(_ - nodeRadius)).map(_.toString),
+                y <-- $nodeRadius.flatMap(nodeRadius => $y.map(_ - nodeRadius)).map(_.toString),
+                width <-- $nodeRadius.map(_ * 2d).map(_.toString),
+                height <-- $nodeRadius.map(_ * 2d).map(_.toString),
+                xlinkHref := logo
+              ))
+          case experience: ExperienceDescription.Employment =>
+            experience.logo.map(logo =>
+              image(
+                x <-- $nodeRadius.flatMap(nodeRadius => $x.map(_ - nodeRadius)).map(_.toString),
+                y <-- $nodeRadius.flatMap(nodeRadius => $y.map(_ - nodeRadius)).map(_.toString),
+                width <-- $nodeRadius.map(_ * 2d).map(_.toString),
+                height <-- $nodeRadius.map(_ * 2d).map(_.toString),
+                xlinkHref := logo
+              ))
+          case _ =>
+            none
+        }),
         text(
           x <-- $x.map(_.toString()),
           y <-- $y.map(_.toString()),
           style := "15px sans-serif",
           (node.experience match {
             case ExperienceDescription.Blank => ""
-            case experience: ExperienceDescription.Skill => experience.id.toText
-            case experience: ExperienceDescription.Employment => experience.id.toText
+            case experience: ExperienceDescription.Skill => experience.logo.fold(experience.id.toText)(_ => "")
+            case experience: ExperienceDescription.Employment => experience.logo.fold(experience.id.toText)(_ => "")
           })
         ),
         //inContext { context =>
