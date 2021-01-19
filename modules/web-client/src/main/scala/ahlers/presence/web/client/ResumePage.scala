@@ -147,7 +147,7 @@ object ResumePage {
                 .translate(centerX, centerY)
             }
 
-          $focusTransform --> (zb.transform(d3.select(thisNode.ref).transition().duration(2000d), _)) ::
+          $focusTransform --> (zb.transform(d3.select(thisNode.ref).transition().duration(1500d), _)) ::
             $resizeTransform --> (zb.transform(d3.select(thisNode.ref), _)) ::
             $width.map(_ / 2) --> centeringXVar.writer ::
             $height.map(_ / 2) --> centeringYVar.writer ::
@@ -157,7 +157,9 @@ object ResumePage {
           import context.thisNode
           val centerX = thisNode.ref.clientWidth / 2
           val centerY = thisNode.ref.clientHeight / 2
-          zb.transform(d3.select(thisNode.ref), d3.zoomIdentity.translate(centerX, centerY))
+          val zoomIdentity = d3.zoomIdentity.translate(centerX, centerY)
+          zb.transform(d3.select(thisNode.ref), zoomIdentity.scale(0.75d))
+          zb.transform(d3.select(thisNode.ref).transition().duration(1500d), zoomIdentity.scale(1d))
           centeringXVar.set(centerX)
           centeringYVar.set(centerY)
         }
