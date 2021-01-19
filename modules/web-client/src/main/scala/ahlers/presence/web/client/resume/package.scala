@@ -14,33 +14,33 @@ package object resume {
 
   object experiences {
 
-    val Akka = ExperienceDescription.skill(ExperienceId("akka"), ExperienceName("Akka"), "https://seeklogo.com/images/A/akka-logo-24316F492F-seeklogo.com.png")
-    val Bootstrap = ExperienceDescription.skill(
+    val Akka = ExperienceBrief.skill(ExperienceId("akka"), ExperienceName("Akka"), "https://seeklogo.com/images/A/akka-logo-24316F492F-seeklogo.com.png")
+    val Bootstrap = ExperienceBrief.skill(
       ExperienceId("bootstrap"),
       ExperienceName("Bootstrap"),
       "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Bootstrap_logo.svg/1024px-Bootstrap_logo.svg.png"
     )
-    val CSS = ExperienceDescription.skill(ExperienceId("css"), ExperienceName("CSS"), "https://cdn.worldvectorlogo.com/logos/css3.svg")
-    val Flyway = ExperienceDescription.skill(ExperienceId("flyway"), ExperienceName("Flyway"))
-    val SBT = ExperienceDescription.skill(ExperienceId("sbt"), ExperienceName("SBT"))
-    val Scala = ExperienceDescription.skill(ExperienceId("scala"), ExperienceName("Scala"), "https://www.scala-lang.org/resources/img/frontpage/scala-spiral.png")
-    val Slick = ExperienceDescription.skill(ExperienceId("slick"), ExperienceName("Slick"))
-    val Lagom = ExperienceDescription.skill(ExperienceId("lagom"), ExperienceName("Lagom"), "https://avatars3.githubusercontent.com/u/17168851?s=280&v=4")
-    val PlayFramework = ExperienceDescription.skill(
+    val CSS = ExperienceBrief.skill(ExperienceId("css"), ExperienceName("CSS"), "https://cdn.worldvectorlogo.com/logos/css3.svg")
+    val Flyway = ExperienceBrief.skill(ExperienceId("flyway"), ExperienceName("Flyway"))
+    val SBT = ExperienceBrief.skill(ExperienceId("sbt"), ExperienceName("SBT"))
+    val Scala = ExperienceBrief.skill(ExperienceId("scala"), ExperienceName("Scala"), "https://www.scala-lang.org/resources/img/frontpage/scala-spiral.png")
+    val Slick = ExperienceBrief.skill(ExperienceId("slick"), ExperienceName("Slick"))
+    val Lagom = ExperienceBrief.skill(ExperienceId("lagom"), ExperienceName("Lagom"), "https://avatars3.githubusercontent.com/u/17168851?s=280&v=4")
+    val PlayFramework = ExperienceBrief.skill(
       ExperienceId("play-framework"),
       ExperienceName("Play Framework"),
       "https://www.playframework.com/assets/images/logos/1d627942f0b2f115f8638936a212244a-play_icon_full_color.png"
     )
-    val PostgreSQL = ExperienceDescription.skill(
+    val PostgreSQL = ExperienceBrief.skill(
       ExperienceId("postgresql"),
       ExperienceName("PostgreSQL"),
       "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Postgresql_elephant.svg/1200px-Postgresql_elephant.svg.png"
     )
 
     val LiveSafe =
-      ExperienceDescription.employment(
+      ExperienceBrief.employment(
         ExperienceId("livesafe"),
-        ExperienceDescription.Employment.Company(
+        ExperienceBrief.Employment.Company(
           "LiveSafe",
           "Rosslyn",
           "Virginia"),
@@ -48,22 +48,22 @@ package object resume {
       )
 
     val ThompsonReutersSpecialServices =
-      ExperienceDescription.employment(
+      ExperienceBrief.employment(
         ExperienceId("trss"),
-        ExperienceDescription.Employment.Company(
+        ExperienceBrief.Employment.Company(
           "Thompson-Reuters Special Services",
           "McLean",
           "Virginia"))
 
     val VerizonBusiness =
-      ExperienceDescription.employment(
+      ExperienceBrief.employment(
         ExperienceId("verizon-business"),
-        ExperienceDescription.Employment.Company(
+        ExperienceBrief.Employment.Company(
           "Verizon Business",
           "Ashburn",
           "Virginia"))
 
-    val descriptions: Seq[ExperienceDescription] =
+    val descriptions: Seq[ExperienceBrief] =
       Akka ::
         Bootstrap ::
         CSS ::
@@ -80,13 +80,13 @@ package object resume {
         Nil
 
     val nodes: Seq[ExperienceNodeUi] =
-      (descriptions ++ Seq.fill(1000)(ExperienceDescription.Blank))
+      (descriptions ++ Seq.fill(1000)(ExperienceBrief.Blank))
         .zipWithIndex
         .map { case (detail, index) =>
           ExperienceNodeUi(index, detail)
         }
 
-    val relationSets: Seq[Set[_ <: ExperienceDescription]] =
+    val relationSets: Seq[Set[_ <: ExperienceBrief]] =
       Set(Akka, Lagom, PlayFramework, Scala, Slick) ::
         Set(Bootstrap, CSS) ::
         Set(Flyway, PostgreSQL, Slick) ::

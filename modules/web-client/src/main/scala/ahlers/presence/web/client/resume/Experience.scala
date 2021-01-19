@@ -28,17 +28,18 @@ sealed trait ExperienceRef {
   def id: ExperienceId
 }
 
-sealed trait ExperienceDescription //extends ExperienceRef
+sealed trait ExperienceBrief //extends ExperienceRef
 
-object ExperienceDescription {
+object ExperienceBrief {
 
-  case object Blank extends ExperienceDescription
+  // TODO: Make the view synthesize blank experience discs.
+  case object Blank extends ExperienceBrief
 
   case class Skill(
     id: ExperienceId,
     name: ExperienceName,
     logo: Option[String])
-    extends ExperienceDescription
+    extends ExperienceBrief
 
   object Skill {}
 
@@ -75,7 +76,7 @@ object ExperienceDescription {
     id: ExperienceId,
     company: Employment.Company,
     logo: Option[String])
-    extends ExperienceDescription
+    extends ExperienceBrief
 
   object Employment {
     case class Company(
