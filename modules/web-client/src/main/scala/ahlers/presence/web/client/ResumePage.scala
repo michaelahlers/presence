@@ -93,8 +93,8 @@ object ResumePage {
           experiences.nodes.map(node =>
             node.render(
               $nodeRadius,
-              $centerX,
-              $centerY,
+              //$centerX,
+              //$centerY,
               onClick.map(_.stopPropagation()).mapToValue(node.some.filterNot(_.experience == ExperienceDescription.Blank)) --> focusedNodeVar.writer
             ))
         ),
@@ -103,40 +103,63 @@ object ResumePage {
             windowEvents
               .onResize
               .mapTo(thisNode.ref.clientWidth)
-              .toSignal(thisNode.ref.clientWidth)
+          //.toSignal(thisNode.ref.clientWidth)
 
           val $height =
             windowEvents
               .onResize
               .mapTo(thisNode.ref.clientHeight)
-              .toSignal(thisNode.ref.clientHeight)
+          //.toSignal(thisNode.ref.clientHeight)
 
-          val $transform =
+          val $focusTransform =
             for {
               nodeRadius <- $nodeRadius
-              centerX <- $centerX
-              centerY <- $centerY
+              //centerX <- $centerX
+              //centerY <- $centerY
               focusedNodeF <- $focusedNode
-            } yield focusedNodeF match {
-              case None => d3.zoomIdentity
-              case Some(focusedNode) =>
-                val x = focusedNode.xFor(nodeRadius, centerX)
-                val y = focusedNode.yFor(nodeRadius, centerY)
-                d3.zoomIdentity
-                  .translate(centerX, centerY)
-                  .scale(5)
-                  .translate(-x, -y)
+            } yield {
+              val centerX = thisNode.ref.clientWidth / 2
+              val centerY = thisNode.ref.clientHeight / 2
+
+              focusedNodeF match {
+                case None =>
+                  d3.zoomIdentity
+                    .translate(centerX, centerY)
+                case Some(focusedNode) =>
+                  println((centerX, centerY))
+                  val x = focusedNode.xFor(nodeRadius) //, centerX)
+                  val y = focusedNode.yFor(nodeRadius) //, centerY)
+                  d3.zoomIdentity
+                    .translate(centerX, centerY)
+                    .scale(5)
+                    .translate(-x, -y)
+              }
             }
 
-          $transform --> (zb.transform(d3.select(thisNode.ref).transition().duration(2000d), _)) ::
+          val $resizeTransform =
+            for {
+              _ <- $width
+              _ <- $height
+            } yield {
+              val centerX = thisNode.ref.clientWidth / 2
+              val centerY = thisNode.ref.clientHeight / 2
+              d3.zoomIdentity
+                .translate(centerX, centerY)
+            }
+
+          $focusTransform --> (zb.transform(d3.select(thisNode.ref).transition().duration(2000d), _)) ::
+            $resizeTransform --> (zb.transform(d3.select(thisNode.ref), _)) ::
             $width.map(_ / 2) --> centeringXVar.writer ::
             $height.map(_ / 2) --> centeringYVar.writer ::
             Nil
         },
         onMountCallback { context =>
           import context.thisNode
-          centeringXVar.set(thisNode.ref.clientWidth / 2)
-          centeringYVar.set(thisNode.ref.clientHeight / 2)
+          val centerX = thisNode.ref.clientWidth / 2
+          val centerY = thisNode.ref.clientHeight / 2
+          zb.transform(d3.select(thisNode.ref), d3.zoomIdentity.translate(centerX, centerY))
+          centeringXVar.set(centerX)
+          centeringYVar.set(centerY)
         }
       )
     }
@@ -190,28 +213,30 @@ object ResumePage {
 
   implicit class ExperienceNodeSyntax(private val node: ExperienceNodeUi) extends AnyVal {
 
-    def xFor(nodeRadius: Double, centerX: Double): Double = {
+    def xFor(nodeRadius: Double): Double = { //, centerX: Double): Double = {
       val theta = Math.PI * (3 - Math.sqrt(5))
       val i = node.index
       val step = nodeRadius * 2d
       val radius = step * Math.sqrt(i + 0.25d)
       val a = theta * (i + 0.25d)
-      centerX + radius * Math.cos(a)
+      //centerX + radius * Math.cos(a)
+      radius * Math.cos(a)
     }
 
-    def yFor(nodeRadius: Double, centerY: Double): Double = {
+    def yFor(nodeRadius: Double): Double = { //, centerY: Double): Double = {
       val theta = Math.PI * (3 - Math.sqrt(5))
       val i = node.index
       val step = nodeRadius * 2d
       val radius = step * Math.sqrt(i + 0.25d)
       val a = theta * (i + 0.25d)
-      centerY + radius * Math.sin(a)
+      //centerY + radius * Math.sin(a)
+      radius * Math.sin(a)
     }
 
     @inline def render(
       $nodeRadius: Signal[Double],
-      $centerX: Signal[Int],
-      $centerY: Signal[Int],
+      //$centerX: Signal[Int],
+      //$centerY: Signal[Int],
       //$focusedNode: Signal[Option[ExperienceNodeUi]],
       modifiers: Modifier[ReactiveSvgElement[dom.raw.SVGElement]]*
     ) = {
@@ -220,14 +245,14 @@ object ResumePage {
       val $x =
         for {
           nodeRadius <- $nodeRadius
-          centerX <- $centerX
-        } yield xFor(nodeRadius, centerX)
+          //centerX <- $centerX
+        } yield xFor(nodeRadius) //, centerX)
 
       val $y =
         for {
           nodeRadius <- $nodeRadius
-          centerY <- $centerY
-        } yield yFor(nodeRadius, centerY)
+          //centerY <- $centerY
+        } yield yFor(nodeRadius) //, centerY)
 
       //val transformNodeVar: Var[Transform] = Var(d3.zoomIdentity)
       g(
