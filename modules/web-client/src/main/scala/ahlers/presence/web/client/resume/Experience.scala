@@ -147,4 +147,4 @@ object ExperienceBrief {
 
 case class ExperienceNodeUi(
   index: Int,
-  experience: ExperienceDescription)
+  experience: ExperienceBrief)
