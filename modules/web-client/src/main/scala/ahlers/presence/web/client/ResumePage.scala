@@ -82,7 +82,7 @@ object ResumePage {
       $focusedNode.foreach(println(_))(unsafeWindowOwner)
 
       svg(
-        className := "d-flex flex-grow-1 bg-dark",
+        className := "flex-fill bg-dark",
         onZoom(zb) --> transformDiagramVar.writer.contramap[ZoomEvent](_.transform.some),
         onClick.mapToValue(none) --> focusedNodeVar.writer,
         g(
@@ -144,7 +144,7 @@ object ResumePage {
     val onEnterPress = onKeyPress.filter(_.keyCode == KeyCode.Enter)
 
     article(
-      className := "d-flex flex-column flex-grow-1",
+      className := "d-flex flex-column h-100",
       diagram,
       div(
         className := "container-fluid",
