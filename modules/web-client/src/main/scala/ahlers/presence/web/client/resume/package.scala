@@ -81,6 +81,12 @@ package object resume {
         ExperienceName("Lagom"),
         Asset.versioned("/ahlers/presence/web/experiences/lagom-brief.svg").absoluteUrl.toString())
 
+    val Linux =
+      ExperienceBrief.skill(
+        ExperienceId("linux"),
+        ExperienceName("Linux"),
+        Asset.versioned("/ahlers/presence/web/experiences/linux-brief.svg").absoluteUrl.toString())
+
     val PlayFramework = ExperienceBrief.skill(
       ExperienceId("play-framework"),
       ExperienceName("Play Framework"),
@@ -132,6 +138,7 @@ package object resume {
         JavaScript ::
         Flyway ::
         Lagom ::
+        Linux ::
         PlayFramework ::
         PostgreSQL ::
         SBT ::
