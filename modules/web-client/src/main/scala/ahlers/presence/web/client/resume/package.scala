@@ -51,7 +51,11 @@ package object resume {
         Asset.versioned("/ahlers/presence/web/experiences/javascript-brief.svg").absoluteUrl.toString()
       )
 
-    val SBT = ExperienceBrief.skill(ExperienceId("sbt"), ExperienceName("SBT"))
+    val SBT =
+      ExperienceBrief.skill(
+        ExperienceId("sbt"),
+        ExperienceName("SBT"),
+        Asset.versioned("/ahlers/presence/web/experiences/sbt-brief.svg").absoluteUrl.toString())
 
     val Scala =
       ExperienceBrief.skill(
