@@ -64,3 +64,16 @@ svg.ahlers-consulting-logo g g g:nth-child(1) {
 main.resume {
   height: 100%;
 }
+
+@keyframes ahlers-consulting-experience-brief-fade-in {
+  100% { opacity: 1; }
+}
+
+svg g.experience-brief {
+  opacity: 0;
+}
+
+svg g.experience-brief.revealed {
+  animation: ahlers-consulting-experience-brief-fade-in 1000ms ease;
+  animation-fill-mode: forwards;
+}
