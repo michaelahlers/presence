@@ -1,5 +1,9 @@
 # Brands
 
+## Java
+
+- [Java Licensing: Logo Guidelines](http://www.oracle.com/us/technologies/java/java-licensing-logo-guidelines-1908204.pdf)
+
 ## Lightbend
 
 - [Brand Resources](https://lightbend.com/brand)

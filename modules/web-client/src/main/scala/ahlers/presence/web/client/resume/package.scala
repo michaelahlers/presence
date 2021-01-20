@@ -44,6 +44,12 @@ package object resume {
         ExperienceName("HTML"),
         Asset.versioned("/ahlers/presence/web/experiences/html5-brief.svg").absoluteUrl.toString())
 
+    val Java =
+      ExperienceBrief.skill(
+        ExperienceId("java"),
+        ExperienceName("Java"),
+        Asset.versioned("/ahlers/presence/web/experiences/java-brief.svg").absoluteUrl.toString())
+
     val JavaScript =
       ExperienceBrief.skill(
         ExperienceId("javascript"),
@@ -122,6 +128,7 @@ package object resume {
         Bootstrap ::
         CSS ::
         HTML ::
+        Java ::
         JavaScript ::
         Flyway ::
         Lagom ::
