@@ -30,7 +30,13 @@ package object resume {
     val SBT = ExperienceBrief.skill(ExperienceId("sbt"), ExperienceName("SBT"))
     val Scala = ExperienceBrief.skill(ExperienceId("scala"), ExperienceName("Scala"), "https://www.scala-lang.org/resources/img/frontpage/scala-spiral.png")
     val Slick = ExperienceBrief.skill(ExperienceId("slick"), ExperienceName("Slick"))
-    val Lagom = ExperienceBrief.skill(ExperienceId("lagom"), ExperienceName("Lagom"), "https://avatars3.githubusercontent.com/u/17168851?s=280&v=4")
+
+    val Lagom =
+      ExperienceBrief.skill(
+        ExperienceId("lagom"),
+        ExperienceName("Lagom"),
+        Asset.versioned("/ahlers/presence/web/experiences/lagom-brief.svg").absoluteUrl.toString())
+
     val PlayFramework = ExperienceBrief.skill(
       ExperienceId("play-framework"),
       ExperienceName("Play Framework"),
