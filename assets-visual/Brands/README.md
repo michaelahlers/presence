@@ -4,6 +4,10 @@
 
 - [Brand Resources](https://lightbend.com/brand)
 
+## LiveSafe
+
+- [The LiveSafe BRand: Logos, Assets, and Guidelines](https://www.livesafemobile.com/brand-assets/)
+
 ## PostgreSQL
 
 - [Logo](https://wiki.postgresql.org/wiki/Logo)
