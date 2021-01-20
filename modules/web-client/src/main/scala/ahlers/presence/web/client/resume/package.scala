@@ -44,6 +44,18 @@ package object resume {
         ExperienceName("Flyway"),
         Asset.versioned("/ahlers/presence/web/experiences/flyway-brief.svg").absoluteUrl.toString())
 
+    val Git =
+      ExperienceBrief.skill(
+        ExperienceId("git"),
+        ExperienceName("Git"),
+        Asset.versioned("/ahlers/presence/web/experiences/git-brief.svg").absoluteUrl.toString())
+
+    val GitHub =
+      ExperienceBrief.skill(
+        ExperienceId("github"),
+        ExperienceName("GitHub"),
+        Asset.versioned("/ahlers/presence/web/experiences/github-brief.svg").absoluteUrl.toString())
+
     val HTML =
       ExperienceBrief.skill(
         ExperienceId("html"),
@@ -165,10 +177,12 @@ package object resume {
         CSS ::
         D3 ::
         HTML ::
+        Flyway ::
+        Git ::
+        GitHub ::
         Java ::
         JavaScript ::
         jQuery ::
-        Flyway ::
         Kafka ::
         Lagom ::
         Linux ::
