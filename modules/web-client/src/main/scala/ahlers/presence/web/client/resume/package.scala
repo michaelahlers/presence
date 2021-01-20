@@ -63,6 +63,12 @@ package object resume {
         Asset.versioned("/ahlers/presence/web/experiences/javascript-brief.svg").absoluteUrl.toString()
       )
 
+    val jQuery =
+      ExperienceBrief.skill(
+        ExperienceId("jquery"),
+        ExperienceName("jQuery"),
+        Asset.versioned("/ahlers/presence/web/experiences/jquery-brief.svg").absoluteUrl.toString())
+
     val Kafka =
       ExperienceBrief.skill(
         ExperienceId("kafka"),
@@ -80,6 +86,12 @@ package object resume {
         ExperienceId("scala"),
         ExperienceName("Scala"),
         Asset.versioned("/ahlers/presence/web/experiences/scala-brief.svg").absoluteUrl.toString())
+
+    val ScalaJs =
+      ExperienceBrief.skill(
+        ExperienceId("scala.js"),
+        ExperienceName("Scala.js"),
+        Asset.versioned("/ahlers/presence/web/experiences/scala.js-brief.svg").absoluteUrl.toString())
 
     val Slick =
       ExperienceBrief.skill(
@@ -155,6 +167,7 @@ package object resume {
         HTML ::
         Java ::
         JavaScript ::
+        jQuery ::
         Flyway ::
         Kafka ::
         Lagom ::
