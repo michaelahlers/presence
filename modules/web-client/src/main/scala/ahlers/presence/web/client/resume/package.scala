@@ -32,7 +32,11 @@ package object resume {
         ExperienceName("CSS"),
         Asset.versioned("/ahlers/presence/web/experiences/css3-brief.svg").absoluteUrl.toString())
 
-    val Flyway = ExperienceBrief.skill(ExperienceId("flyway"), ExperienceName("Flyway"))
+    val Flyway =
+      ExperienceBrief.skill(
+        ExperienceId("flyway"),
+        ExperienceName("Flyway"),
+        Asset.versioned("/ahlers/presence/web/experiences/flyway-brief.svg").absoluteUrl.toString())
 
     val HTML =
       ExperienceBrief.skill(
