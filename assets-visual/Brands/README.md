@@ -1,5 +1,9 @@
 # Brands
 
+## D3
+
+- [Logo Repository](https://github.com/d3/d3-logo)
+
 ## Java
 
 - [Java Licensing: Logo Guidelines](http://www.oracle.com/us/technologies/java/java-licensing-logo-guidelines-1908204.pdf)
