@@ -14,7 +14,12 @@ package object resume {
 
   object experiences {
 
-    val Akka = ExperienceBrief.skill(ExperienceId("akka"), ExperienceName("Akka"), "https://seeklogo.com/images/A/akka-logo-24316F492F-seeklogo.com.png")
+    val Akka =
+      ExperienceBrief.skill(
+        ExperienceId("akka"),
+        ExperienceName("Akka"),
+        Asset.versioned("/ahlers/presence/web/experiences/akka-brief.svg").absoluteUrl.toString())
+
     val Bootstrap = ExperienceBrief.skill(
       ExperienceId("bootstrap"),
       ExperienceName("Bootstrap"),
