@@ -63,6 +63,12 @@ package object resume {
         Asset.versioned("/ahlers/presence/web/experiences/javascript-brief.svg").absoluteUrl.toString()
       )
 
+    val Kafka =
+      ExperienceBrief.skill(
+        ExperienceId("kafka"),
+        ExperienceName("Kafka"),
+        Asset.versioned("/ahlers/presence/web/experiences/kafka-brief.svg").absoluteUrl.toString())
+
     val SBT =
       ExperienceBrief.skill(
         ExperienceId("sbt"),
@@ -139,10 +145,12 @@ package object resume {
       Akka ::
         Bootstrap ::
         CSS ::
+        D3 ::
         HTML ::
         Java ::
         JavaScript ::
         Flyway ::
+        Kafka ::
         Lagom ::
         Linux ::
         PlayFramework ::
