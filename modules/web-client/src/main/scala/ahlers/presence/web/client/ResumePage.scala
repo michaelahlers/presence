@@ -308,16 +308,16 @@ object ResumePage {
               fill := "#333"
             )
         },
-        text(
-          x <-- $x.map(_.toString()),
-          y <-- $y.map(_.toString()),
-          style := "15px sans-serif",
-          (node.experience match {
-            case ExperienceBrief.Blank => ""
-            case experience: ExperienceBrief.Skill => experience.logo.fold(experience.id.toText)(_ => "")
-            case experience: ExperienceBrief.Employment => experience.logo.fold(experience.id.toText)(_ => "")
-          })
-        ),
+        //text(
+        //  x <-- $x.map(_.toString()),
+        //  y <-- $y.map(_.toString()),
+        //  style := "15px sans-serif",
+        //  (node.experience match {
+        //    case ExperienceBrief.Blank => ""
+        //    case experience: ExperienceBrief.Skill => experience.logo.fold(experience.id.toText)(_ => "")
+        //    case experience: ExperienceBrief.Employment => experience.logo.fold(experience.id.toText)(_ => "")
+        //  })
+        //),
         //inContext { context =>
         //  $radius.map(_.some) --> node.radiusVar.writer ::
         //    $fx --> node.fxVar.writer ::
