@@ -95,7 +95,7 @@ object ResumePage {
               $nodeRadius,
               //$centerX,
               //$centerY,
-              onClick.map(_.stopPropagation()).mapToValue(node.some.filterNot(_.experience == ExperienceBrief.Blank)) --> focusedNodeVar.writer
+              onClick.stopPropagation.mapToValue(node.some.filterNot(_.experience == ExperienceBrief.Blank)) --> focusedNodeVar.writer
             ))
         ),
         inContext { thisNode =>
@@ -308,31 +308,6 @@ object ResumePage {
               fill := "#333"
             )
         },
-        //text(
-        //  x <-- $x.map(_.toString()),
-        //  y <-- $y.map(_.toString()),
-        //  style := "15px sans-serif",
-        //  (node.experience match {
-        //    case ExperienceBrief.Blank => ""
-        //    case experience: ExperienceBrief.Skill => experience.logo.fold(experience.id.toText)(_ => "")
-        //    case experience: ExperienceBrief.Employment => experience.logo.fold(experience.id.toText)(_ => "")
-        //  })
-        //),
-        //inContext { context =>
-        //  $radius.map(_.some) --> node.radiusVar.writer ::
-        //    $fx --> node.fxVar.writer ::
-        //    $fy --> node.fyVar.writer ::
-        //    Nil
-        //},
-        //onMountCallback { context =>
-        //  import context.thisNode
-        //
-        //  d3.zoom()
-        //    .on("zoom", () => transformNodeVar.set(d3.event.transform))
-        //    .scaleBy(d3.select(thisNode.ref), 1.1d)
-        //
-        //},
-        //onClick.mapToValue(node.some) --> focusedExperienceVar
         modifiers
       )
     }
