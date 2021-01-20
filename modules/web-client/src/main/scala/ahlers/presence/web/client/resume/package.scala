@@ -23,8 +23,8 @@ package object resume {
     val Bootstrap = ExperienceBrief.skill(
       ExperienceId("bootstrap"),
       ExperienceName("Bootstrap"),
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Bootstrap_logo.svg/1024px-Bootstrap_logo.svg.png"
-    )
+      Asset.versioned("/ahlers/presence/web/experiences/bootstrap-brief.svg").absoluteUrl.toString())
+
     val CSS = ExperienceBrief.skill(ExperienceId("css"), ExperienceName("CSS"), "https://cdn.worldvectorlogo.com/logos/css3.svg")
     val Flyway = ExperienceBrief.skill(ExperienceId("flyway"), ExperienceName("Flyway"))
     val SBT = ExperienceBrief.skill(ExperienceId("sbt"), ExperienceName("SBT"))
