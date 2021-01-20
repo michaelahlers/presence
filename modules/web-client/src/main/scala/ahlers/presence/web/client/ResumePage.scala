@@ -259,39 +259,48 @@ object ResumePage {
       //val transformNodeVar: Var[Transform] = Var(d3.zoomIdentity)
       g(
         //transform <-- transformNodeVar.signal.map(_.toString()),
-        circle(
-          //r <-- node.$radius.map(_.fold("")(_.toString)),
-          r <-- $nodeRadius.map(_.toString),
-          cx <-- $x.map(_.toString()),
-          cy <-- $y.map(_.toString()),
-          fill := (node.experience match {
-            case ExperienceBrief.Blank => "#333"
-            case _: ExperienceBrief.Skill => "white"
-            case _: ExperienceBrief.Employment => "white"
-          })
-        ),
-        child.maybe <-- Val(node.experience match {
+        node.experience match {
           case experience: ExperienceBrief.Skill =>
-            experience.logo.map(logo =>
-              image(
-                x <-- $nodeRadius.flatMap(nodeRadius => $x.map(_ - nodeRadius)).map(_.toString),
-                y <-- $nodeRadius.flatMap(nodeRadius => $y.map(_ - nodeRadius)).map(_.toString),
-                width <-- $nodeRadius.map(_ * 2d).map(_.toString),
-                height <-- $nodeRadius.map(_ * 2d).map(_.toString),
-                xlinkHref := logo
+            experience.logo
+              .map(logo =>
+                image(
+                  x <-- $nodeRadius.flatMap(nodeRadius => $x.map(_ - nodeRadius)).map(_.toString),
+                  y <-- $nodeRadius.flatMap(nodeRadius => $y.map(_ - nodeRadius)).map(_.toString),
+                  width <-- $nodeRadius.map(_ * 2d).map(_.toString),
+                  height <-- $nodeRadius.map(_ * 2d).map(_.toString),
+                  xlinkHref := logo
+                ))
+              .getOrElse(circle(
+                r <-- $nodeRadius.map(_.toString),
+                cx <-- $x.map(_.toString()),
+                cy <-- $y.map(_.toString()),
+                fill := "green"
               ))
           case experience: ExperienceBrief.Employment =>
-            experience.logo.map(logo =>
-              image(
-                x <-- $nodeRadius.flatMap(nodeRadius => $x.map(_ - nodeRadius)).map(_.toString),
-                y <-- $nodeRadius.flatMap(nodeRadius => $y.map(_ - nodeRadius)).map(_.toString),
-                width <-- $nodeRadius.map(_ * 2d).map(_.toString),
-                height <-- $nodeRadius.map(_ * 2d).map(_.toString),
-                xlinkHref := logo
+            experience.logo
+              .map(logo =>
+                image(
+                  x <-- $nodeRadius.flatMap(nodeRadius => $x.map(_ - nodeRadius)).map(_.toString),
+                  y <-- $nodeRadius.flatMap(nodeRadius => $y.map(_ - nodeRadius)).map(_.toString),
+                  width <-- $nodeRadius.map(_ * 2d).map(_.toString),
+                  height <-- $nodeRadius.map(_ * 2d).map(_.toString),
+                  xlinkHref := logo
+                ))
+              .getOrElse(circle(
+                r <-- $nodeRadius.map(_.toString),
+                cx <-- $x.map(_.toString()),
+                cy <-- $y.map(_.toString()),
+                fill := "blue"
               ))
           case _ =>
-            none
-        }),
+            circle(
+              //r <-- node.$radius.map(_.fold("")(_.toString)),
+              r <-- $nodeRadius.map(_.toString),
+              cx <-- $x.map(_.toString()),
+              cy <-- $y.map(_.toString()),
+              fill := "#333"
+            )
+        },
         text(
           x <-- $x.map(_.toString()),
           y <-- $y.map(_.toString()),
