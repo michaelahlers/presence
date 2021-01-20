@@ -4,6 +4,14 @@
 
 - [Logo Repository](https://github.com/d3/d3-logo)
 
+## Git
+
+- [Logos](https://git-scm.com/downloads/logos)
+
+## GitHub
+
+- [GitHub Logos and Usage](https://github.com/logos)
+
 ## Java
 
 ## jQuery Foundation
