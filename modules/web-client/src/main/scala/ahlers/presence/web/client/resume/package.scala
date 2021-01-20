@@ -107,7 +107,9 @@ package object resume {
         ExperienceBrief.Employment.Company(
           "Verizon Business",
           "Ashburn",
-          "Virginia"))
+          "Virginia"),
+        Asset.versioned("/ahlers/presence/web/experiences/verizon-brief.svg").absoluteUrl.toString()
+      )
 
     val descriptions: Seq[ExperienceBrief] =
       Akka ::
