@@ -28,7 +28,13 @@ package object resume {
     val CSS = ExperienceBrief.skill(ExperienceId("css"), ExperienceName("CSS"), "https://cdn.worldvectorlogo.com/logos/css3.svg")
     val Flyway = ExperienceBrief.skill(ExperienceId("flyway"), ExperienceName("Flyway"))
     val SBT = ExperienceBrief.skill(ExperienceId("sbt"), ExperienceName("SBT"))
-    val Scala = ExperienceBrief.skill(ExperienceId("scala"), ExperienceName("Scala"), "https://www.scala-lang.org/resources/img/frontpage/scala-spiral.png")
+
+    val Scala =
+      ExperienceBrief.skill(
+        ExperienceId("scala"),
+        ExperienceName("Scala"),
+        Asset.versioned("/ahlers/presence/web/experiences/scala-brief.svg").absoluteUrl.toString())
+
     val Slick = ExperienceBrief.skill(ExperienceId("slick"), ExperienceName("Slick"))
 
     val Lagom =
