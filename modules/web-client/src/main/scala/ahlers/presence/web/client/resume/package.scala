@@ -52,7 +52,7 @@ package object resume {
     val PostgreSQL = ExperienceBrief.skill(
       ExperienceId("postgresql"),
       ExperienceName("PostgreSQL"),
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Postgresql_elephant.svg/1200px-Postgresql_elephant.svg.png"
+      Asset.versioned("/ahlers/presence/web/experiences/postgresql-brief.svg").absoluteUrl.toString()
     )
 
     val LiveSafe =
