@@ -40,8 +40,9 @@ package object resume {
     val PlayFramework = ExperienceBrief.skill(
       ExperienceId("play-framework"),
       ExperienceName("Play Framework"),
-      "https://www.playframework.com/assets/images/logos/1d627942f0b2f115f8638936a212244a-play_icon_full_color.png"
+      Asset.versioned("/ahlers/presence/web/experiences/play-framework-brief.svg").absoluteUrl.toString()
     )
+
     val PostgreSQL = ExperienceBrief.skill(
       ExperienceId("postgresql"),
       ExperienceName("PostgreSQL"),
