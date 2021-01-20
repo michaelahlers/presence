@@ -90,7 +90,7 @@ package object resume {
           "LiveSafe",
           "Rosslyn",
           "Virginia"),
-        "https://media.glassdoor.com/sqll/968163/livesafe-squarelogo-1498735659534.png"
+        Asset.versioned("/ahlers/presence/web/experiences/livesafe-brief.svg").absoluteUrl.toString()
       )
 
     val ThompsonReutersSpecialServices =
