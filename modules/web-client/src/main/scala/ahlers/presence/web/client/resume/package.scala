@@ -99,7 +99,9 @@ package object resume {
         ExperienceBrief.Employment.Company(
           "Thompson-Reuters Special Services",
           "McLean",
-          "Virginia"))
+          "Virginia"),
+        Asset.versioned("/ahlers/presence/web/experiences/trss-brief.svg").absoluteUrl.toString()
+      )
 
     val VerizonBusiness =
       ExperienceBrief.employment(
