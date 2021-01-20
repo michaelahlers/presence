@@ -20,13 +20,33 @@ package object resume {
         ExperienceName("Akka"),
         Asset.versioned("/ahlers/presence/web/experiences/akka-brief.svg").absoluteUrl.toString())
 
-    val Bootstrap = ExperienceBrief.skill(
-      ExperienceId("bootstrap"),
-      ExperienceName("Bootstrap"),
-      Asset.versioned("/ahlers/presence/web/experiences/bootstrap-brief.svg").absoluteUrl.toString())
+    val Bootstrap =
+      ExperienceBrief.skill(
+        ExperienceId("bootstrap"),
+        ExperienceName("Bootstrap"),
+        Asset.versioned("/ahlers/presence/web/experiences/bootstrap-brief.svg").absoluteUrl.toString())
 
-    val CSS = ExperienceBrief.skill(ExperienceId("css"), ExperienceName("CSS"), "https://cdn.worldvectorlogo.com/logos/css3.svg")
+    val CSS =
+      ExperienceBrief.skill(
+        ExperienceId("css"),
+        ExperienceName("CSS"),
+        Asset.versioned("/ahlers/presence/web/experiences/css3-brief.svg").absoluteUrl.toString())
+
     val Flyway = ExperienceBrief.skill(ExperienceId("flyway"), ExperienceName("Flyway"))
+
+    val HTML =
+      ExperienceBrief.skill(
+        ExperienceId("html"),
+        ExperienceName("HTML"),
+        Asset.versioned("/ahlers/presence/web/experiences/html5-brief.svg").absoluteUrl.toString())
+
+    val JavaScript =
+      ExperienceBrief.skill(
+        ExperienceId("javascript"),
+        ExperienceName("JavaScript"),
+        Asset.versioned("/ahlers/presence/web/experiences/javascript-brief.svg").absoluteUrl.toString()
+      )
+
     val SBT = ExperienceBrief.skill(ExperienceId("sbt"), ExperienceName("SBT"))
 
     val Scala =
@@ -85,6 +105,8 @@ package object resume {
       Akka ::
         Bootstrap ::
         CSS ::
+        HTML ::
+        JavaScript ::
         Flyway ::
         Lagom ::
         PlayFramework ::
