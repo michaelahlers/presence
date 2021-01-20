@@ -158,8 +158,18 @@ object ResumePage {
           val centerX = thisNode.ref.clientWidth / 2
           val centerY = thisNode.ref.clientHeight / 2
           val zoomIdentity = d3.zoomIdentity.translate(centerX, centerY)
-          zb.transform(d3.select(thisNode.ref), zoomIdentity.scale(0.50d))
-          zb.transform(d3.select(thisNode.ref).transition().duration(3000d), zoomIdentity.scale(1.5d))
+
+          zb.transform(
+            d3.select(thisNode.ref),
+            zoomIdentity.scale(0.50d))
+
+          zb.transform(
+            d3.select(thisNode.ref)
+              .transition()
+              .delay(1000d)
+              .duration(3000d),
+            zoomIdentity.scale(1.5d))
+
           centeringXVar.set(centerX)
           centeringYVar.set(centerY)
         }
