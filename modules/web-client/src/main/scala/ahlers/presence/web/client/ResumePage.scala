@@ -5,7 +5,7 @@ import cats.instances.option._
 import cats.syntax.apply._
 import cats.syntax.option._
 import com.raquo.airstream.core.Observer
-import com.raquo.airstream.signal.Var
+import com.raquo.airstream.signal.{ Signal, Var }
 import com.raquo.laminar.api.L._
 import com.raquo.laminar.nodes.{ ReactiveElement, ReactiveSvgElement }
 import d3v4._
@@ -158,8 +158,8 @@ object ResumePage {
           val centerX = thisNode.ref.clientWidth / 2
           val centerY = thisNode.ref.clientHeight / 2
           val zoomIdentity = d3.zoomIdentity.translate(centerX, centerY)
-          zb.transform(d3.select(thisNode.ref), zoomIdentity.scale(0.75d))
-          zb.transform(d3.select(thisNode.ref).transition().duration(1500d), zoomIdentity.scale(1d))
+          zb.transform(d3.select(thisNode.ref), zoomIdentity.scale(0.50d))
+          zb.transform(d3.select(thisNode.ref).transition().duration(3000d), zoomIdentity.scale(1.5d))
           centeringXVar.set(centerX)
           centeringYVar.set(centerY)
         }
@@ -218,7 +218,7 @@ object ResumePage {
     def xFor(nodeRadius: Double): Double = { //, centerX: Double): Double = {
       val theta = Math.PI * (3 - Math.sqrt(5))
       val i = node.index
-      val step = nodeRadius * 2d
+      val step = nodeRadius * 1.75d
       val radius = step * Math.sqrt(i + 0.25d)
       val a = theta * (i + 0.25d)
       //centerX + radius * Math.cos(a)
@@ -228,7 +228,7 @@ object ResumePage {
     def yFor(nodeRadius: Double): Double = { //, centerY: Double): Double = {
       val theta = Math.PI * (3 - Math.sqrt(5))
       val i = node.index
-      val step = nodeRadius * 2d
+      val step = nodeRadius * 1.75d
       val radius = step * Math.sqrt(i + 0.25d)
       val a = theta * (i + 0.25d)
       //centerY + radius * Math.sin(a)
@@ -256,9 +256,16 @@ object ResumePage {
           //centerY <- $centerY
         } yield yFor(nodeRadius) //, centerY)
 
+      val $className =
+        EventStream
+          .fromValue("revealed", emitOnce = true)
+          .delay((node.index + 1) * 50)
+
       //val transformNodeVar: Var[Transform] = Var(d3.zoomIdentity)
       g(
         //transform <-- transformNodeVar.signal.map(_.toString()),
+        className := "experience-brief",
+        className <-- $className,
         node.experience match {
           case experience: ExperienceBrief.Skill =>
             experience.logo
