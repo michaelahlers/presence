@@ -63,7 +63,11 @@ package object resume {
         ExperienceName("Scala"),
         Asset.versioned("/ahlers/presence/web/experiences/scala-brief.svg").absoluteUrl.toString())
 
-    val Slick = ExperienceBrief.skill(ExperienceId("slick"), ExperienceName("Slick"))
+    val Slick =
+      ExperienceBrief.skill(
+        ExperienceId("slick"),
+        ExperienceName("Slick"),
+        Asset.versioned("/ahlers/presence/web/experiences/slick-brief.svg").absoluteUrl.toString())
 
     val Lagom =
       ExperienceBrief.skill(
