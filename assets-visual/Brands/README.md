@@ -16,6 +16,10 @@
 
 - [The LiveSafe BRand: Logos, Assets, and Guidelines](https://www.livesafemobile.com/brand-assets/)
 
+## MongoDB
+
+- [Brand Resources](https://mongodb.com/brand-resources)
+
 ## PostgreSQL
 
 - [Logo](https://wiki.postgresql.org/wiki/Logo)

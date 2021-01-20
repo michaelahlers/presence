@@ -99,6 +99,12 @@ package object resume {
         ExperienceName("Linux"),
         Asset.versioned("/ahlers/presence/web/experiences/linux-brief.svg").absoluteUrl.toString())
 
+    val MongoDB =
+      ExperienceBrief.skill(
+        ExperienceId("mongodb"),
+        ExperienceName("mongodb"),
+        Asset.versioned("/ahlers/presence/web/experiences/mongodb-brief.svg").absoluteUrl.toString())
+
     val PlayFramework = ExperienceBrief.skill(
       ExperienceId("play-framework"),
       ExperienceName("Play Framework"),
@@ -153,6 +159,7 @@ package object resume {
         Kafka ::
         Lagom ::
         Linux ::
+        MongoDB ::
         PlayFramework ::
         PostgreSQL ::
         SBT ::
