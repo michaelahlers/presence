@@ -22,6 +22,10 @@
 
 - [Logo](https://getbootstrap.com/docs/5.0/about/brand/)
 
+## Verizon
+
+- [Media Resources](https://www.verizon.com/about/news/media-resources)
+
 ## World Wide Web
 
 - [CSS 3 Logo](https://commons.wikimedia.org/wiki/File:CSS3_logo_and_wordmark.svg)
