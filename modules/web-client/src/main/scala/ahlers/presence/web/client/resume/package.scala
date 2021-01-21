@@ -130,6 +130,12 @@ package object resume {
         ExperienceName("Linux"),
         Asset.versioned("/ahlers/presence/web/experiences/linux-brief.svg").absoluteUrl.toString())
 
+    val MySQL =
+      ExperienceBrief.skill(
+        ExperienceId("mysql"),
+        ExperienceName("MySQL"),
+        Asset.versioned("/ahlers/presence/web/experiences/mysql-brief.svg").absoluteUrl.toString())
+
     val MongoDB =
       ExperienceBrief.skill(
         ExperienceId("mongodb"),
@@ -194,6 +200,7 @@ package object resume {
         Kafka ::
         Lagom ::
         Linux ::
+        MySQL ::
         MongoDB ::
         PlayFramework ::
         PostgreSQL ::
