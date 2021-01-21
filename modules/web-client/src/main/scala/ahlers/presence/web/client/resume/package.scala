@@ -38,6 +38,12 @@ package object resume {
         ExperienceName("D3"),
         Asset.versioned("/ahlers/presence/web/experiences/d3-brief.svg").absoluteUrl.toString())
 
+    val DataGrip =
+      ExperienceBrief.skill(
+        ExperienceId("datagrip"),
+        ExperienceName("DataGrip"),
+        Asset.versioned("/ahlers/presence/web/experiences/datagrip-brief.svg").absoluteUrl.toString())
+
     val Flyway =
       ExperienceBrief.skill(
         ExperienceId("flyway"),
@@ -189,6 +195,7 @@ package object resume {
         Bootstrap ::
         CSS ::
         D3 ::
+        DataGrip ::
         Flyway ::
         Git ::
         GitHub ::
