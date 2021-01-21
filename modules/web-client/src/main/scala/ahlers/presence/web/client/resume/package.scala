@@ -199,6 +199,7 @@ package object resume {
         PostgreSQL ::
         SBT ::
         Scala ::
+        ScalaJs ::
         Slick ::
         LiveSafe ::
         ThompsonReutersSpecialServices ::
