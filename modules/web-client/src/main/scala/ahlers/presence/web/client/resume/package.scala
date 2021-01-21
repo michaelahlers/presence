@@ -56,6 +56,13 @@ package object resume {
         ExperienceName("GitHub"),
         Asset.versioned("/ahlers/presence/web/experiences/github-brief.svg").absoluteUrl.toString())
 
+    val IntelliJ =
+      ExperienceBrief.skill(
+        ExperienceId("intellij-idea"),
+        ExperienceName("IntelliJ IDEA"),
+        Asset.versioned("/ahlers/presence/web/experiences/intellij-idea-brief.svg").absoluteUrl.toString()
+      )
+
     val HTML =
       ExperienceBrief.skill(
         ExperienceId("html"),
@@ -176,10 +183,11 @@ package object resume {
         Bootstrap ::
         CSS ::
         D3 ::
-        HTML ::
         Flyway ::
         Git ::
         GitHub ::
+        HTML ::
+        IntelliJ ::
         Java ::
         JavaScript ::
         jQuery ::

@@ -14,11 +14,15 @@
 
 ## Java
 
+- [Java Licensing: Logo Guidelines](http://www.oracle.com/us/technologies/java/java-licensing-logo-guidelines-1908204.pdf)
+
+## JetBrains
+
+- [Brand Guidelines](https://jetbrains.com/company/brand/)
+
 ## jQuery Foundation
 
 - [Brand Repository](https://github.com/jquery/brand.jquery.org)
-
-- [Java Licensing: Logo Guidelines](http://www.oracle.com/us/technologies/java/java-licensing-logo-guidelines-1908204.pdf)
 
 ## Lightbend
 
