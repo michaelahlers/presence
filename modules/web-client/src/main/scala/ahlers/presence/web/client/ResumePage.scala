@@ -11,6 +11,7 @@ import com.raquo.laminar.nodes.{ ReactiveElement, ReactiveSvgElement }
 import d3v4._
 import d3v4.d3.ZoomBehavior
 import d3v4.d3force._
+import d3v4.d3hierarchy.{ Hierarchy, Pack, Packed }
 import d3v4.d3zoom.{ Transform, ZoomEvent }
 import org.scalajs.dom
 import org.scalajs.dom.ext.KeyCode
@@ -57,6 +58,26 @@ object ResumePage {
     //  -->(targetVar.writer)
 
   }
+
+  val pack: Pack[ExperienceNodeUi] =
+    d3.pack()
+      .padding(10d)
+      .radius(_ => 20d)
+
+  val hierarchy: Hierarchy[ExperienceNodeUi] with Packed =
+    pack.apply(d3.hierarchy(
+      ExperienceNodeUi(-1, ExperienceBrief.Blank),
+      {
+        case x if -1 == x.index => experiences.nodes.toJSArray
+        case _ => js.Array()
+      }))
+
+  val hierarchyByIndex: Map[Index, Hierarchy[ExperienceNodeUi] with Packed] =
+    hierarchy.children.orNull
+      .groupBy(_.data.index)
+      .view
+      .mapValues(_.head)
+      .toMap
 
   def apply(): HtmlElement = {
     val nodeRadiusVar: Var[Double] = Var(20d)
@@ -271,6 +292,9 @@ object ResumePage {
           .fromValue("revealed", emitOnce = true)
           .delay((node.index + 1) * 50)
 
+      val hx: Double = hierarchyByIndex(node.index).x.getOrElse(???)
+      val hy: Double = hierarchyByIndex(node.index).y.getOrElse(???)
+
       //val transformNodeVar: Var[Transform] = Var(d3.zoomIdentity)
       g(
         //transform <-- transformNodeVar.signal.map(_.toString()),
@@ -281,8 +305,10 @@ object ResumePage {
             experience.logo
               .map(logo =>
                 image(
-                  x <-- $nodeRadius.flatMap(nodeRadius => $x.map(_ - nodeRadius)).map(_.toString),
-                  y <-- $nodeRadius.flatMap(nodeRadius => $y.map(_ - nodeRadius)).map(_.toString),
+                  //x <-- $nodeRadius.flatMap(nodeRadius => $x.map(_ - nodeRadius)).map(_.toString),
+                  //y <-- $nodeRadius.flatMap(nodeRadius => $y.map(_ - nodeRadius)).map(_.toString),
+                  x := (hx - 20).toString,
+                  y := (hy - 20).toString,
                   width <-- $nodeRadius.map(_ * 2d).map(_.toString),
                   height <-- $nodeRadius.map(_ * 2d).map(_.toString),
                   xlinkHref := logo
@@ -297,8 +323,10 @@ object ResumePage {
             experience.logo
               .map(logo =>
                 image(
-                  x <-- $nodeRadius.flatMap(nodeRadius => $x.map(_ - nodeRadius)).map(_.toString),
-                  y <-- $nodeRadius.flatMap(nodeRadius => $y.map(_ - nodeRadius)).map(_.toString),
+                  //x <-- $nodeRadius.flatMap(nodeRadius => $x.map(_ - nodeRadius)).map(_.toString),
+                  //y <-- $nodeRadius.flatMap(nodeRadius => $y.map(_ - nodeRadius)).map(_.toString),
+                  x := (hx - 20).toString,
+                  y := (hy - 20).toString,
                   width <-- $nodeRadius.map(_ * 2d).map(_.toString),
                   height <-- $nodeRadius.map(_ * 2d).map(_.toString),
                   xlinkHref := logo
@@ -307,14 +335,18 @@ object ResumePage {
                 r <-- $nodeRadius.map(_.toString),
                 cx <-- $x.map(_.toString()),
                 cy <-- $y.map(_.toString()),
+                //x := hx.toString,
+                //y := hy.toString,
                 fill := "blue"
               ))
           case _ =>
             circle(
               //r <-- node.$radius.map(_.fold("")(_.toString)),
               r <-- $nodeRadius.map(_.toString),
-              cx <-- $x.map(_.toString()),
-              cy <-- $y.map(_.toString()),
+              //cx <-- $x.map(_.toString()),
+              //cy <-- $y.map(_.toString()),
+              cx := hx.toString,
+              cy := hy.toString,
               fill := "#333"
             )
         },
