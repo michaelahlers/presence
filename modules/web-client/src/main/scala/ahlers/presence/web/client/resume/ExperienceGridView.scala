@@ -9,9 +9,13 @@ import com.raquo.laminar.nodes.ReactiveSvgElement
 import d3.laminar.syntax.zoom._
 import d3v4.d3
 import d3v4.d3.{ Selection, ZoomBehavior, ZoomEvent }
+import d3v4.d3hierarchy.{ Hierarchy, Pack, Packed }
 import io.scalaland.chimney.dsl.TransformerOps
 import org.scalajs.dom
 import org.scalajs.dom.svg.{ G, SVG }
+
+import scala.scalajs.js
+import scala.scalajs.js.JSConverters.JSRichIterableOnce
 
 /**
  * @since January 31, 2021
@@ -66,22 +70,39 @@ object ExperienceGridView {
   val nodeStatesVar = {
     import ExperienceBrief.{ Blank, Employment, Skill }
 
-    Var(experiences
-      .descriptions
-      .map {
-        case _: Blank => ???
-        case employment: Employment =>
-          employment
-            .into[ExperienceNodeState]
-            .withFieldConst(_.x, 0d)
-            .withFieldConst(_.y, 0d)
-            .transform
-        case skill: Skill =>
-          skill
-            .into[ExperienceNodeState]
-            .withFieldConst(_.x, 0d)
-            .withFieldConst(_.y, 0d)
-            .transform
+    val pack: Pack[ExperienceBrief] =
+      d3.pack()
+        .padding(10)
+        .radius(_ => 20) // + Random.nextInt(20))
+
+    val hierarchy: Hierarchy[ExperienceBrief] with Packed = {
+      val root = ExperienceBrief.Blank(ExperienceId("root"))
+      pack.apply(d3.hierarchy(
+        root,
+        {
+          case x if x.id == root.id => experiences.descriptions.toJSArray
+          case _ => js.Array()
+        }))
+    }
+
+    Var(hierarchy.children.orNull
+      .toSeq
+      .map { hierarchy =>
+        hierarchy.data match {
+          case _: Blank => ???
+          case employment: Employment =>
+            employment
+              .into[ExperienceNodeState]
+              .withFieldConst(_.x, hierarchy.x.getOrElse(???))
+              .withFieldConst(_.y, hierarchy.y.getOrElse(???))
+              .transform
+          case skill: Skill =>
+            skill
+              .into[ExperienceNodeState]
+              .withFieldConst(_.x, hierarchy.x.getOrElse(???))
+              .withFieldConst(_.y, hierarchy.y.getOrElse(???))
+              .transform
+        }
       })
   }
 
