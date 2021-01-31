@@ -18,6 +18,7 @@ import org.scalajs.dom.ext.KeyCode
 
 import scala.scalajs.js
 import scala.scalajs.js.JSConverters._
+import scala.util.Random
 
 /**
  * @since December 22, 2020
@@ -61,12 +62,12 @@ object ResumePage {
 
   val pack: Pack[ExperienceNodeUi] =
     d3.pack()
-      .padding(10d)
-      .radius(_ => 20d)
+      .padding(10)
+      .radius(_ => 20) // + Random.nextInt(20))
 
   val hierarchy: Hierarchy[ExperienceNodeUi] with Packed =
     pack.apply(d3.hierarchy(
-      ExperienceNodeUi(-1, ExperienceBrief.Blank),
+      ExperienceNodeUi(-1, ExperienceBrief.Blank(ExperienceId("-1"))),
       {
         case x if -1 == x.index => experiences.nodes.toJSArray
         case _ => js.Array()
@@ -116,7 +117,7 @@ object ResumePage {
               $nodeRadius,
               //$centerX,
               //$centerY,
-              onClick.stopPropagation.mapToValue(node.some.filterNot(_.experience == ExperienceBrief.Blank)) --> focusedNodeVar.writer
+              onClick.stopPropagation.mapToValue(node.some /*.filterNot(_.experience == ExperienceBrief.Blank)*/ ) --> focusedNodeVar.writer
             ))
         ),
         inContext { thisNode =>
@@ -201,20 +202,20 @@ object ResumePage {
 
     article(
       className := "d-flex flex-column h-100",
-      diagram,
-      div(
-        className := "container-fluid",
-        div(
-          className := "row",
-          div(
-            className := "col-12",
-            span("Node Radius: "),
-            input(
-              value <-- $nodeRadius.map(_.toString()),
-              inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toDouble) --> nodeRadiusVar.writer))
-          )
-        )
-      )
+      ExperienceGridView.render() //,
+//div(
+//  className := "container-fluid",
+//  div(
+//    className := "row",
+//    div(
+//      className := "col-12",
+//      span("Node Radius: "),
+//      input(
+//        value <-- $nodeRadius.map(_.toString()),
+//        inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toDouble) --> nodeRadiusVar.writer))
+//    )
+//  )
+//)
     )
 
   }
@@ -294,6 +295,7 @@ object ResumePage {
 
       val hx: Double = hierarchyByIndex(node.index).x.getOrElse(???)
       val hy: Double = hierarchyByIndex(node.index).y.getOrElse(???)
+      val hr: Double = hierarchyByIndex(node.index).r.getOrElse(???)
 
       //val transformNodeVar: Var[Transform] = Var(d3.zoomIdentity)
       g(
@@ -302,49 +304,36 @@ object ResumePage {
         className <-- $className,
         node.experience match {
           case experience: ExperienceBrief.Skill =>
-            experience.logo
-              .map(logo =>
-                image(
-                  //x <-- $nodeRadius.flatMap(nodeRadius => $x.map(_ - nodeRadius)).map(_.toString),
-                  //y <-- $nodeRadius.flatMap(nodeRadius => $y.map(_ - nodeRadius)).map(_.toString),
-                  x := (hx - 20).toString,
-                  y := (hy - 20).toString,
-                  width <-- $nodeRadius.map(_ * 2d).map(_.toString),
-                  height <-- $nodeRadius.map(_ * 2d).map(_.toString),
-                  xlinkHref := logo
-                ))
-              .getOrElse(circle(
-                r <-- $nodeRadius.map(_.toString),
-                cx <-- $x.map(_.toString()),
-                cy <-- $y.map(_.toString()),
-                fill := "green"
-              ))
+            image(
+              //x <-- $nodeRadius.flatMap(nodeRadius => $x.map(_ - nodeRadius)).map(_.toString),
+              //y <-- $nodeRadius.flatMap(nodeRadius => $y.map(_ - nodeRadius)).map(_.toString),
+              //width <-- $nodeRadius.map(_ * 2d).map(_.toString),
+              //height <-- $nodeRadius.map(_ * 2d).map(_.toString),
+              x := (hx - 20).toString,
+              y := (hy - 20).toString,
+              width := (hr * 2).toString,
+              height := (hr * 2).toString,
+              xlinkHref := experience.logo
+            )
           case experience: ExperienceBrief.Employment =>
-            experience.logo
-              .map(logo =>
-                image(
-                  //x <-- $nodeRadius.flatMap(nodeRadius => $x.map(_ - nodeRadius)).map(_.toString),
-                  //y <-- $nodeRadius.flatMap(nodeRadius => $y.map(_ - nodeRadius)).map(_.toString),
-                  x := (hx - 20).toString,
-                  y := (hy - 20).toString,
-                  width <-- $nodeRadius.map(_ * 2d).map(_.toString),
-                  height <-- $nodeRadius.map(_ * 2d).map(_.toString),
-                  xlinkHref := logo
-                ))
-              .getOrElse(circle(
-                r <-- $nodeRadius.map(_.toString),
-                cx <-- $x.map(_.toString()),
-                cy <-- $y.map(_.toString()),
-                //x := hx.toString,
-                //y := hy.toString,
-                fill := "blue"
-              ))
+            image(
+              //x <-- $nodeRadius.flatMap(nodeRadius => $x.map(_ - nodeRadius)).map(_.toString),
+              //y <-- $nodeRadius.flatMap(nodeRadius => $y.map(_ - nodeRadius)).map(_.toString),
+              //width <-- $nodeRadius.map(_ * 2d).map(_.toString),
+              //height <-- $nodeRadius.map(_ * 2d).map(_.toString),
+              x := (hx - 20).toString,
+              y := (hy - 20).toString,
+              width := (hr * 2).toString,
+              height := (hr * 2).toString,
+              xlinkHref := experience.logo
+            )
           case _ =>
             circle(
               //r <-- node.$radius.map(_.fold("")(_.toString)),
-              r <-- $nodeRadius.map(_.toString),
+              //r <-- $nodeRadius.map(_.toString),
               //cx <-- $x.map(_.toString()),
               //cy <-- $y.map(_.toString()),
+              r := hr.toString,
               cx := hx.toString,
               cy := hy.toString,
               fill := "#333"

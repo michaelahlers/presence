@@ -221,7 +221,7 @@ package object resume {
         Nil
 
     val nodes: Seq[ExperienceNodeUi] =
-      (descriptions ++ Seq.fill(1000)(ExperienceBrief.Blank))
+      descriptions // ++ Seq.fill(1000)(ExperienceBrief.Blank))
         .zipWithIndex
         .map { case (detail, index) =>
           ExperienceNodeUi(index, detail)

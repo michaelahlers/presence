@@ -1,12 +1,8 @@
 package ahlers.presence.web.client.resume
+
 import cats.Eq
 import cats.syntax.option._
-import cats.syntax.eq._
-import com.raquo.airstream.signal.{ Signal, Var }
-import d3.laminar.{ SimulationLinkRx, SimulationNodeRx }
-import d3v4.Index
 
-import scala.scalajs.js.JSConverters.JSRichOption
 import scala.language.postfixOps
 
 /**
@@ -28,30 +24,20 @@ sealed trait ExperienceRef {
   def id: ExperienceId
 }
 
-sealed trait ExperienceBrief //extends ExperienceRef
+sealed trait ExperienceBrief extends ExperienceRef
 
 object ExperienceBrief {
 
   // TODO: Make the view synthesize blank experience discs.
-  case object Blank extends ExperienceBrief
+  case class Blank(id: ExperienceId) extends ExperienceBrief
 
   case class Skill(
     id: ExperienceId,
     name: ExperienceName,
-    logo: Option[String])
+    logo: String)
     extends ExperienceBrief
 
   object Skill {}
-
-  def skill(
-    id: ExperienceId,
-    name: ExperienceName,
-    logo: Option[String]
-  ): Skill =
-    Skill(
-      id,
-      name,
-      logo)
 
   def skill(
     id: ExperienceId,
@@ -61,21 +47,12 @@ object ExperienceBrief {
     Skill(
       id,
       name,
-      logo.some)
-
-  def skill(
-    id: ExperienceId,
-    name: ExperienceName
-  ): Skill =
-    Skill(
-      id,
-      name,
-      none)
+      logo)
 
   case class Employment(
     id: ExperienceId,
     company: Employment.Company,
-    logo: Option[String])
+    logo: String)
     extends ExperienceBrief
 
   object Employment {
@@ -88,31 +65,12 @@ object ExperienceBrief {
   def employment(
     id: ExperienceId,
     company: Employment.Company,
-    logo: Option[String]
-  ): Employment =
-    Employment(
-      id,
-      company,
-      logo)
-
-  def employment(
-    id: ExperienceId,
-    company: Employment.Company,
     logo: String
   ): Employment =
     Employment(
       id,
       company,
-      logo.some)
-
-  def employment(
-    id: ExperienceId,
-    company: Employment.Company
-  ): Employment =
-    Employment(
-      id,
-      company,
-      none)
+      logo)
 
 }
 
