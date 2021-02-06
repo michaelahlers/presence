@@ -1,7 +1,7 @@
 package ahlers.presence.web.client.resume
 
-import com.raquo.laminar.api.L.Signal
-import com.raquo.laminar.api.L.svg._
+import cats.syntax.option._
+import com.raquo.laminar.api.L._
 import com.raquo.laminar.nodes.ReactiveSvgElement
 import org.scalajs.dom.svg.G
 
@@ -14,20 +14,29 @@ object ExperienceNodeView {
   def render(
     id: ExperienceId,
     state: ExperienceNodeState,
-    $state: Signal[ExperienceNodeState] //,
-    //focusObserver: Observer[ExperienceNodeState]
+    $state: Signal[ExperienceNodeState],
+    focusObserver: Observer[Option[ExperienceId]]
   ): ReactiveSvgElement[G] = {
+    import svg._
+
+    /** @todo Will be parameterized, set by significance of an experience. */
     val radius: Double = 20d
+
+    val $logo = $state.map(_.logo)
+    val $x = $state.map(_.x - radius)
+    val $y = $state.map(_.y - radius)
+    val $width = Val(radius * 2d)
+    val $height = Val(radius * 2d)
 
     g(
       className := "experience-node-view",
       image(
-        xlinkHref <-- $state.map(_.logo),
-        x <-- $state.map(_.x - radius).map(_.toString),
-        y <-- $state.map(_.y - radius).map(_.toString),
-        width := (radius * 2d).toString,
-        height := (radius * 2d).toString
-      )
+        xlinkHref <-- $logo,
+        x <-- $x.map(_.toString),
+        y <-- $y.map(_.toString),
+        width <-- $width.map(_.toString),
+        height <-- $height.map(_.toString)),
+      onClick.stopPropagation.mapToValue(id.some) --> focusObserver
     )
   }
 
