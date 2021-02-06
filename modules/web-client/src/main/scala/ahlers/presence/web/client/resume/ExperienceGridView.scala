@@ -1,6 +1,8 @@
 package ahlers.presence.web.client.resume
 
+import cats.syntax.apply._
 import cats.syntax.option._
+import cats.laminar.instances.signal._
 import com.raquo.airstream.eventbus.EventBus
 import com.raquo.airstream.signal.{ Signal, Var }
 import com.raquo.domtypes.generic.Modifier
@@ -12,7 +14,7 @@ import d3v4.d3hierarchy.{ Hierarchy, Pack, Packed }
 import d3v4.d3zoom.Transform
 import io.scalaland.chimney.dsl.TransformerOps
 import org.scalajs.dom
-import org.scalajs.dom.console
+import org.scalajs.dom.{ console, window, EventTarget }
 import org.scalajs.dom.svg.{ G, SVG }
 
 import scala.scalajs.js
@@ -114,10 +116,21 @@ object ExperienceGridView {
     inContext { thisNode: ReactiveSvgElement[SVG] =>
       import thisNode.ref.{ clientHeight, clientWidth }
 
-      val transition = //: Transition[dom.EventTarget] =
-        d3.select(thisNode.ref)
-      //.transition()
-      //.duration(1500d)
+      val $transition: Signal[Transition[dom.EventTarget]] =
+        $focusedNodeState
+          .map {
+
+            case None =>
+              d3.select(thisNode.ref)
+                .transition()
+                .duration(1000d)
+
+            case Some(_) =>
+              d3.select(thisNode.ref)
+                .transition()
+                .duration(2000d)
+
+          }
 
       val $transform: Signal[Transform] =
         $focusedNodeState
@@ -140,7 +153,10 @@ object ExperienceGridView {
 
           }
 
-      $transform --> (gridZoomBehavior.transform(transition, _))
+      val zoomTransform: (Transition[EventTarget], Transform) => Unit =
+        gridZoomBehavior.transform(_, _)
+
+      ($transition, $transform).tupled --> zoomTransform.tupled
     }
 
   val nodeStatesVar = {
