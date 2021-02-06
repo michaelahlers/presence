@@ -57,18 +57,6 @@ object ExperienceGridView {
 
       val selection = d3.select(thisNode.ref)
 
-      (for {
-        clientWidth <- $clientWidth
-        clientHeight <- $clientHeight
-        zoomIdentity =
-          d3.zoomIdentity
-            .translate(
-              clientWidth / 2,
-              clientHeight / 2)
-      } yield zoomIdentity)
-        .foreach(zoomBehavior
-          .transform(selection, _))
-
       /** @todo Overload [[d3v4.d3zoom.ZoomBehavior.on]] with [[https://github.com/d3/d3-selection#selection_on listener function type taking documented event, datum, and target]]. */
       val onZoomEvent = () =>
         zoomEventBus
@@ -81,6 +69,18 @@ object ExperienceGridView {
       zoomEventBus
         .events
         .foreach(console.debug("Zoom event.", _))
+
+      (for {
+        clientWidth <- $clientWidth
+        clientHeight <- $clientHeight
+        zoomIdentity =
+          d3.zoomIdentity
+            .translate(
+              clientWidth / 2,
+              clientHeight / 2)
+      } yield zoomIdentity)
+        .foreach(zoomBehavior
+          .transform(selection, _))
     }
 
     val unmount: ReactiveSvgElement[SVG] => Unit = { thisNode =>
