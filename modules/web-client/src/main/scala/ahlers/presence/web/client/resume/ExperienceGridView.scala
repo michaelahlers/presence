@@ -79,15 +79,10 @@ object ExperienceGridView {
         .foreach(console.debug("Zoom event.", _))
 
       val $transform =
-        for {
-          clientWidth <- $clientWidth
-          clientHeight <- $clientHeight
-          transform =
-            d3.zoomIdentity
-              .translate(
-                clientWidth / 2,
-                clientHeight / 2)
-        } yield transform
+        ($clientWidth.map(_ / 2), $clientHeight.map(_ / 2))
+          .mapN(d3
+            .zoomIdentity
+            .translate(_, _))
 
       $transform
         .foreach(gridZoomBehavior
