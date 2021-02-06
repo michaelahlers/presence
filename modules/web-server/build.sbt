@@ -30,7 +30,7 @@ Compile / herokuAppName :=
   Map(
     ("preview", "michaelahlers-presence-stage"),
     ("public", "michaelahlers-presence-public"))
-    .apply(sys.props.getOrElse("environment", "preview"))
+    .apply(sys.props.getOrElse("stage", "preview"))
 
 Compile / herokuSkipSubProjects := false
 Compile / herokuJdkVersion := "15"
