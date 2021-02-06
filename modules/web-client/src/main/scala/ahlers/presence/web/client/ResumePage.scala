@@ -101,7 +101,7 @@ object ResumePage {
       val focusedNodeVar: Var[Option[ExperienceNodeUi]] = Var(none)
       val $focusedNode: Signal[Option[ExperienceNodeUi]] = focusedNodeVar.signal
 
-      $focusedNode.foreach(println(_))(unsafeWindowOwner)
+      //$focusedNode.foreach(println(_))(unsafeWindowOwner)
 
       svg(
         className := "flex-fill bg-dark",
