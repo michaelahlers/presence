@@ -4,14 +4,13 @@ import com.raquo.airstream.eventbus.EventBus
 import com.raquo.airstream.signal.{ Signal, Var }
 import com.raquo.domtypes.generic.Modifier
 import com.raquo.laminar.api.L._
-import com.raquo.laminar.keys.ReactiveEventProp
 import com.raquo.laminar.nodes.ReactiveSvgElement
-import d3.laminar.syntax.zoom._
 import d3v4.d3
-import d3v4.d3.{ Selection, ZoomBehavior, ZoomEvent }
+import d3v4.d3.{ ZoomBehavior, ZoomEvent }
 import d3v4.d3hierarchy.{ Hierarchy, Pack, Packed }
 import io.scalaland.chimney.dsl.TransformerOps
 import org.scalajs.dom
+import org.scalajs.dom.console
 import org.scalajs.dom.svg.{ G, SVG }
 
 import scala.scalajs.js
@@ -28,7 +27,6 @@ object ExperienceGridView {
     svg(
       className := "experience-grid-view",
       className := "flex-fill bg-dark",
-      zoomBehavior --> zoomEventBus.writer,
       zoomEventBinder,
       g(
         transform <-- zoomEventBus.events.map(_.transform.toString()),
@@ -38,8 +36,13 @@ object ExperienceGridView {
 
   val zoomBehavior: ZoomBehavior[dom.EventTarget] = d3.zoom()
   val zoomEventBus: EventBus[ZoomEvent] = new EventBus()
-  val zoomEventBinder: Modifier[ReactiveSvgElement[SVG]] =
-    onMountCallback { context =>
+
+  /**
+   * When mounted, monitors window resize events to keep [[zoomBehavior]] centered, and also send applicable [[ZoomEvent]] values to [[zoomEventBus]].
+   * @todo Learn if there's a more elegant, idiomatic technique to this.
+   */
+  val zoomEventBinder: Modifier[ReactiveSvgElement[SVG]] = {
+    val mount: MountContext[ReactiveSvgElement[SVG]] => Unit = { context =>
       import context.{ owner, thisNode }
 
       val $clientWidth =
@@ -52,6 +55,8 @@ object ExperienceGridView {
           .onResize.mapTo(thisNode.ref.clientHeight)
           .toSignal(thisNode.ref.clientHeight)
 
+      val selection = d3.select(thisNode.ref)
+
       (for {
         clientWidth <- $clientWidth
         clientHeight <- $clientHeight
@@ -62,10 +67,29 @@ object ExperienceGridView {
               clientHeight / 2)
       } yield zoomIdentity)
         .foreach(zoomBehavior
-          .transform(
-            d3.select(thisNode.ref),
-            _))
+          .transform(selection, _))
+
+      /** @todo Overload [[d3v4.d3zoom.ZoomBehavior.on]] with [[https://github.com/d3/d3-selection#selection_on listener function type taking documented event, datum, and target]]. */
+      val onZoomEvent = () =>
+        zoomEventBus
+          .writer
+          .onNext(d3.event)
+
+      zoomBehavior.on("zoom", onZoomEvent)(selection)
+
+      /** @todo Figure out why the transform binding never receives the first event without this. */
+      zoomEventBus
+        .events
+        .foreach(console.debug("Zoom event.", _))
     }
+
+    val unmount: ReactiveSvgElement[SVG] => Unit = { thisNode =>
+      val selection = d3.select(thisNode.ref)
+      zoomBehavior.on("zoom", null)(selection)
+    }
+
+    onMountUnmountCallback(mount, unmount)
+  }
 
   val nodeStatesVar = {
     import ExperienceBrief.{ Blank, Employment, Skill }
