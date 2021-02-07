@@ -12,7 +12,7 @@ object MainView {
   val pageSplitter =
     SplitRender[UiState, HtmlElement](UiState.router.$currentPage)
       .collectStatic(UiState.Landing)(LandingPageView())
-      .collectStatic(UiState.Resume)(ResumePage())
+      .collectStatic(UiState.Resume)(ResumePage.render())
       .collectStatic(UiState.Contact)(ContactPage())
 
   val pageClassName =
