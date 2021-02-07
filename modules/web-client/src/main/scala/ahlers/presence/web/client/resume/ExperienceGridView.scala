@@ -51,7 +51,6 @@ object ExperienceGridView {
   val gridZoomEventBinder: Modifier[ReactiveSvgElement[SVG]] = {
     val mount: MountContext[ReactiveSvgElement[SVG]] => Unit = { context =>
       import context.thisNode
-      import thisNode.ref.{ clientHeight, clientWidth }
 
       /** @todo Overload [[d3v4.d3zoom.ZoomBehavior.on]] with [[https://github.com/d3/d3-selection#selection_on listener function type taking documented event, datum, and target]]. */
       val onZoomEvent = () =>
@@ -63,14 +62,6 @@ object ExperienceGridView {
         .on("zoom", onZoomEvent)
         .apply(d3.select(thisNode.ref))
 
-    //gridZoomBehavior
-    //  .transform(
-    //    d3.select(thisNode.ref),
-    //    d3.zoomIdentity
-    //      .translate(
-    //        clientWidth / 2,
-    //        clientHeight / 2)
-    //      .scale(0.5d))
     }
 
     val unmount: ReactiveSvgElement[SVG] => Unit = { thisNode =>
