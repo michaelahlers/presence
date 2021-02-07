@@ -44,15 +44,23 @@ object ExperienceNodeView {
 
     val clickBus: EventBus[MouseEvent] = new EventBus()
 
+    val $revealed =
+      EventStream
+        .fromValue(true, emitOnce = true)
+        .delay((index.toInt + 1) * 50)
+        .toSignal(false)
+
     g(
       className := "experience-node-view",
+      className.toggle("hidden") <-- $revealed.map(!_),
+      className.toggle("revealed") <-- $revealed,
       child <-- $logo.map {
         case None =>
           circle(
             cx <-- $cx.map(_.toString),
             cy <-- $cy.map(_.toString),
             r <-- $radius.map(_.toString),
-            fill := "gray"
+            fill := "#333"
           )
         case Some(logo) =>
           image(

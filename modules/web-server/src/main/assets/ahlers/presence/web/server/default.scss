@@ -65,15 +65,16 @@ main.resume {
   height: 100%;
 }
 
-@keyframes ahlers-consulting-experience-brief-fade-in {
+@keyframes ahlers-consulting-experience-node-view-fade-in {
+  0% { opacity: 0; }
   100% { opacity: 1; }
 }
 
-svg g.experience-brief {
-  opacity: 0.1;
+svg g.experience-node-view.hidden {
+  opacity: 0;
 }
 
-svg g.experience-brief.revealed {
-  animation: ahlers-consulting-experience-brief-fade-in 1000ms ease;
+svg g.experience-node-view.revealed {
+  animation: ahlers-consulting-experience-node-view-fade-in 1000ms ease;
   animation-fill-mode: forwards;
 }
