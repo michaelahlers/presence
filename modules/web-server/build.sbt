@@ -34,3 +34,7 @@ Compile / herokuAppName :=
 
 Compile / herokuSkipSubProjects := false
 Compile / herokuJdkVersion := "15"
+
+Compile / doc / sources := Nil
+Test / doc / sources := Nil
+//Global / packageDoc / publishArtifact := false

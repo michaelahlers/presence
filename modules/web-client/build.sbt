@@ -13,3 +13,7 @@ scalaJSUseMainModuleInitializer := true
 // TODO: Configure caching for Scalably Typed artifacts.
 
 //zonesFilter := (_ == "America/New_York")
+
+Compile / doc / sources := Nil
+Test / doc / sources := Nil
+//Global / packageDoc / publishArtifact := false
