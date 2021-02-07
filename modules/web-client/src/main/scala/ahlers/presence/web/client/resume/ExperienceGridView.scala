@@ -10,11 +10,12 @@ import com.raquo.laminar.api.L._
 import com.raquo.laminar.nodes.ReactiveSvgElement
 import d3.laminar.syntax.zoom._
 import d3v4.d3
-import d3v4.d3.{ ZoomBehavior, ZoomEvent }
+import d3v4.d3.{ Transform, ZoomBehavior }
 import d3v4.d3hierarchy.{ Hierarchy, Pack, Packed }
 import io.scalaland.chimney.dsl.TransformerOps
 import org.scalajs.dom
 import org.scalajs.dom.svg.{ G, SVG }
+
 import scala.scalajs.js
 import scala.scalajs.js.JSConverters.JSRichIterableOnce
 
@@ -29,26 +30,26 @@ object ExperienceGridView {
     svg(
       className := "experience-grid-view",
       className := "flex-fill bg-dark",
-      gridZoomBehavior --> gridZoomEventBus.writer,
+      zoomBehavior --> zoomTransformBus.writer.contramap(_.transform),
       handleWindowLoad,
       handleWindowResize,
       handleFocusedNode,
       onClick.mapToValue(none) --> focusedIdVar.writer,
       g(
-        transform <-- gridZoomEventBus.events.map(_.transform.toString()),
+        transform <-- zoomTransformBus.events.map(_.toString()),
         children <-- $nodeRenders)
     )
   }
 
-  val gridZoomBehavior: ZoomBehavior[dom.EventTarget] = d3.zoom()
-  val gridZoomEventBus: EventBus[ZoomEvent] = new EventBus()
+  val zoomBehavior: ZoomBehavior[dom.EventTarget] = d3.zoom()
+  val zoomTransformBus: EventBus[Transform] = new EventBus()
 
   val handleWindowLoad: Modifier[ReactiveSvgElement[SVG]] =
     inContext { thisNode =>
       import thisNode.ref.{ clientHeight, clientWidth }
 
       windowEvents.onLoad --> { _ =>
-        gridZoomBehavior
+        zoomBehavior
           .transform(
             d3.select(thisNode.ref),
             d3.zoomIdentity
@@ -57,11 +58,11 @@ object ExperienceGridView {
                 clientHeight / 2)
               .scale(0.5d))
 
-        gridZoomBehavior
+        zoomBehavior
           .transform(
             d3.select(thisNode.ref)
               .transition()
-              .duration(5000d),
+              .duration(3000d),
             d3.zoomIdentity
               .translate(
                 clientWidth / 2,
@@ -76,7 +77,7 @@ object ExperienceGridView {
       windowEvents.onResize.mapTo(focusedNodeNow()) --> {
 
         case None =>
-          gridZoomBehavior
+          zoomBehavior
             .transform(
               d3.select(thisNode.ref),
               d3.zoomIdentity
@@ -86,7 +87,7 @@ object ExperienceGridView {
 
         case Some(nodeState) =>
           import nodeState.{ x, y }
-          gridZoomBehavior
+          zoomBehavior
             .transform(
               d3.select(thisNode.ref),
               d3.zoomIdentity
@@ -106,7 +107,7 @@ object ExperienceGridView {
       $focusedNode --> {
 
         case None =>
-          gridZoomBehavior
+          zoomBehavior
             .transform(
               d3.select(thisNode.ref)
                 .transition()
@@ -118,11 +119,11 @@ object ExperienceGridView {
 
         case Some(nodeState) =>
           import nodeState.{ x, y }
-          gridZoomBehavior
+          zoomBehavior
             .transform(
               d3.select(thisNode.ref)
                 .transition()
-                .duration(3000d),
+                .duration(1500d),
               d3.zoomIdentity
                 .translate(
                   clientWidth / 2,
