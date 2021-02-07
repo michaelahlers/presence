@@ -15,7 +15,7 @@ object ExperienceNodeView {
     id: ExperienceId,
     state: ExperienceNodeState,
     $state: Signal[ExperienceNodeState],
-    focusObserver: Observer[Option[ExperienceId]]
+    focusedIdVar: Var[Option[ExperienceId]]
   ): ReactiveSvgElement[G] = {
     import svg._
 
@@ -36,7 +36,7 @@ object ExperienceNodeView {
         y <-- $y.map(_.toString),
         width <-- $width.map(_.toString),
         height <-- $height.map(_.toString)),
-      onClick.stopPropagation.mapToValue(id.some) --> focusObserver
+      onClick.stopPropagation.mapToValue(id.some) --> focusedIdVar.writer
     )
   }
 
