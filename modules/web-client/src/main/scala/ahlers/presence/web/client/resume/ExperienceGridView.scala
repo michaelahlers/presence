@@ -1,5 +1,7 @@
 package ahlers.presence.web.client.resume
 
+import ahlers.presence.web.client.UiState
+import ahlers.presence.web.client.UiState.{ FocusedResumePage, UnfocusedResumePage }
 import cats.laminar.instances.signal._
 import cats.syntax.apply._
 import cats.syntax.option._
@@ -67,11 +69,6 @@ object ExperienceGridView {
       })
   }
   val $nodeStates: StrictSignal[Seq[ExperienceNodeState]] = nodeStatesVar.signal
-
-  val $nodeRenders: Signal[Seq[ReactiveSvgElement[G]]] =
-    $nodeStates
-      .split(_.id)(ExperienceNodeView
-        .render(_, _, _, focusedIdVar))
 
   val focusedIdVar: Var[Option[ExperienceId]] = Var(none)
   val $focusedId: Signal[Option[ExperienceId]] = focusedIdVar.signal
@@ -179,8 +176,19 @@ object ExperienceGridView {
       }
     }
 
-  def render(): ReactiveSvgElement[SVG] = {
+  val handleClick: Modifier[ReactiveSvgElement[SVG]] =
+    onClick
+      .stopPropagation
+      .mapToValue(UnfocusedResumePage) --> (UiState.router.pushState(_))
+
+  def render($focusedExperienceId: Signal[Option[ExperienceId]]): ReactiveSvgElement[SVG] = {
     import svg._
+
+    val $nodeRenders: Signal[Seq[ReactiveSvgElement[G]]] =
+      $nodeStates
+        .split(_.id)(ExperienceNodeView
+          .render(_, _, _, $focusedExperienceId))
+
     svg(
       className := "experience-grid-view",
       className := "flex-fill bg-dark",
@@ -188,7 +196,9 @@ object ExperienceGridView {
       handleWindowLoad,
       handleWindowResize,
       handleFocusedNode,
-      onClick.mapToValue(none) --> focusedIdVar.writer,
+      $focusedExperienceId --> focusedIdVar.writer,
+      $focusedExperienceId --> (dom.console.debug("Focused experience id.", _)),
+      handleClick,
       g(
         transform <-- zoomTransform.events.map(_.toString()),
         children <-- $nodeRenders)

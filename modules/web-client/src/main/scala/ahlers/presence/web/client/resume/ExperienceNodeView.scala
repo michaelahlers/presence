@@ -1,5 +1,7 @@
 package ahlers.presence.web.client.resume
 
+import ahlers.presence.web.client.UiState
+import ahlers.presence.web.client.UiState.FocusedResumePage
 import cats.syntax.option._
 import com.raquo.laminar.api.L._
 import com.raquo.laminar.nodes.ReactiveSvgElement
@@ -15,7 +17,7 @@ object ExperienceNodeView {
     id: ExperienceId,
     state: ExperienceNodeState,
     $state: Signal[ExperienceNodeState],
-    focusedIdVar: Var[Option[ExperienceId]]
+    $focusedExperienceId: Signal[Option[ExperienceId]]
   ): ReactiveSvgElement[G] = {
     import svg._
 
@@ -28,6 +30,11 @@ object ExperienceNodeView {
     val $width = Val(radius * 2d)
     val $height = Val(radius * 2d)
 
+    val handleClick =
+      onClick
+        .stopPropagation
+        .mapToValue(FocusedResumePage(id)) --> (UiState.router.pushState(_))
+
     g(
       className := "experience-node-view",
       image(
@@ -36,7 +43,7 @@ object ExperienceNodeView {
         y <-- $y.map(_.toString),
         width <-- $width.map(_.toString),
         height <-- $height.map(_.toString)),
-      onClick.stopPropagation.mapToValue(id.some) --> focusedIdVar.writer
+      handleClick
     )
   }
 
