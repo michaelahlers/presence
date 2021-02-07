@@ -1,6 +1,6 @@
 package ahlers.presence.web.client.resume
 
-import ahlers.presence.web.client.UiState
+import ahlers.presence.web.client.{ Asset, UiState }
 import ahlers.presence.web.client.UiState.{ FocusedResumePage, UnfocusedResumePage }
 import cats.syntax.apply._
 import cats.syntax.option._
@@ -30,41 +30,56 @@ object ExperienceGridView {
   val zoomTransformBus: EventBus[Transform] = new EventBus()
 
   val nodeStatesVar = {
-    import ExperienceBrief.{ Blank, Employment, Skill }
+    import ExperienceBrief.{ Blank, Employment, Root, Skill }
 
-    val pack: Pack[ExperienceBrief] =
+    val packed: Pack[ExperienceBrief] =
       d3.pack()
         .padding(10)
         .radius(_ => 20) // + Random.nextInt(20))
 
-    val hierarchy: Hierarchy[ExperienceBrief] with Packed = {
-      val root = ExperienceBrief.Blank(ExperienceId("root"))
-      pack.apply(d3.hierarchy(
-        root,
+    val hierarchy: Hierarchy[ExperienceBrief] with Packed =
+      packed(d3.hierarchy(
+        Root,
         {
-          case x if x.id == root.id => experiences.descriptions.toJSArray
+          case Root => (experiences.descriptions ++ Seq.fill(2000)(Blank)).toJSArray
           case _ => js.Array()
         }))
-    }
 
-    Var(hierarchy.children.orNull
+    Val(hierarchy.children.orNull
       .toSeq
-      .map { hierarchy =>
-        hierarchy.data match {
-          case _: Blank => ???
-          case employment: Employment =>
-            employment
-              .into[ExperienceNodeState]
-              .withFieldConst(_.x, hierarchy.x.getOrElse(???))
-              .withFieldConst(_.y, hierarchy.y.getOrElse(???))
-              .transform
-          case skill: Skill =>
-            skill
-              .into[ExperienceNodeState]
-              .withFieldConst(_.x, hierarchy.x.getOrElse(???))
-              .withFieldConst(_.y, hierarchy.y.getOrElse(???))
-              .transform
-        }
+      .zipWithIndex
+      .map {
+        case (hierarchy, index) =>
+          hierarchy.data match {
+
+            case Root => ???
+
+            case Blank =>
+              ExperienceNodeState(
+                ExperienceNodeIndex(index),
+                none,
+                none,
+                hierarchy.x.getOrElse(???),
+                hierarchy.y.getOrElse(???)
+              )
+
+            case employment: Employment =>
+              employment
+                .into[ExperienceNodeState]
+                .withFieldConst(_.index, ExperienceNodeIndex(index))
+                .withFieldConst(_.cx, hierarchy.x.getOrElse(???))
+                .withFieldConst(_.cy, hierarchy.y.getOrElse(???))
+                .transform
+
+            case skill: Skill =>
+              skill
+                .into[ExperienceNodeState]
+                .withFieldConst(_.index, ExperienceNodeIndex(index))
+                .withFieldConst(_.cx, hierarchy.x.getOrElse(???))
+                .withFieldConst(_.cy, hierarchy.y.getOrElse(???))
+                .transform
+
+          }
       })
   }
 
@@ -99,7 +114,7 @@ object ExperienceGridView {
                   clientHeight / 2))
 
         case (_, Some(nodeState)) =>
-          import nodeState.{ x, y }
+          import nodeState.{ cx, cy }
           zoomBehavior
             .transform(
               d3.select(thisNode.ref),
@@ -119,7 +134,7 @@ object ExperienceGridView {
                   clientWidth / 2,
                   clientHeight / 2)
                 .scale(5d)
-                .translate(-x, -y))
+                .translate(-cx, -cy))
 
       }
     }
@@ -142,7 +157,7 @@ object ExperienceGridView {
                   clientHeight / 2))
 
         case (_, Some(nodeState)) =>
-          import nodeState.{ x, y }
+          import nodeState.{ cx, cy }
           zoomBehavior
             .transform(
               d3.select(thisNode.ref),
@@ -151,7 +166,7 @@ object ExperienceGridView {
                   clientWidth / 2,
                   clientHeight / 2)
                 .scale(5)
-                .translate(-x, -y))
+                .translate(-cx, -cy))
 
       }
     }
@@ -174,7 +189,7 @@ object ExperienceGridView {
                   clientHeight / 2))
 
         case Some(nodeState) =>
-          import nodeState.{ x, y }
+          import nodeState.{ cx, cy }
           zoomBehavior
             .transform(
               d3.select(thisNode.ref)
@@ -185,7 +200,7 @@ object ExperienceGridView {
                   clientWidth / 2,
                   clientHeight / 2)
                 .scale(5)
-                .translate(-x, -y))
+                .translate(-cx, -cy))
 
       }
     }
@@ -200,7 +215,7 @@ object ExperienceGridView {
 
     val $nodeRenders: Signal[Seq[ReactiveSvgElement[G]]] =
       $nodeStates
-        .split(_.id)(ExperienceNodeView
+        .split(_.index)(ExperienceNodeView
           .render(_, _, _, $focusedExperienceId))
 
     val $focusedNodeState: Signal[Option[ExperienceNodeState]] =
@@ -208,7 +223,7 @@ object ExperienceGridView {
         .combineWith($nodeStates)
         .map {
           case (None, _) => none
-          case (Some(id), nodeStates) => nodeStates.find(_.id == id)
+          case (Some(id), nodeStates) => nodeStates.find(_.id.contains(id))
         }
 
     svg(

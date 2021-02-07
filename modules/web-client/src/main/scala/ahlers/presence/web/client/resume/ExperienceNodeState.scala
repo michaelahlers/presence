@@ -5,8 +5,8 @@ package ahlers.presence.web.client.resume
  * @author <a href="mailto:michael@ahlers.consulting">Michael Ahlers</a>
  */
 case class ExperienceNodeState(
-  id: ExperienceId,
-  logo: String,
-  //focused: Boolean,
-  x: Double,
-  y: Double)
+  index: ExperienceNodeIndex,
+  id: Option[ExperienceId],
+  logo: Option[String],
+  cx: Double,
+  cy: Double)

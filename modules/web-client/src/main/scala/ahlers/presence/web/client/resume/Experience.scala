@@ -20,16 +20,13 @@ object ExperienceId {
 
 case class ExperienceName(toText: String) extends AnyVal
 
-sealed trait ExperienceRef {
-  def id: ExperienceId
-}
-
-sealed trait ExperienceBrief extends ExperienceRef
+sealed trait ExperienceBrief
 
 object ExperienceBrief {
 
-  // TODO: Make the view synthesize blank experience discs.
-  case class Blank(id: ExperienceId) extends ExperienceBrief
+  case object Root extends ExperienceBrief
+
+  case object Blank extends ExperienceBrief
 
   case class Skill(
     id: ExperienceId,
