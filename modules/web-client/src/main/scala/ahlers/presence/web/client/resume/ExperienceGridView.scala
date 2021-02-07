@@ -179,7 +179,7 @@ object ExperienceGridView {
             .transform(
               d3.select(thisNode.ref)
                 .transition()
-                .duration(1500d),
+                .duration(1000d),
               d3.zoomIdentity
                 .translate(
                   clientWidth / 2,
