@@ -1,20 +1,18 @@
 package ahlers.presence.web.client.resume
 
+import cats.laminar.instances.signal._
 import cats.syntax.apply._
 import cats.syntax.option._
-import cats.laminar.instances.signal._
 import com.raquo.airstream.eventbus.EventBus
 import com.raquo.airstream.signal.{ Signal, Var }
 import com.raquo.domtypes.generic.Modifier
 import com.raquo.laminar.api.L._
 import com.raquo.laminar.nodes.ReactiveSvgElement
 import d3v4.d3
-import d3v4.d3.{ Transition, ZoomBehavior, ZoomEvent }
+import d3v4.d3.{ ZoomBehavior, ZoomEvent }
 import d3v4.d3hierarchy.{ Hierarchy, Pack, Packed }
-import d3v4.d3zoom.Transform
 import io.scalaland.chimney.dsl.TransformerOps
 import org.scalajs.dom
-import org.scalajs.dom.{ console, window, EventTarget }
 import org.scalajs.dom.svg.{ G, SVG }
 
 import scala.scalajs.js
@@ -32,8 +30,10 @@ object ExperienceGridView {
       className := "experience-grid-view",
       className := "flex-fill bg-dark",
       gridZoomEventBinder,
-      focusedNodeZoomBinder,
-      onClick.mapToValue(none) --> focusedNodeIdVar.writer,
+      handleWindowLoad,
+      handleWindowResize,
+      handleFocusedNode,
+      onClick.mapToValue(none) --> focusedIdVar.writer,
       g(
         transform <-- gridZoomEventBus.events.map(_.transform.toString()),
         children <-- $nodeRenders)
@@ -50,20 +50,8 @@ object ExperienceGridView {
    */
   val gridZoomEventBinder: Modifier[ReactiveSvgElement[SVG]] = {
     val mount: MountContext[ReactiveSvgElement[SVG]] => Unit = { context =>
-      import context.{ owner, thisNode }
+      import context.thisNode
       import thisNode.ref.{ clientHeight, clientWidth }
-
-      val $clientWidth =
-        windowEvents
-          .onResize.mapTo(clientWidth)
-          .toSignal(clientWidth)
-
-      val $clientHeight =
-        windowEvents
-          .onResize.mapTo(clientHeight)
-          .toSignal(clientHeight)
-
-      val selection = d3.select(thisNode.ref)
 
       /** @todo Overload [[d3v4.d3zoom.ZoomBehavior.on]] with [[https://github.com/d3/d3-selection#selection_on listener function type taking documented event, datum, and target]]. */
       val onZoomEvent = () =>
@@ -71,87 +59,117 @@ object ExperienceGridView {
           .writer
           .onNext(d3.event)
 
-      gridZoomBehavior.on("zoom", onZoomEvent)(selection)
+      gridZoomBehavior
+        .on("zoom", onZoomEvent)
+        .apply(d3.select(thisNode.ref))
 
-      /** @todo Figure out why the transform binding never receives the first event without this. */
-      gridZoomEventBus
-        .events
-        .foreach(console.debug("Zoom event.", _))
-
-      val $transform =
-        ($clientWidth.map(_ / 2), $clientHeight.map(_ / 2))
-          .mapN(d3
-            .zoomIdentity
-            .translate(_, _))
-
-      $transform
-        .foreach(gridZoomBehavior
-          .transform(selection, _))
+    //gridZoomBehavior
+    //  .transform(
+    //    d3.select(thisNode.ref),
+    //    d3.zoomIdentity
+    //      .translate(
+    //        clientWidth / 2,
+    //        clientHeight / 2)
+    //      .scale(0.5d))
     }
 
     val unmount: ReactiveSvgElement[SVG] => Unit = { thisNode =>
-      val selection = d3.select(thisNode.ref)
-      gridZoomBehavior.on("zoom", null)(selection)
+      gridZoomBehavior
+        .on("zoom", null)
+        .apply(d3.select(thisNode.ref))
     }
 
     onMountUnmountCallback(mount, unmount)
   }
 
-  val focusedNodeIdVar: Var[Option[ExperienceId]] = Var(none)
-  val $focusedNodeId: StrictSignal[Option[ExperienceId]] = focusedNodeIdVar.signal
-
-  val $focusedNodeState: Signal[Option[ExperienceNodeState]] =
-    $focusedNodeId
-      .flatMap {
-        case None => Val(None)
-        case Some(focusedId) => $nodeStates.map(_.find(_.id == focusedId))
-      }
-
-  val focusedNodeZoomBinder: Modifier[ReactiveSvgElement[SVG]] =
-    inContext { thisNode: ReactiveSvgElement[SVG] =>
+  val handleWindowLoad: Modifier[ReactiveSvgElement[SVG]] =
+    inContext { thisNode =>
       import thisNode.ref.{ clientHeight, clientWidth }
 
-      val $transition: Signal[Transition[dom.EventTarget]] =
-        $focusedNodeState
-          .map {
+      windowEvents.onLoad --> { _ =>
+        gridZoomBehavior
+          .transform(
+            d3.select(thisNode.ref),
+            d3.zoomIdentity
+              .translate(
+                clientWidth / 2,
+                clientHeight / 2)
+              .scale(0.5d))
 
-            case None =>
-              d3.select(thisNode.ref)
-                .transition()
-                .duration(1000d)
+        gridZoomBehavior
+          .transform(
+            d3.select(thisNode.ref)
+              .transition()
+              .duration(5000d),
+            d3.zoomIdentity
+              .translate(
+                clientWidth / 2,
+                clientHeight / 2))
+      }
+    }
 
-            case Some(_) =>
-              d3.select(thisNode.ref)
-                .transition()
-                .duration(2000d)
+  val handleWindowResize: Modifier[ReactiveSvgElement[SVG]] =
+    inContext { thisNode =>
+      import thisNode.ref.{ clientHeight, clientWidth }
 
-          }
+      windowEvents.onResize.mapTo(focusedNodeNow()) --> {
 
-      val $transform: Signal[Transform] =
-        $focusedNodeState
-          .map {
-
-            case None =>
+        case None =>
+          gridZoomBehavior
+            .transform(
+              d3.select(thisNode.ref),
               d3.zoomIdentity
                 .translate(
                   clientWidth / 2,
-                  clientHeight / 2)
+                  clientHeight / 2))
 
-            case Some(nodeState) =>
-              import nodeState.{ x, y }
+        case Some(nodeState) =>
+          import nodeState.{ x, y }
+          gridZoomBehavior
+            .transform(
+              d3.select(thisNode.ref),
               d3.zoomIdentity
                 .translate(
                   clientWidth / 2,
                   clientHeight / 2)
                 .scale(5)
-                .translate(-x, -y)
+                .translate(-x, -y))
 
-          }
+      }
+    }
 
-      val zoomTransform: (Transition[EventTarget], Transform) => Unit =
-        gridZoomBehavior.transform(_, _)
+  val handleFocusedNode: Modifier[ReactiveSvgElement[SVG]] =
+    inContext { thisNode =>
+      import thisNode.ref.{ clientHeight, clientWidth }
 
-      ($transition, $transform).tupled --> zoomTransform.tupled
+      $focusedNode --> {
+
+        case None =>
+          gridZoomBehavior
+            .transform(
+              d3.select(thisNode.ref)
+                .transition()
+                .duration(1000d),
+              d3.zoomIdentity
+                .translate(
+                  clientWidth / 2,
+                  clientHeight / 2))
+
+        case Some(nodeState) =>
+          import nodeState.{ x, y }
+          gridZoomBehavior
+            .transform(
+              d3.select(thisNode.ref)
+                .transition()
+                .duration(3000d),
+              d3.zoomIdentity
+                .translate(
+                  clientWidth / 2,
+                  clientHeight / 2)
+                .scale(5)
+                .translate(-x, -y))
+
+      }
     }
 
   val nodeStatesVar = {
@@ -192,13 +210,27 @@ object ExperienceGridView {
         }
       })
   }
-
-  val $nodeStates: Signal[Seq[ExperienceNodeState]] = nodeStatesVar.signal
+  val $nodeStates: StrictSignal[Seq[ExperienceNodeState]] = nodeStatesVar.signal
 
   val $nodeRenders: Signal[Seq[ReactiveSvgElement[G]]] =
-    nodeStatesVar
-      .signal
+    $nodeStates
       .split(_.id)(ExperienceNodeView
-        .render(_, _, _, focusedNodeIdVar.writer))
+        .render(_, _, _, focusedIdVar))
+
+  val focusedIdVar: Var[Option[ExperienceId]] = Var(none)
+  val $focusedId: Signal[Option[ExperienceId]] = focusedIdVar.signal
+
+  val $focusedNode: Signal[Option[ExperienceNodeState]] =
+    ($focusedId, $nodeStates)
+      .mapN {
+        case (None, _) => None
+        case (Some(id), nodeStates) => nodeStates.find(_.id == id)
+      }
+
+  def focusedNodeNow(): Option[ExperienceNodeState] =
+    (focusedIdVar.now(), nodeStatesVar.now()) match {
+      case (None, _) => None
+      case (Some(id), nodeStates) => nodeStates.find(_.id == id)
+    }
 
 }
