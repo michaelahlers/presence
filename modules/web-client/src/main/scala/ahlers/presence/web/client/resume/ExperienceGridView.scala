@@ -25,24 +25,69 @@ import scala.scalajs.js.JSConverters.JSRichIterableOnce
  */
 object ExperienceGridView {
 
-  def render(): ReactiveSvgElement[SVG] = {
-    import svg._
-    svg(
-      className := "experience-grid-view",
-      className := "flex-fill bg-dark",
-      zoomBehavior --> zoomTransformBus.writer.contramap(_.transform),
-      handleWindowLoad,
-      handleWindowResize,
-      handleFocusedNode,
-      onClick.mapToValue(none) --> focusedIdVar.writer,
-      g(
-        transform <-- zoomTransformBus.events.map(_.toString()),
-        children <-- $nodeRenders)
-    )
-  }
-
   val zoomBehavior: ZoomBehavior[dom.EventTarget] = d3.zoom()
-  val zoomTransformBus: EventBus[Transform] = new EventBus()
+  val zoomTransform: EventBus[Transform] = new EventBus()
+
+  val nodeStatesVar = {
+    import ExperienceBrief.{ Blank, Employment, Skill }
+
+    val pack: Pack[ExperienceBrief] =
+      d3.pack()
+        .padding(10)
+        .radius(_ => 20) // + Random.nextInt(20))
+
+    val hierarchy: Hierarchy[ExperienceBrief] with Packed = {
+      val root = ExperienceBrief.Blank(ExperienceId("root"))
+      pack.apply(d3.hierarchy(
+        root,
+        {
+          case x if x.id == root.id => experiences.descriptions.toJSArray
+          case _ => js.Array()
+        }))
+    }
+
+    Var(hierarchy.children.orNull
+      .toSeq
+      .map { hierarchy =>
+        hierarchy.data match {
+          case _: Blank => ???
+          case employment: Employment =>
+            employment
+              .into[ExperienceNodeState]
+              .withFieldConst(_.x, hierarchy.x.getOrElse(???))
+              .withFieldConst(_.y, hierarchy.y.getOrElse(???))
+              .transform
+          case skill: Skill =>
+            skill
+              .into[ExperienceNodeState]
+              .withFieldConst(_.x, hierarchy.x.getOrElse(???))
+              .withFieldConst(_.y, hierarchy.y.getOrElse(???))
+              .transform
+        }
+      })
+  }
+  val $nodeStates: StrictSignal[Seq[ExperienceNodeState]] = nodeStatesVar.signal
+
+  val $nodeRenders: Signal[Seq[ReactiveSvgElement[G]]] =
+    $nodeStates
+      .split(_.id)(ExperienceNodeView
+        .render(_, _, _, focusedIdVar))
+
+  val focusedIdVar: Var[Option[ExperienceId]] = Var(none)
+  val $focusedId: Signal[Option[ExperienceId]] = focusedIdVar.signal
+
+  val $focusedNode: Signal[Option[ExperienceNodeState]] =
+    ($focusedId, $nodeStates)
+      .mapN {
+        case (None, _) => None
+        case (Some(id), nodeStates) => nodeStates.find(_.id == id)
+      }
+
+  def focusedNodeNow(): Option[ExperienceNodeState] =
+    (focusedIdVar.now(), nodeStatesVar.now()) match {
+      case (None, _) => None
+      case (Some(id), nodeStates) => nodeStates.find(_.id == id)
+    }
 
   val handleWindowLoad: Modifier[ReactiveSvgElement[SVG]] =
     inContext { thisNode =>
@@ -134,65 +179,20 @@ object ExperienceGridView {
       }
     }
 
-  val nodeStatesVar = {
-    import ExperienceBrief.{ Blank, Employment, Skill }
-
-    val pack: Pack[ExperienceBrief] =
-      d3.pack()
-        .padding(10)
-        .radius(_ => 20) // + Random.nextInt(20))
-
-    val hierarchy: Hierarchy[ExperienceBrief] with Packed = {
-      val root = ExperienceBrief.Blank(ExperienceId("root"))
-      pack.apply(d3.hierarchy(
-        root,
-        {
-          case x if x.id == root.id => experiences.descriptions.toJSArray
-          case _ => js.Array()
-        }))
-    }
-
-    Var(hierarchy.children.orNull
-      .toSeq
-      .map { hierarchy =>
-        hierarchy.data match {
-          case _: Blank => ???
-          case employment: Employment =>
-            employment
-              .into[ExperienceNodeState]
-              .withFieldConst(_.x, hierarchy.x.getOrElse(???))
-              .withFieldConst(_.y, hierarchy.y.getOrElse(???))
-              .transform
-          case skill: Skill =>
-            skill
-              .into[ExperienceNodeState]
-              .withFieldConst(_.x, hierarchy.x.getOrElse(???))
-              .withFieldConst(_.y, hierarchy.y.getOrElse(???))
-              .transform
-        }
-      })
+  def render(): ReactiveSvgElement[SVG] = {
+    import svg._
+    svg(
+      className := "experience-grid-view",
+      className := "flex-fill bg-dark",
+      zoomBehavior --> zoomTransform.writer.contramap(_.transform),
+      handleWindowLoad,
+      handleWindowResize,
+      handleFocusedNode,
+      onClick.mapToValue(none) --> focusedIdVar.writer,
+      g(
+        transform <-- zoomTransform.events.map(_.toString()),
+        children <-- $nodeRenders)
+    )
   }
-  val $nodeStates: StrictSignal[Seq[ExperienceNodeState]] = nodeStatesVar.signal
-
-  val $nodeRenders: Signal[Seq[ReactiveSvgElement[G]]] =
-    $nodeStates
-      .split(_.id)(ExperienceNodeView
-        .render(_, _, _, focusedIdVar))
-
-  val focusedIdVar: Var[Option[ExperienceId]] = Var(none)
-  val $focusedId: Signal[Option[ExperienceId]] = focusedIdVar.signal
-
-  val $focusedNode: Signal[Option[ExperienceNodeState]] =
-    ($focusedId, $nodeStates)
-      .mapN {
-        case (None, _) => None
-        case (Some(id), nodeStates) => nodeStates.find(_.id == id)
-      }
-
-  def focusedNodeNow(): Option[ExperienceNodeState] =
-    (focusedIdVar.now(), nodeStatesVar.now()) match {
-      case (None, _) => None
-      case (Some(id), nodeStates) => nodeStates.find(_.id == id)
-    }
 
 }
