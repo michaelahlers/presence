@@ -6,7 +6,6 @@ import com.raquo.laminar.api.L._
 import com.raquo.laminar.nodes.ReactiveElement
 import d3v4.d3
 import d3v4.d3.ZoomBehavior
-import d3v4.d3selection.Selection
 import d3v4.d3zoom.ZoomEvent
 import org.scalajs.dom
 
@@ -29,19 +28,19 @@ object ZoomSyntax {
 
     @inline def -->(observer: Observer[ZoomEvent]): Binder[Element] =
       ReactiveElement.bindSubscription(_) { context =>
-        val selection: Selection[dom.EventTarget] = d3.select(context.thisNode.ref)
+        import context.thisNode
 
         /** @todo Overload [[d3v4.d3zoom.ZoomBehavior.on]] with [[https://github.com/d3/d3-selection#selection_on listener function type taking documented event, datum, and target]]. */
         behavior
           .on("zoom", () => observer.onNext(d3.event))
-          .apply(selection)
+          .apply(d3.select(thisNode.ref))
 
         new Subscription(
           context.owner,
           cleanup = () =>
             behavior
               .on("zoom", null)
-              .apply(selection))
+              .apply(d3.select(thisNode.ref)))
       }
 
     // And so on…

@@ -8,13 +8,13 @@ import com.raquo.airstream.signal.{ Signal, Var }
 import com.raquo.domtypes.generic.Modifier
 import com.raquo.laminar.api.L._
 import com.raquo.laminar.nodes.ReactiveSvgElement
+import d3.laminar.syntax.zoom._
 import d3v4.d3
 import d3v4.d3.{ ZoomBehavior, ZoomEvent }
 import d3v4.d3hierarchy.{ Hierarchy, Pack, Packed }
 import io.scalaland.chimney.dsl.TransformerOps
 import org.scalajs.dom
 import org.scalajs.dom.svg.{ G, SVG }
-
 import scala.scalajs.js
 import scala.scalajs.js.JSConverters.JSRichIterableOnce
 
@@ -29,7 +29,7 @@ object ExperienceGridView {
     svg(
       className := "experience-grid-view",
       className := "flex-fill bg-dark",
-      gridZoomEventBinder,
+      gridZoomBehavior --> gridZoomEventBus.writer,
       handleWindowLoad,
       handleWindowResize,
       handleFocusedNode,
@@ -42,36 +42,6 @@ object ExperienceGridView {
 
   val gridZoomBehavior: ZoomBehavior[dom.EventTarget] = d3.zoom()
   val gridZoomEventBus: EventBus[ZoomEvent] = new EventBus()
-
-  /**
-   * When mounted, monitors window resize events to keep [[gridZoomBehavior]] centered, and also send applicable [[ZoomEvent]] values to [[gridZoomEventBus]].
-   *
-   * @todo Learn if there's a more elegant, idiomatic technique to this.
-   */
-  val gridZoomEventBinder: Modifier[ReactiveSvgElement[SVG]] = {
-    val mount: MountContext[ReactiveSvgElement[SVG]] => Unit = { context =>
-      import context.thisNode
-
-      /** @todo Overload [[d3v4.d3zoom.ZoomBehavior.on]] with [[https://github.com/d3/d3-selection#selection_on listener function type taking documented event, datum, and target]]. */
-      val onZoomEvent = () =>
-        gridZoomEventBus
-          .writer
-          .onNext(d3.event)
-
-      gridZoomBehavior
-        .on("zoom", onZoomEvent)
-        .apply(d3.select(thisNode.ref))
-
-    }
-
-    val unmount: ReactiveSvgElement[SVG] => Unit = { thisNode =>
-      gridZoomBehavior
-        .on("zoom", null)
-        .apply(d3.select(thisNode.ref))
-    }
-
-    onMountUnmountCallback(mount, unmount)
-  }
 
   val handleWindowLoad: Modifier[ReactiveSvgElement[SVG]] =
     inContext { thisNode =>
