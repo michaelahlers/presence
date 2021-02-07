@@ -2,7 +2,7 @@ package ahlers.presence.web.client.resume
 
 import ahlers.presence.web.client.UiState
 import ahlers.presence.web.client.UiState.{ FocusedResumePage, UnfocusedResumePage }
-import cats.laminar.instances.signal._
+import cats.laminar.instances.all._
 import cats.syntax.apply._
 import cats.syntax.option._
 import com.raquo.airstream.eventbus.EventBus
@@ -10,6 +10,7 @@ import com.raquo.airstream.signal.{ Signal, Var }
 import com.raquo.domtypes.generic.Modifier
 import com.raquo.laminar.api.L._
 import com.raquo.laminar.nodes.ReactiveSvgElement
+import cats.laminar.instances.all._
 import d3.laminar.syntax.zoom._
 import d3v4.d3
 import d3v4.d3.{ Transform, ZoomBehavior }
@@ -28,7 +29,7 @@ import scala.scalajs.js.JSConverters.JSRichIterableOnce
 object ExperienceGridView {
 
   val zoomBehavior: ZoomBehavior[dom.EventTarget] = d3.zoom()
-  val zoomTransform: EventBus[Transform] = new EventBus()
+  val zoomTransformBus: EventBus[Transform] = new EventBus()
 
   val nodeStatesVar = {
     import ExperienceBrief.{ Blank, Employment, Skill }
@@ -68,57 +69,86 @@ object ExperienceGridView {
         }
       })
   }
-  val $nodeStates: StrictSignal[Seq[ExperienceNodeState]] = nodeStatesVar.signal
 
-  val focusedIdVar: Var[Option[ExperienceId]] = Var(none)
-  val $focusedId: Signal[Option[ExperienceId]] = focusedIdVar.signal
+  val $nodeStates: Signal[Seq[ExperienceNodeState]] = nodeStatesVar.signal
 
-  val $focusedNode: Signal[Option[ExperienceNodeState]] =
-    ($focusedId, $nodeStates)
-      .mapN {
-        case (None, _) => None
-        case (Some(id), nodeStates) => nodeStates.find(_.id == id)
-      }
-
-  def focusedNodeNow(): Option[ExperienceNodeState] =
-    (focusedIdVar.now(), nodeStatesVar.now()) match {
-      case (None, _) => None
-      case (Some(id), nodeStates) => nodeStates.find(_.id == id)
-    }
-
-  val handleWindowLoad: Modifier[ReactiveSvgElement[SVG]] =
+  def handleWindowLoad($focusedExperienceId: Signal[Option[ExperienceId]]): Modifier[ReactiveSvgElement[SVG]] =
     inContext { thisNode =>
       import thisNode.ref.{ clientHeight, clientWidth }
 
-      windowEvents.onLoad --> { _ =>
-        zoomBehavior
-          .transform(
-            d3.select(thisNode.ref),
-            d3.zoomIdentity
-              .translate(
-                clientWidth / 2,
-                clientHeight / 2)
-              .scale(0.5d))
+      val $focusedNodeState: Signal[Option[ExperienceNodeState]] =
+        ($focusedExperienceId, $nodeStates)
+          .mapN {
+            case (None, _) => none
+            case (Some(id), nodeStates) => nodeStates.find(_.id == id)
+          }
 
-        zoomBehavior
-          .transform(
-            d3.select(thisNode.ref)
-              .transition()
-              .duration(3000d),
-            d3.zoomIdentity
-              .translate(
-                clientWidth / 2,
-                clientHeight / 2))
+      windowEvents
+        .onLoad
+        .withCurrentValueOf($focusedNodeState) --> {
+
+        case (_, None) =>
+          zoomBehavior
+            .transform(
+              d3.select(thisNode.ref),
+              d3.zoomIdentity
+                .translate(
+                  clientWidth / 2,
+                  clientHeight / 2)
+                .scale(0.5d))
+
+          zoomBehavior
+            .transform(
+              d3.select(thisNode.ref)
+                .transition()
+                .duration(3000d),
+              d3.zoomIdentity
+                .translate(
+                  clientWidth / 2,
+                  clientHeight / 2))
+
+        case (_, Some(nodeState)) =>
+          import nodeState.{ x, y }
+          zoomBehavior
+            .transform(
+              d3.select(thisNode.ref),
+              d3.zoomIdentity
+                .translate(
+                  clientWidth / 2,
+                  clientHeight / 2)
+                .scale(0.5d))
+
+          zoomBehavior
+            .transform(
+              d3.select(thisNode.ref)
+                .transition()
+                .duration(3000d),
+              d3.zoomIdentity
+                .translate(
+                  clientWidth / 2,
+                  clientHeight / 2)
+                .scale(5d)
+                .translate(-x, -y))
+
       }
     }
 
-  val handleWindowResize: Modifier[ReactiveSvgElement[SVG]] =
+  def handleWindowResize($focusedExperienceId: Signal[Option[ExperienceId]]): Modifier[ReactiveSvgElement[SVG]] =
     inContext { thisNode =>
       import thisNode.ref.{ clientHeight, clientWidth }
 
-      windowEvents.onResize.mapTo(focusedNodeNow()) --> {
+      val $focusedNodeState: Signal[Option[ExperienceNodeState]] =
+        ($focusedExperienceId, $nodeStates)
+          .mapN {
+            case (None, _) => none
+            case (Some(id), nodeStates) => nodeStates.find(_.id == id)
+          }
 
-        case None =>
+      windowEvents
+        .onResize
+        .withCurrentValueOf($focusedNodeState) --> {
+
+        case (_, None) =>
           zoomBehavior
             .transform(
               d3.select(thisNode.ref),
@@ -127,7 +157,7 @@ object ExperienceGridView {
                   clientWidth / 2,
                   clientHeight / 2))
 
-        case Some(nodeState) =>
+        case (_, Some(nodeState)) =>
           import nodeState.{ x, y }
           zoomBehavior
             .transform(
@@ -142,11 +172,18 @@ object ExperienceGridView {
       }
     }
 
-  val handleFocusedNode: Modifier[ReactiveSvgElement[SVG]] =
+  def handleFocusedNode($focusedExperienceId: Signal[Option[ExperienceId]]): Modifier[ReactiveSvgElement[SVG]] =
     inContext { thisNode =>
       import thisNode.ref.{ clientHeight, clientWidth }
 
-      $focusedNode --> {
+      val $focusedNodeState: Signal[Option[ExperienceNodeState]] =
+        ($focusedExperienceId, $nodeStates)
+          .mapN {
+            case (None, _) => none
+            case (Some(id), nodeStates) => nodeStates.find(_.id == id)
+          }
+
+      $focusedNodeState --> {
 
         case None =>
           zoomBehavior
@@ -192,15 +229,14 @@ object ExperienceGridView {
     svg(
       className := "experience-grid-view",
       className := "flex-fill bg-dark",
-      zoomBehavior --> zoomTransform.writer.contramap(_.transform),
-      handleWindowLoad,
-      handleWindowResize,
-      handleFocusedNode,
-      $focusedExperienceId --> focusedIdVar.writer,
+      zoomBehavior --> zoomTransformBus.writer.contramap(_.transform),
+      handleWindowLoad($focusedExperienceId),
+      handleWindowResize($focusedExperienceId),
+      handleFocusedNode($focusedExperienceId),
       $focusedExperienceId --> (dom.console.debug("Focused experience id.", _)),
       handleClick,
       g(
-        transform <-- zoomTransform.events.map(_.toString()),
+        transform <-- zoomTransformBus.events.map(_.toString()),
         children <-- $nodeRenders)
     )
   }
