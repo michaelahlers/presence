@@ -34,7 +34,7 @@ object ExperienceGridView {
 
     val packed: Pack[ExperienceBrief] =
       d3.pack()
-        .padding(10)
+        .padding(15)
         .radius(_ => 20) // + Random.nextInt(20))
 
     val hierarchy: Hierarchy[ExperienceBrief] with Packed =
@@ -107,7 +107,8 @@ object ExperienceGridView {
             .transform(
               d3.select(thisNode.ref)
                 .transition()
-                .duration(3000d),
+                .duration(3000d)
+                .delay(2000d),
               d3.zoomIdentity
                 .translate(
                   clientWidth / 2,

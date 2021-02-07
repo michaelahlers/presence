@@ -7,6 +7,7 @@ import com.raquo.laminar.api.L._
 import com.raquo.laminar.nodes.ReactiveSvgElement
 import org.scalajs.dom.raw.MouseEvent
 import org.scalajs.dom.svg.G
+import scala.util.Random
 
 /**
  * @since January 31, 2021
@@ -47,7 +48,7 @@ object ExperienceNodeView {
     val $revealed =
       EventStream
         .fromValue(true, emitOnce = true)
-        .delay((index.toInt + 1) * 50)
+        .delay((index.toInt + 1) * (50 + Random.nextInt(50)))
         .toSignal(false)
 
     g(
@@ -60,7 +61,7 @@ object ExperienceNodeView {
             cx <-- $cx.map(_.toString),
             cy <-- $cy.map(_.toString),
             r <-- $radius.map(_.toString),
-            fill := "#333"
+            fill := "#292929"
           )
         case Some(logo) =>
           image(
