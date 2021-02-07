@@ -1,5 +1,6 @@
 package ahlers.presence.web.client
 
+import ahlers.presence.web.client.UiState.ResumePage
 import com.raquo.laminar.api.L._
 import com.raquo.waypoint.SplitRender
 
@@ -12,14 +13,14 @@ object MainView {
   val pageSplitter =
     SplitRender[UiState, HtmlElement](UiState.router.$currentPage)
       .collectStatic(UiState.Landing)(LandingPageView())
-      .collectStatic(UiState.Resume)(ResumePage.render())
+      .collectSignal[ResumePage](ResumePage.render(_))
       .collectStatic(UiState.Contact)(ContactPage())
 
   val pageClassName =
     UiState.router.$currentPage
       .map {
         case UiState.Landing => "landing"
-        case UiState.Resume => "resume"
+        case _: UiState.ResumePage => "resume"
         case UiState.Contact => "contact"
       }
 

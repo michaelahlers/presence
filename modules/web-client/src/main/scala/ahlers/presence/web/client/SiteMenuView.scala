@@ -27,7 +27,7 @@ object SiteMenuView {
               UiState.Landing,
               i(className := "fas fa-home")),
             SiteAnchorView(
-              UiState.Resume,
+              UiState.UnfocusedResumePage,
               span("Resume"))
             //SiteAnchorView(
             //  UiState.Contact,
