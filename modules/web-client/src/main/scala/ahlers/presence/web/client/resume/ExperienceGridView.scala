@@ -2,7 +2,6 @@ package ahlers.presence.web.client.resume
 
 import ahlers.presence.web.client.UiState
 import ahlers.presence.web.client.UiState.{ FocusedResumePage, UnfocusedResumePage }
-import cats.laminar.instances.all._
 import cats.syntax.apply._
 import cats.syntax.option._
 import com.raquo.airstream.eventbus.EventBus
@@ -10,7 +9,6 @@ import com.raquo.airstream.signal.{ Signal, Var }
 import com.raquo.domtypes.generic.Modifier
 import com.raquo.laminar.api.L._
 import com.raquo.laminar.nodes.ReactiveSvgElement
-import cats.laminar.instances.all._
 import d3.laminar.syntax.zoom._
 import d3v4.d3
 import d3v4.d3.{ Transform, ZoomBehavior }
@@ -72,16 +70,9 @@ object ExperienceGridView {
 
   val $nodeStates: Signal[Seq[ExperienceNodeState]] = nodeStatesVar.signal
 
-  def handleWindowLoad($focusedExperienceId: Signal[Option[ExperienceId]]): Modifier[ReactiveSvgElement[SVG]] =
+  def handleWindowLoad($focusedNodeState: Signal[Option[ExperienceNodeState]]): Modifier[ReactiveSvgElement[SVG]] =
     inContext { thisNode =>
       import thisNode.ref.{ clientHeight, clientWidth }
-
-      val $focusedNodeState: Signal[Option[ExperienceNodeState]] =
-        ($focusedExperienceId, $nodeStates)
-          .mapN {
-            case (None, _) => none
-            case (Some(id), nodeStates) => nodeStates.find(_.id == id)
-          }
 
       windowEvents
         .onLoad
@@ -133,16 +124,9 @@ object ExperienceGridView {
       }
     }
 
-  def handleWindowResize($focusedExperienceId: Signal[Option[ExperienceId]]): Modifier[ReactiveSvgElement[SVG]] =
+  def handleWindowResize($focusedNodeState: Signal[Option[ExperienceNodeState]]): Modifier[ReactiveSvgElement[SVG]] =
     inContext { thisNode =>
       import thisNode.ref.{ clientHeight, clientWidth }
-
-      val $focusedNodeState: Signal[Option[ExperienceNodeState]] =
-        ($focusedExperienceId, $nodeStates)
-          .mapN {
-            case (None, _) => none
-            case (Some(id), nodeStates) => nodeStates.find(_.id == id)
-          }
 
       windowEvents
         .onResize
@@ -172,16 +156,9 @@ object ExperienceGridView {
       }
     }
 
-  def handleFocusedNode($focusedExperienceId: Signal[Option[ExperienceId]]): Modifier[ReactiveSvgElement[SVG]] =
+  def handleFocusedNode($focusedNodeState: Signal[Option[ExperienceNodeState]]): Modifier[ReactiveSvgElement[SVG]] =
     inContext { thisNode =>
       import thisNode.ref.{ clientHeight, clientWidth }
-
-      val $focusedNodeState: Signal[Option[ExperienceNodeState]] =
-        ($focusedExperienceId, $nodeStates)
-          .mapN {
-            case (None, _) => none
-            case (Some(id), nodeStates) => nodeStates.find(_.id == id)
-          }
 
       $focusedNodeState --> {
 
@@ -226,13 +203,21 @@ object ExperienceGridView {
         .split(_.id)(ExperienceNodeView
           .render(_, _, _, $focusedExperienceId))
 
+    val $focusedNodeState: Signal[Option[ExperienceNodeState]] =
+      $focusedExperienceId
+        .combineWith($nodeStates)
+        .map {
+          case (None, _) => none
+          case (Some(id), nodeStates) => nodeStates.find(_.id == id)
+        }
+
     svg(
       className := "experience-grid-view",
       className := "flex-fill bg-dark",
       zoomBehavior --> zoomTransformBus.writer.contramap(_.transform),
-      handleWindowLoad($focusedExperienceId),
-      handleWindowResize($focusedExperienceId),
-      handleFocusedNode($focusedExperienceId),
+      handleWindowLoad($focusedNodeState),
+      handleWindowResize($focusedNodeState),
+      handleFocusedNode($focusedNodeState),
       $focusedExperienceId --> (dom.console.debug("Focused experience id.", _)),
       handleClick,
       g(
