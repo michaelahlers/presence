@@ -5,8 +5,10 @@ import ahlers.presence.web.client.UiState.{ FocusedResumePage, UnfocusedResumePa
 import cats.syntax.apply._
 import cats.syntax.option._
 import com.raquo.airstream.eventbus.EventBus
+import com.raquo.airstream.eventstream.PeriodicEventStream
 import com.raquo.airstream.signal.{ Signal, Var }
 import com.raquo.domtypes.generic.Modifier
+import com.raquo.laminar.CollectionCommand
 import com.raquo.laminar.api.L._
 import com.raquo.laminar.nodes.ReactiveSvgElement
 import d3.laminar.syntax.zoom._
@@ -30,7 +32,7 @@ object ExperienceGridView {
   val zoomTransformBus: EventBus[Transform] = new EventBus()
 
   //val nodeStatesVar = {
-  val nodeStates = {
+  val nodeStates: Seq[ExperienceNodeState] = {
     import ExperienceBrief.{ Blank, Employment, Root, Skill }
 
     val packed: Pack[ExperienceBrief] =
@@ -89,6 +91,15 @@ object ExperienceGridView {
   }
 
   //val $nodeStates: Signal[Seq[ExperienceNodeState]] = nodeStatesVar.signal
+
+  val nodeStateStream: EventStream[ExperienceNodeState] = {
+    val x = nodeStates.iterator
+    new PeriodicEventStream[ExperienceNodeState](
+      initial = x.next(),
+      next = last => if (x.hasNext) Some((x.next(), 100)) else None,
+      emitInitial = true,
+      resetOnStop = false)
+  }
 
   def handleWindowLoad($focusedNodeState: Signal[Option[ExperienceNodeState]]): Modifier[ReactiveSvgElement[SVG]] =
     inContext { thisNode =>
@@ -219,13 +230,13 @@ object ExperienceGridView {
   def render($focusedExperienceId: Signal[Option[ExperienceId]]): ReactiveSvgElement[SVG] = {
     import svg._
 
-    //val $nodeRenders: Signal[Seq[ReactiveSvgElement[G]]] =
-    //  $nodeStates
-    //    .split(_.index)(ExperienceNodeView
-    //      .render(_, _, _, $focusedExperienceId))
-    val nodeRenders: Seq[ReactiveSvgElement[G]] =
-      nodeStates
-        .map(ExperienceNodeView.render(_, $focusedExperienceId))
+    val commandBus = new EventBus[ChildrenCommand]
+    val commandStream = commandBus.events
+
+//val $nodeRenders: Signal[Seq[ReactiveSvgElement[G]]] =
+//  $nodeStates
+//    .split(_.index)(ExperienceNodeView
+//      .render(_, _, _, $focusedExperienceId))
 
     val $focusedNodeState: Signal[Option[ExperienceNodeState]] =
       $focusedExperienceId
@@ -249,7 +260,9 @@ object ExperienceGridView {
       g(
         transform <-- zoomTransformBus.events.map(_.toString()),
         //children <-- $nodeRenders)
-        nodeRenders)
+        nodeStateStream.map(ExperienceNodeView.render(_)).map(CollectionCommand.Append(_)) --> commandBus.writer,
+        children.command <-- commandStream
+      )
     )
   }
 

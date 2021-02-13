@@ -17,9 +17,9 @@ object ExperienceNodeView {
 
   def render(
     //index: ExperienceNodeIndex,
-    state: ExperienceNodeState,
-    //$state: Signal[ExperienceNodeState],
-    $focusedExperienceId: Signal[Option[ExperienceId]]
+    state: ExperienceNodeState
+    //$state: EventStream[ExperienceNodeState],
+    //$focusedExperienceId: Signal[Option[ExperienceId]]
   ): ReactiveSvgElement[G] = {
     import svg._
 
