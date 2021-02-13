@@ -114,6 +114,9 @@ object ExperienceGridView {
         .withCurrentValueOf($focusedNodeState) --> {
 
         case (_, None) =>
+          val nodeState = nodeStates.head
+          import nodeState.{ cx, cy }
+
           zoomBehavior
             .transform(
               d3.select(thisNode.ref),
@@ -121,7 +124,8 @@ object ExperienceGridView {
                 .translate(
                   clientWidth / 2,
                   clientHeight / 2)
-                .scale(0.5d))
+                .scale(0.5d)
+                .translate(-cx, -cy))
 
           zoomBehavior
             .transform(
@@ -132,7 +136,8 @@ object ExperienceGridView {
               d3.zoomIdentity
                 .translate(
                   clientWidth / 2,
-                  clientHeight / 2))
+                  clientHeight / 2)
+                .translate(-cx, -cy))
 
         case (_, Some(nodeState)) =>
           import nodeState.{ cx, cy }
@@ -143,7 +148,8 @@ object ExperienceGridView {
                 .translate(
                   clientWidth / 2,
                   clientHeight / 2)
-                .scale(0.5d))
+                .scale(0.5d)
+                .translate(-cx, -cy))
 
           zoomBehavior
             .transform(
@@ -169,13 +175,17 @@ object ExperienceGridView {
         .withCurrentValueOf($focusedNodeState) --> {
 
         case (_, None) =>
+          val nodeState = nodeStates.head
+          import nodeState.{ cx, cy }
+
           zoomBehavior
             .transform(
               d3.select(thisNode.ref),
               d3.zoomIdentity
                 .translate(
                   clientWidth / 2,
-                  clientHeight / 2))
+                  clientHeight / 2)
+                .translate(-cx, -cy))
 
         case (_, Some(nodeState)) =>
           import nodeState.{ cx, cy }
@@ -199,6 +209,9 @@ object ExperienceGridView {
       $focusedNodeState --> {
 
         case None =>
+          val nodeState = nodeStates.head
+          import nodeState.{ cx, cy }
+
           zoomBehavior
             .transform(
               d3.select(thisNode.ref)
@@ -207,7 +220,8 @@ object ExperienceGridView {
               d3.zoomIdentity
                 .translate(
                   clientWidth / 2,
-                  clientHeight / 2))
+                  clientHeight / 2)
+                .translate(-cx, -cy))
 
         case Some(nodeState) =>
           import nodeState.{ cx, cy }
