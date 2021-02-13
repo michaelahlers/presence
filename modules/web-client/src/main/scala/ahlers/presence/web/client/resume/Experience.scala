@@ -24,14 +24,15 @@ sealed trait ExperienceBrief
 
 object ExperienceBrief {
 
-  case object Root extends ExperienceBrief
-
-  case object Blank extends ExperienceBrief
+  case class Blank(
+    radius: Double)
+    extends ExperienceBrief
 
   case class Skill(
     id: ExperienceId,
     name: ExperienceName,
-    logo: String)
+    logo: String,
+    radius: Double)
     extends ExperienceBrief
 
   object Skill {}
@@ -44,12 +45,14 @@ object ExperienceBrief {
     Skill(
       id,
       name,
-      logo)
+      logo,
+      20d)
 
   case class Employment(
     id: ExperienceId,
     company: Employment.Company,
-    logo: String)
+    logo: String,
+    radius: Double)
     extends ExperienceBrief
 
   object Employment {
@@ -67,7 +70,8 @@ object ExperienceBrief {
     Employment(
       id,
       company,
-      logo)
+      logo,
+      20d)
 
 }
 

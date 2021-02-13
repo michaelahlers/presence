@@ -33,60 +33,64 @@ object ExperienceGridView {
 
   //val nodeStatesVar = {
   val nodeStates: Seq[ExperienceNodeState] = {
-    import ExperienceBrief.{ Blank, Employment, Root, Skill }
+    import ExperienceBrief.{ Blank, Employment, Skill }
 
     val packed: Pack[ExperienceBrief] =
       d3.pack()
         .padding(15)
-        .radius(_ => 20) // + Random.nextInt(20))
+        .radius(_.data match {
+          case blank: Blank => blank.radius
+          case employment: Employment => employment.radius
+          case skill: Skill => skill.radius
+        })
 
-    val hierarchy: Hierarchy[ExperienceBrief] with Packed =
+    val hierarchy: Hierarchy[ExperienceBrief] with Packed = {
+      val root = Blank(0)
+      val children = experiences.descriptions ++ Seq.tabulate(1000)(index => Blank(20d + Math.pow(index, 2) / 2000d))
       packed(d3.hierarchy(
-        Root,
+        root,
         {
-          case Root => (experiences.descriptions ++ Seq.fill(2000)(Blank)).toJSArray
+          case x if root == x => children.toJSArray
           case _ => js.Array()
         }))
+    }
 
     //Val(hierarchy.children.orNull
     hierarchy.children.orNull
       .toSeq
       .zipWithIndex
-      .map {
-        case (hierarchy, index) =>
-          hierarchy.data match {
+      .map { case (hierarchy, index) =>
+        hierarchy.data match {
 
-            case Root => ???
+          case Blank(radius) =>
+            ExperienceNodeState(
+              ExperienceNodeIndex(index),
+              none,
+              none,
+              hierarchy.x.getOrElse(???),
+              hierarchy.y.getOrElse(???),
+              radius)
 
-            case Blank =>
-              ExperienceNodeState(
-                ExperienceNodeIndex(index),
-                none,
-                none,
-                hierarchy.x.getOrElse(???),
-                hierarchy.y.getOrElse(???),
-                20d)
+          case employment: Employment =>
+            employment
+              .into[ExperienceNodeState]
+              .withFieldConst(_.index, ExperienceNodeIndex(index))
+              .withFieldConst(_.cx, hierarchy.x.getOrElse(???))
+              .withFieldConst(_.cy, hierarchy.y.getOrElse(???))
+              .withFieldConst(_.radius, employment.radius)
+              .transform
 
-            case employment: Employment =>
-              employment
-                .into[ExperienceNodeState]
-                .withFieldConst(_.index, ExperienceNodeIndex(index))
-                .withFieldConst(_.cx, hierarchy.x.getOrElse(???))
-                .withFieldConst(_.cy, hierarchy.y.getOrElse(???))
-                .withFieldConst(_.radius, 20d)
-                .transform
+          case skill: Skill =>
+            skill
+              .into[ExperienceNodeState]
+              .withFieldConst(_.index, ExperienceNodeIndex(index))
+              .withFieldConst(_.cx, hierarchy.x.getOrElse(???))
+              .withFieldConst(_.cy, hierarchy.y.getOrElse(???))
+              .withFieldConst(_.radius, skill.radius)
+              .transform
 
-            case skill: Skill =>
-              skill
-                .into[ExperienceNodeState]
-                .withFieldConst(_.index, ExperienceNodeIndex(index))
-                .withFieldConst(_.cx, hierarchy.x.getOrElse(???))
-                .withFieldConst(_.cy, hierarchy.y.getOrElse(???))
-                .withFieldConst(_.radius, 20d)
-                .transform
-
-          }
-        //})
+        }
+      //})
       }
   }
 
@@ -96,7 +100,7 @@ object ExperienceGridView {
     val x = nodeStates.iterator
     new PeriodicEventStream[ExperienceNodeState](
       initial = x.next(),
-      next = last => if (x.hasNext) Some((x.next(), 100)) else None,
+      next = last => if (x.hasNext) Some((x.next(), 1)) else None,
       emitInitial = true,
       resetOnStop = false)
   }
