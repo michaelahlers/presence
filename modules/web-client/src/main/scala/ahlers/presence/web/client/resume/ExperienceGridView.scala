@@ -29,7 +29,10 @@ import scala.util.Random
  */
 object ExperienceGridView {
 
-  val zoomBehavior: ZoomBehavior[dom.EventTarget] = d3.zoom()
+  val zoomBehavior: ZoomBehavior[dom.EventTarget] =
+    d3.zoom()
+      .scaleExtent(js.Array(0.5d, 5d))
+
   val zoomTransformBus: EventBus[Transform] = new EventBus()
 
   val nodeStates: Seq[ExperienceNodeState] = {
@@ -45,7 +48,7 @@ object ExperienceGridView {
 
     val hierarchy: Hierarchy[ExperienceBrief] with Packed = {
       val root = Blank(0)
-      val children = experiences.descriptions ++ Seq.tabulate(500)(index => Blank(15d + Math.pow(index - 65, 2) / 1000d))
+      val children = experiences.descriptions ++ Seq.tabulate(500)(index => Blank(18d + Math.pow(index, 2) / 750))
       packed(d3.hierarchy(
         root,
         {
