@@ -74,7 +74,7 @@ svg g.experience-node-view.hidden {
   opacity: 0;
 }
 
-svg g.experience-node-view.revealed {
+svg g.experience-node-view {
   animation: ahlers-consulting-experience-node-view-fade-in 2000ms ease;
   animation-fill-mode: forwards;
 }
