@@ -21,7 +21,6 @@ import org.scalajs.dom.svg.SVG
 
 import scala.scalajs.js
 import scala.scalajs.js.JSConverters.JSRichIterableOnce
-import scala.util.Random
 
 /**
  * @since January 31, 2021
@@ -97,8 +96,7 @@ object ExperienceGridView {
 
   def onMountZoom($focusedNodeState: Signal[Option[ExperienceNodeState]]): Modifier[ReactiveSvgElement[SVG]] =
     onMountCallback { context =>
-      import context.thisNode
-      import context.owner
+      import context.{ owner, thisNode }
       import thisNode.ref.{ clientHeight, clientWidth }
 
       zoomBehavior
