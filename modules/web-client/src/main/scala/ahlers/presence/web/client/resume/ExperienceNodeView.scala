@@ -16,63 +16,77 @@ import scala.util.Random
 object ExperienceNodeView {
 
   def render(
-    index: ExperienceNodeIndex,
+    //index: ExperienceNodeIndex,
     state: ExperienceNodeState,
-    $state: Signal[ExperienceNodeState],
+    //$state: Signal[ExperienceNodeState],
     $focusedExperienceId: Signal[Option[ExperienceId]]
   ): ReactiveSvgElement[G] = {
     import svg._
 
     /** @todo Will be parameterized, set by significance of an experience. */
-    val $radius: Val[Int] = Val(20)
+    //val $radius: Val[Int] = Val(20)
 
-    val $uiState: Signal[ResumePage] =
-      $state
-        .toSignal(state)
-        .map(_.id
-          .map(FocusedResumePage(_))
-          .getOrElse(UnfocusedResumePage))
+    //val $uiState: Signal[ResumePage] =
+    //  $state
+    //    .toSignal(state)
+    //    .map(_.id
+    //      .map(FocusedResumePage(_))
+    //      .getOrElse(UnfocusedResumePage))
+    val uiState =
+      state.id
+        .map(FocusedResumePage(_))
+        .getOrElse(UnfocusedResumePage)
 
-    val $logo = $state.toSignal(state).map(_.logo)
+    //val $logo = $state.toSignal(state).map(_.logo)
 
-    val $cx = $state.toSignal(state).map(_.cx)
-    val $cy = $state.toSignal(state).map(_.cy)
-    val $x = $cx.combineWith($radius).map { case (x, radius) => x - radius }
-    val $y = $cy.combineWith($radius).map { case (y, radius) => y - radius }
+    //val $cx = $state.toSignal(state).map(_.cx)
+    //val $cy = $state.toSignal(state).map(_.cy)
+    //val $x = $cx.combineWith($radius).map { case (x, radius) => x - radius }
+    //val $y = $cy.combineWith($radius).map { case (y, radius) => y - radius }
 
-    val $width = $radius.map(_ * 2)
-    val $height = $radius.map(_ * 2)
+    //val $width = $radius.map(_ * 2)
+    //val $height = $radius.map(_ * 2)
 
     val clickBus: EventBus[MouseEvent] = new EventBus()
 
-    val $revealed =
-      EventStream
-        .fromValue(true, emitOnce = true)
-        .delay((index.toInt + 1) * (50 + Random.nextInt(50)))
-        .toSignal(false)
+    //val $revealed =
+    //  EventStream
+    //    .fromValue(true, emitOnce = true)
+    //    .delay((state.index.toInt + 1) * (50 + Random.nextInt(50)))
+    //    .toSignal(false)
 
     g(
       className := "experience-node-view",
-      className.toggle("hidden") <-- $revealed.map(!_),
-      className.toggle("revealed") <-- $revealed,
-      child <-- $logo.map {
+      //className.toggle("hidden") <-- $revealed.map(!_),
+      //className.toggle("revealed") <-- $revealed,
+      //child <-- $logo.map {
+      state.logo match {
         case None =>
           circle(
-            cx <-- $cx.map(_.toString),
-            cy <-- $cy.map(_.toString),
-            r <-- $radius.map(_.toString),
+            //cx <-- $cx.map(_.toString),
+            //cy <-- $cy.map(_.toString),
+            //r <-- $radius.map(_.toString),
+            cx := state.cx.toString,
+            cy := state.cy.toString,
+            r := state.radius.toString,
             fill := "#292929"
           )
-        case Some(logo) =>
+        case Some(logo: String) =>
           image(
             xlinkHref := logo,
-            x <-- $x.map(_.toString),
-            y <-- $y.map(_.toString),
-            width <-- $width.map(_.toString),
-            height <-- $height.map(_.toString))
+            //x <-- $x.map(_.toString),
+            //y <-- $y.map(_.toString),
+            //width <-- $width.map(_.toString),
+            //height <-- $height.map(_.toString))
+            x := state.x.toString,
+            y := state.y.toString,
+            width := state.width.toString,
+            height := state.height.toString
+          )
       },
       onClick.stopPropagation --> clickBus.writer,
-      clickBus.events.withCurrentValueOf($uiState).map { case (_, x) => x } --> (UiState.router.pushState(_))
+      //clickBus.events.withCurrentValueOf($uiState).map { case (_, x) => x } --> (UiState.router.pushState(_))
+      clickBus.events.mapToValue(uiState) --> (UiState.router.pushState(_))
     )
   }
 

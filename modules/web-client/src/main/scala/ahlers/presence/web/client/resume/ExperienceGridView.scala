@@ -29,7 +29,8 @@ object ExperienceGridView {
   val zoomBehavior: ZoomBehavior[dom.EventTarget] = d3.zoom()
   val zoomTransformBus: EventBus[Transform] = new EventBus()
 
-  val nodeStatesVar = {
+  //val nodeStatesVar = {
+  val nodeStates = {
     import ExperienceBrief.{ Blank, Employment, Root, Skill }
 
     val packed: Pack[ExperienceBrief] =
@@ -45,7 +46,8 @@ object ExperienceGridView {
           case _ => js.Array()
         }))
 
-    Val(hierarchy.children.orNull
+    //Val(hierarchy.children.orNull
+    hierarchy.children.orNull
       .toSeq
       .zipWithIndex
       .map {
@@ -60,8 +62,8 @@ object ExperienceGridView {
                 none,
                 none,
                 hierarchy.x.getOrElse(???),
-                hierarchy.y.getOrElse(???)
-              )
+                hierarchy.y.getOrElse(???),
+                20d)
 
             case employment: Employment =>
               employment
@@ -69,6 +71,7 @@ object ExperienceGridView {
                 .withFieldConst(_.index, ExperienceNodeIndex(index))
                 .withFieldConst(_.cx, hierarchy.x.getOrElse(???))
                 .withFieldConst(_.cy, hierarchy.y.getOrElse(???))
+                .withFieldConst(_.radius, 20d)
                 .transform
 
             case skill: Skill =>
@@ -77,13 +80,15 @@ object ExperienceGridView {
                 .withFieldConst(_.index, ExperienceNodeIndex(index))
                 .withFieldConst(_.cx, hierarchy.x.getOrElse(???))
                 .withFieldConst(_.cy, hierarchy.y.getOrElse(???))
+                .withFieldConst(_.radius, 20d)
                 .transform
 
           }
-      })
+        //})
+      }
   }
 
-  val $nodeStates: Signal[Seq[ExperienceNodeState]] = nodeStatesVar.signal
+  //val $nodeStates: Signal[Seq[ExperienceNodeState]] = nodeStatesVar.signal
 
   def handleWindowLoad($focusedNodeState: Signal[Option[ExperienceNodeState]]): Modifier[ReactiveSvgElement[SVG]] =
     inContext { thisNode =>
@@ -214,17 +219,22 @@ object ExperienceGridView {
   def render($focusedExperienceId: Signal[Option[ExperienceId]]): ReactiveSvgElement[SVG] = {
     import svg._
 
-    val $nodeRenders: Signal[Seq[ReactiveSvgElement[G]]] =
-      $nodeStates
-        .split(_.index)(ExperienceNodeView
-          .render(_, _, _, $focusedExperienceId))
+    //val $nodeRenders: Signal[Seq[ReactiveSvgElement[G]]] =
+    //  $nodeStates
+    //    .split(_.index)(ExperienceNodeView
+    //      .render(_, _, _, $focusedExperienceId))
+    val nodeRenders: Seq[ReactiveSvgElement[G]] =
+      nodeStates
+        .map(ExperienceNodeView.render(_, $focusedExperienceId))
 
     val $focusedNodeState: Signal[Option[ExperienceNodeState]] =
       $focusedExperienceId
-        .combineWith($nodeStates)
+        //.combineWith($nodeStates)
         .map {
-          case (None, _) => none
-          case (Some(id), nodeStates) => nodeStates.find(_.id.contains(id))
+          //case (None, _) => none
+          case None => none
+          //case (Some(id), nodeStates) => nodeStates.find(_.id.contains(id))
+          case Some(id) => nodeStates.find(_.id.contains(id))
         }
 
     svg(
@@ -238,7 +248,8 @@ object ExperienceGridView {
       handleClick,
       g(
         transform <-- zoomTransformBus.events.map(_.toString()),
-        children <-- $nodeRenders)
+        //children <-- $nodeRenders)
+        nodeRenders)
     )
   }
 
