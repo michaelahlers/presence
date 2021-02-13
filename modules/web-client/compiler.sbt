@@ -7,4 +7,5 @@ scalacOptions --=
     "-Wunused:patvars" ::
     "-Wunused:privates" ::
     "-Wvalue-discard" ::
+    "-Wnumeric-widen" ::
     Nil
