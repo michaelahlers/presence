@@ -28,7 +28,7 @@ indexWriter ~= (writer => index => s"var versioned = ${writer(index)};")
 
 Compile / herokuAppName :=
   Map(
-    ("preview", "michaelahlers-presence-stage"),
+    ("preview", "michaelahlers-presence-preview"),
     ("public", "michaelahlers-presence-public"))
     .apply(sys.props.getOrElse("stage", "preview"))
 
