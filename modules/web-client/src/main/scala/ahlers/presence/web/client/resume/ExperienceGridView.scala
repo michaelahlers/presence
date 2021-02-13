@@ -1,12 +1,12 @@
 package ahlers.presence.web.client.resume
 
-import ahlers.presence.web.client.{ Asset, UiState }
-import ahlers.presence.web.client.UiState.{ FocusedResumePage, UnfocusedResumePage }
+import ahlers.presence.web.client.UiState
+import ahlers.presence.web.client.UiState.UnfocusedResumePage
 import cats.syntax.apply._
 import cats.syntax.option._
 import com.raquo.airstream.eventbus.EventBus
 import com.raquo.airstream.eventstream.PeriodicEventStream
-import com.raquo.airstream.signal.{ Signal, Var }
+import com.raquo.airstream.signal.Signal
 import com.raquo.domtypes.generic.Modifier
 import com.raquo.laminar.CollectionCommand
 import com.raquo.laminar.api.L._
@@ -17,7 +17,7 @@ import d3v4.d3.{ Transform, ZoomBehavior }
 import d3v4.d3hierarchy.{ Hierarchy, Pack, Packed }
 import io.scalaland.chimney.dsl.TransformerOps
 import org.scalajs.dom
-import org.scalajs.dom.svg.{ G, SVG }
+import org.scalajs.dom.svg.SVG
 
 import scala.scalajs.js
 import scala.scalajs.js.JSConverters.JSRichIterableOnce
@@ -32,7 +32,6 @@ object ExperienceGridView {
   val zoomBehavior: ZoomBehavior[dom.EventTarget] = d3.zoom()
   val zoomTransformBus: EventBus[Transform] = new EventBus()
 
-  //val nodeStatesVar = {
   val nodeStates: Seq[ExperienceNodeState] = {
     import ExperienceBrief.{ Blank, Employment, Skill }
 
@@ -55,7 +54,6 @@ object ExperienceGridView {
         }))
     }
 
-    //Val(hierarchy.children.orNull
     hierarchy.children.orNull
       .toSeq
       .zipWithIndex
@@ -90,11 +88,8 @@ object ExperienceGridView {
               .transform
 
         }
-      //})
       }
   }
-
-  //val $nodeStates: Signal[Seq[ExperienceNodeState]] = nodeStatesVar.signal
 
   val nodeStateStream: EventStream[ExperienceNodeState] =
     new PeriodicEventStream[Int](
@@ -104,7 +99,7 @@ object ExperienceGridView {
       resetOnStop = false)
       .map(nodeStates(_))
 
-  def handleWindowLoad($focusedNodeState: Signal[Option[ExperienceNodeState]]): Modifier[ReactiveSvgElement[SVG]] =
+  def onWindowLoadZoom($focusedNodeState: Signal[Option[ExperienceNodeState]]): Modifier[ReactiveSvgElement[SVG]] =
     inContext { thisNode =>
       import thisNode.ref.{ clientHeight, clientWidth }
 
@@ -165,7 +160,7 @@ object ExperienceGridView {
       }
     }
 
-  def handleWindowResize($focusedNodeState: Signal[Option[ExperienceNodeState]]): Modifier[ReactiveSvgElement[SVG]] =
+  def onWindowResizeZoom($focusedNodeState: Signal[Option[ExperienceNodeState]]): Modifier[ReactiveSvgElement[SVG]] =
     inContext { thisNode =>
       import thisNode.ref.{ clientHeight, clientWidth }
 
@@ -201,7 +196,7 @@ object ExperienceGridView {
       }
     }
 
-  def handleFocusedNode($focusedNodeState: Signal[Option[ExperienceNodeState]]): Modifier[ReactiveSvgElement[SVG]] =
+  def onFocusedNodeZoom($focusedNodeState: Signal[Option[ExperienceNodeState]]): Modifier[ReactiveSvgElement[SVG]] =
     inContext { thisNode =>
       import thisNode.ref.{ clientHeight, clientWidth }
 
@@ -239,7 +234,7 @@ object ExperienceGridView {
       }
     }
 
-  val handleClick: Modifier[ReactiveSvgElement[SVG]] =
+  val onClickFocus: Modifier[ReactiveSvgElement[SVG]] =
     onClick
       .stopPropagation
       .mapToValue(UnfocusedResumePage) --> (UiState.router.pushState(_))
@@ -247,21 +242,14 @@ object ExperienceGridView {
   def render($focusedExperienceId: Signal[Option[ExperienceId]]): ReactiveSvgElement[SVG] = {
     import svg._
 
-    val commandBus = new EventBus[ChildrenCommand]
-    val commandStream = commandBus.events
-
-//val $nodeRenders: Signal[Seq[ReactiveSvgElement[G]]] =
-//  $nodeStates
-//    .split(_.index)(ExperienceNodeView
-//      .render(_, _, _, $focusedExperienceId))
+    val nodeRenderStream =
+      nodeStateStream
+        .map(ExperienceNodeView.render(_))
 
     val $focusedNodeState: Signal[Option[ExperienceNodeState]] =
       $focusedExperienceId
-        //.combineWith($nodeStates)
         .map {
-          //case (None, _) => none
           case None => none
-          //case (Some(id), nodeStates) => nodeStates.find(_.id.contains(id))
           case Some(id) => nodeStates.find(_.id.contains(id))
         }
 
@@ -269,17 +257,13 @@ object ExperienceGridView {
       className := "experience-grid-view",
       className := "flex-fill bg-dark",
       zoomBehavior --> zoomTransformBus.writer.contramap(_.transform),
-      handleWindowLoad($focusedNodeState),
-      handleWindowResize($focusedNodeState),
-      handleFocusedNode($focusedNodeState),
-      $focusedExperienceId --> (dom.console.debug("Focused experience id.", _)),
-      handleClick,
+      onWindowLoadZoom($focusedNodeState),
+      onWindowResizeZoom($focusedNodeState),
+      onFocusedNodeZoom($focusedNodeState),
+      onClickFocus,
       g(
         transform <-- zoomTransformBus.events.map(_.toString()),
-        //children <-- $nodeRenders)
-        nodeStateStream.map(ExperienceNodeView.render(_)).map(CollectionCommand.Append(_)) --> commandBus.writer,
-        children.command <-- commandStream
-      )
+        children.command <-- nodeRenderStream.map(CollectionCommand.Append(_)))
     )
   }
 
