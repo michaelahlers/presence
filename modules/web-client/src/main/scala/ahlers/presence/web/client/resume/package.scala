@@ -220,13 +220,6 @@ package object resume {
         VerizonBusiness ::
         Nil
 
-    val nodes: Seq[ExperienceNodeUi] =
-      descriptions // ++ Seq.fill(1000)(ExperienceBrief.Blank))
-        .zipWithIndex
-        .map { case (detail, index) =>
-          ExperienceNodeUi(index, detail)
-        }
-
     val relationSets: Seq[Set[_ <: ExperienceBrief]] =
       Set(Akka, Lagom, PlayFramework, Scala, Slick) ::
         Set(Bootstrap, CSS) ::

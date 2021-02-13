@@ -99,7 +99,3 @@ object ExperienceBrief {
 //  }
 //
 //}
-
-case class ExperienceNodeUi(
-  index: Int,
-  experience: ExperienceBrief)
