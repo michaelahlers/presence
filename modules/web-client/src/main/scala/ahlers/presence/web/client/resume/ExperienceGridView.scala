@@ -37,16 +37,15 @@ object ExperienceGridView {
 
     val packed: Pack[ExperienceBrief] =
       d3.pack()
-        .padding(15)
         .radius(_.data match {
-          case blank: Blank => blank.radius
-          case employment: Employment => employment.radius
-          case skill: Skill => skill.radius
+          case blank: Blank => blank.radius * 1.2d
+          case employment: Employment => employment.radius * 1.2d
+          case skill: Skill => skill.radius * 1.2d
         })
 
     val hierarchy: Hierarchy[ExperienceBrief] with Packed = {
       val root = Blank(0)
-      val children = experiences.descriptions ++ Seq.tabulate(1000)(index => Blank(20d + Math.pow(index, 2) / 2000d))
+      val children = experiences.descriptions ++ Seq.tabulate(500)(index => Blank(10d + Math.pow(index - 90, 2) / 1000d))
       packed(d3.hierarchy(
         root,
         {
@@ -100,7 +99,7 @@ object ExperienceGridView {
     val x = nodeStates.iterator
     new PeriodicEventStream[ExperienceNodeState](
       initial = x.next(),
-      next = last => if (x.hasNext) Some((x.next(), 1)) else None,
+      next = last => if (x.hasNext) Some((x.next(), 10)) else None,
       emitInitial = true,
       resetOnStop = false)
   }
