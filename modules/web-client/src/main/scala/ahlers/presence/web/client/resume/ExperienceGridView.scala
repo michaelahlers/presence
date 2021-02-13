@@ -96,14 +96,13 @@ object ExperienceGridView {
 
   //val $nodeStates: Signal[Seq[ExperienceNodeState]] = nodeStatesVar.signal
 
-  val nodeStateStream: EventStream[ExperienceNodeState] = {
-    val x = nodeStates.iterator
-    new PeriodicEventStream[ExperienceNodeState](
-      initial = x.next(),
-      next = last => if (x.hasNext) Some((x.next(), Random.nextInt(10))) else None,
+  val nodeStateStream: EventStream[ExperienceNodeState] =
+    new PeriodicEventStream[Int](
+      initial = 0,
+      next = Some(_).map(_ + 1).filter(_ < nodeStates.size).map((_, Random.nextInt(10))),
       emitInitial = true,
       resetOnStop = false)
-  }
+      .map(nodeStates(_))
 
   def handleWindowLoad($focusedNodeState: Signal[Option[ExperienceNodeState]]): Modifier[ReactiveSvgElement[SVG]] =
     inContext { thisNode =>
