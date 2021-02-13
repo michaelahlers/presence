@@ -21,6 +21,7 @@ import org.scalajs.dom.svg.{ G, SVG }
 
 import scala.scalajs.js
 import scala.scalajs.js.JSConverters.JSRichIterableOnce
+import scala.util.Random
 
 /**
  * @since January 31, 2021
@@ -99,7 +100,7 @@ object ExperienceGridView {
     val x = nodeStates.iterator
     new PeriodicEventStream[ExperienceNodeState](
       initial = x.next(),
-      next = last => if (x.hasNext) Some((x.next(), 10)) else None,
+      next = last => if (x.hasNext) Some((x.next(), Random.nextInt(10))) else None,
       emitInitial = true,
       resetOnStop = false)
   }
