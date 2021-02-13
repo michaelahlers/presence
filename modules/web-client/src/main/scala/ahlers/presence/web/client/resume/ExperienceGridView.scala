@@ -93,37 +93,27 @@ object ExperienceGridView {
         }
       }
   }
+  val defaultNodeState: ExperienceNodeState = nodeStates.head
 
-  val nodeStateStream: EventStream[ExperienceNodeState] =
-    new PeriodicEventStream[Int](
-      initial = 0,
-      next = Some(_).map(_ + 1).filter(_ < nodeStates.size).map((_, Random.nextInt(10))),
-      emitInitial = true,
-      resetOnStop = false)
-      .map(nodeStates(_))
-
-  def onWindowLoadZoom($focusedNodeState: Signal[Option[ExperienceNodeState]]): Modifier[ReactiveSvgElement[SVG]] =
-    inContext { thisNode =>
+  def onMountZoom($focusedNodeState: Signal[Option[ExperienceNodeState]]): Modifier[ReactiveSvgElement[SVG]] =
+    onMountCallback { context =>
+      import context.thisNode
+      import context.owner
       import thisNode.ref.{ clientHeight, clientWidth }
 
-      windowEvents
-        .onLoad
-        .withCurrentValueOf($focusedNodeState) --> {
+      zoomBehavior
+        .transform(
+          d3.select(thisNode.ref),
+          d3.zoomIdentity
+            .translate(
+              clientWidth / 2,
+              clientHeight / 2)
+            .scale(0.5d)
+            .translate(-defaultNodeState.cx, -defaultNodeState.cy))
 
-        case (_, None) =>
-          val nodeState = nodeStates.head
-          import nodeState.{ cx, cy }
+      $focusedNodeState.observe.now() match {
 
-          zoomBehavior
-            .transform(
-              d3.select(thisNode.ref),
-              d3.zoomIdentity
-                .translate(
-                  clientWidth / 2,
-                  clientHeight / 2)
-                .scale(0.5d)
-                .translate(-cx, -cy))
-
+        case None =>
           zoomBehavior
             .transform(
               d3.select(thisNode.ref)
@@ -134,20 +124,10 @@ object ExperienceGridView {
                 .translate(
                   clientWidth / 2,
                   clientHeight / 2)
-                .translate(-cx, -cy))
+                .translate(-defaultNodeState.cx, -defaultNodeState.cy)
+            )
 
-        case (_, Some(nodeState)) =>
-          import nodeState.{ cx, cy }
-          zoomBehavior
-            .transform(
-              d3.select(thisNode.ref),
-              d3.zoomIdentity
-                .translate(
-                  clientWidth / 2,
-                  clientHeight / 2)
-                .scale(0.5d)
-                .translate(-cx, -cy))
-
+        case Some(focusedNodeState) =>
           zoomBehavior
             .transform(
               d3.select(thisNode.ref)
@@ -158,7 +138,8 @@ object ExperienceGridView {
                   clientWidth / 2,
                   clientHeight / 2)
                 .scale(5d)
-                .translate(-cx, -cy))
+                .translate(-focusedNodeState.cx, -focusedNodeState.cy)
+            )
 
       }
     }
@@ -172,7 +153,7 @@ object ExperienceGridView {
         .withCurrentValueOf($focusedNodeState) --> {
 
         case (_, None) =>
-          val nodeState = nodeStates.head
+          val nodeState = defaultNodeState
           import nodeState.{ cx, cy }
 
           zoomBehavior
@@ -184,8 +165,7 @@ object ExperienceGridView {
                   clientHeight / 2)
                 .translate(-cx, -cy))
 
-        case (_, Some(nodeState)) =>
-          import nodeState.{ cx, cy }
+        case (_, Some(focusedNodeState)) =>
           zoomBehavior
             .transform(
               d3.select(thisNode.ref),
@@ -194,7 +174,7 @@ object ExperienceGridView {
                   clientWidth / 2,
                   clientHeight / 2)
                 .scale(5)
-                .translate(-cx, -cy))
+                .translate(-focusedNodeState.cx, -focusedNodeState.cy))
 
       }
     }
@@ -203,12 +183,9 @@ object ExperienceGridView {
     inContext { thisNode =>
       import thisNode.ref.{ clientHeight, clientWidth }
 
-      $focusedNodeState --> {
+      $focusedNodeState.changes --> {
 
         case None =>
-          val nodeState = nodeStates.head
-          import nodeState.{ cx, cy }
-
           zoomBehavior
             .transform(
               d3.select(thisNode.ref)
@@ -218,10 +195,10 @@ object ExperienceGridView {
                 .translate(
                   clientWidth / 2,
                   clientHeight / 2)
-                .translate(-cx, -cy))
+                .translate(-defaultNodeState.cx, -defaultNodeState.cy)
+            )
 
-        case Some(nodeState) =>
-          import nodeState.{ cx, cy }
+        case Some(focusedNodeState) =>
           zoomBehavior
             .transform(
               d3.select(thisNode.ref)
@@ -232,7 +209,8 @@ object ExperienceGridView {
                   clientWidth / 2,
                   clientHeight / 2)
                 .scale(5)
-                .translate(-cx, -cy))
+                .translate(-focusedNodeState.cx, -focusedNodeState.cy)
+            )
 
       }
     }
@@ -246,7 +224,12 @@ object ExperienceGridView {
     import svg._
 
     val nodeRenderStream =
-      nodeStateStream
+      new PeriodicEventStream[Int](
+        initial = 0,
+        next = Some(_).map(_ + 1).filter(_ < nodeStates.size).map((_, Random.nextInt(10))),
+        emitInitial = true,
+        resetOnStop = false)
+        .map(nodeStates(_))
         .map(ExperienceNodeView.render(_))
 
     val $focusedNodeState: Signal[Option[ExperienceNodeState]] =
@@ -260,13 +243,13 @@ object ExperienceGridView {
       className := "experience-grid-view",
       className := "flex-fill bg-dark",
       zoomBehavior --> zoomTransformBus.writer.contramap(_.transform),
-      onWindowLoadZoom($focusedNodeState),
-      onWindowResizeZoom($focusedNodeState),
-      onFocusedNodeZoom($focusedNodeState),
-      onClickFocus,
       g(
         transform <-- zoomTransformBus.events.map(_.toString()),
-        children.command <-- nodeRenderStream.map(CollectionCommand.Append(_)))
+        children.command <-- nodeRenderStream.map(CollectionCommand.Append(_))),
+      onMountZoom($focusedNodeState),
+      onWindowResizeZoom($focusedNodeState),
+      onFocusedNodeZoom($focusedNodeState),
+      onClickFocus
     )
   }
 
