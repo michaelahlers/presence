@@ -223,10 +223,15 @@ object ExperienceGridView {
   def render($focusedExperienceId: Signal[Option[ExperienceId]]): ReactiveSvgElement[SVG] = {
     import svg._
 
+    /** Gradually emit rendered experience nodes, which get appended to the illustration. */
     val nodeRenderStream =
       new PeriodicEventStream[Int](
         initial = 0,
-        next = Some(_).map(_ + 1).filter(_ < nodeStates.size).map((_, Random.nextInt(10))),
+        next =
+          Some(_)
+            .map(_ + 1)
+            .filter(_ < nodeStates.size)
+            .map((_, 10)),
         emitInitial = true,
         resetOnStop = false)
         .map(nodeStates(_))
