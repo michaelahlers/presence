@@ -45,7 +45,7 @@ object ExperienceGridView {
 
     val hierarchy: Hierarchy[ExperienceBrief] with Packed = {
       val root = Blank(0)
-      val children = experiences.descriptions ++ Seq.tabulate(500)(index => Blank(10d + Math.pow(index - 90, 2) / 1000d))
+      val children = experiences.descriptions ++ Seq.tabulate(500)(index => Blank(15d + Math.pow(index - 65, 2) / 1000d))
       packed(d3.hierarchy(
         root,
         {
