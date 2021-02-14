@@ -14,34 +14,49 @@ import org.scalajs.dom.svg.G
 object ExperienceNodeView {
 
   def render(
-    state: ExperienceNodeState
+    nodeState: ExperienceNodeState,
+    $focusedNodeState: Signal[Option[ExperienceNodeState]]
   ): ReactiveSvgElement[G] = {
     import svg._
 
     val onClickEnterFocus: Modifier[ReactiveSvgElement[G]] =
       onClick
         .stopPropagation
-        .mapToValue(state.id
+        .mapToValue(nodeState.id
           .map(FocusedResumePage(_))
           .getOrElse(UnfocusedResumePage)) --> (UiState.router.pushState(_))
 
+    /** We could be more clever, but this is easy to understand. */
+    val $classNames =
+      $focusedNodeState.map { focusedNodeState =>
+        val isRevealed = focusedNodeState.isEmpty
+        val isFocused = focusedNodeState.contains(nodeState)
+        val isBlurred = !focusedNodeState.forall(_ == nodeState)
+
+        Map(
+          "revealed" -> isRevealed,
+          "focused" -> isFocused,
+          "blurred" -> isBlurred)
+      }
+
     g(
       className := "experience-node-view",
-      state.logo match {
+      className <-- $classNames,
+      nodeState.logo match {
         case None =>
           circle(
-            cx := state.cx.toString,
-            cy := state.cy.toString,
-            r := state.radius.toString,
+            cx := nodeState.cx.toString,
+            cy := nodeState.cy.toString,
+            r := nodeState.radius.toString,
             fill := "#292929"
           )
         case Some(logo: String) =>
           image(
             xlinkHref := logo,
-            x := state.x.toString,
-            y := state.y.toString,
-            width := state.width.toString,
-            height := state.height.toString
+            x := nodeState.x.toString,
+            y := nodeState.y.toString,
+            width := nodeState.width.toString,
+            height := nodeState.height.toString
           )
       },
       onClickEnterFocus

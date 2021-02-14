@@ -34,7 +34,9 @@ $gray-900: #212121;
 }
 
 @keyframes ahlers-consulting-logo-stroke-fade-in {
-  100% { opacity: 1; }
+  100% {
+    opacity: 1;
+  }
 }
 
 svg.ahlers-consulting-logo g g g:nth-child(4) {
@@ -65,16 +67,27 @@ main.resume {
   height: 100%;
 }
 
-@keyframes ahlers-consulting-experience-node-view-fade-in {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
-}
-
-svg g.experience-node-view.hidden {
-  opacity: 0;
-}
-
 svg g.experience-node-view {
-  animation: ahlers-consulting-experience-node-view-fade-in 500ms ease;
-  animation-fill-mode: forwards;
+  opacity: 0.1;
+}
+
+@keyframes experience-node-view-reveal {
+  100% {
+    opacity: 1;
+  }
+}
+
+svg g.experience-node-view.revealed {
+  opacity: 1;
+  transition: opacity 500ms ease;
+}
+
+svg g.experience-node-view.focused {
+  opacity: 1;
+  transition: opacity 250ms ease;
+}
+
+svg g.experience-node-view.blurred {
+  opacity: 0.25;
+  transition: opacity 1000ms ease;
 }

@@ -92,6 +92,7 @@ object ExperienceGridView {
         }
       }
   }
+
   val defaultNodeState: ExperienceNodeState = nodeStates.head
 
   def onMountZoom($focusedNodeState: Signal[Option[ExperienceNodeState]]): Modifier[ReactiveSvgElement[SVG]] =
@@ -221,6 +222,13 @@ object ExperienceGridView {
   def render($focusedExperienceId: Signal[Option[ExperienceId]]): ReactiveSvgElement[SVG] = {
     import svg._
 
+    val $focusedNodeState: Signal[Option[ExperienceNodeState]] =
+      $focusedExperienceId
+        .map {
+          case None => none
+          case Some(id) => nodeStates.find(_.id.contains(id))
+        }
+
     /** Gradually emit rendered experience nodes, which get appended to the illustration. */
     val nodeRenderStream =
       new PeriodicEventStream[Int](
@@ -233,18 +241,11 @@ object ExperienceGridView {
         emitInitial = true,
         resetOnStop = false)
         .map(nodeStates(_))
-        .map(ExperienceNodeView.render(_))
-
-    val $focusedNodeState: Signal[Option[ExperienceNodeState]] =
-      $focusedExperienceId
-        .map {
-          case None => none
-          case Some(id) => nodeStates.find(_.id.contains(id))
-        }
+        .map(ExperienceNodeView.render(_, $focusedNodeState))
 
     svg(
       className := "experience-grid-view",
-      className := "flex-fill bg-dark",
+      className := Seq("flex-fill", "bg-dark"),
       zoomBehavior --> zoomTransformBus.writer.contramap(_.transform),
       g(
         transform <-- zoomTransformBus.events.map(_.toString()),
