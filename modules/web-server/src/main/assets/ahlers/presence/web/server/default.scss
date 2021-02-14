@@ -67,21 +67,27 @@ main.resume {
   height: 100%;
 }
 
+@keyframes experience-node-view-reveal {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 svg g.experience-node-view {
   opacity: 0;
+  animation: experience-node-view-reveal 250ms ease var(--delay);
+  animation-fill-mode: forwards;
 }
 
-svg g.experience-node-view.revealed {
+svg g.experience-node-view.focused {
   opacity: 1;
   transition: opacity 250ms ease;
 }
 
-svg g.experience-node-view.revealed.focused {
-  opacity: 1;
-  transition: opacity 250ms ease;
-}
-
-svg g.experience-node-view.revealed.not-focused {
+svg g.experience-node-view.not-focused {
   opacity: 0.25;
   transition: opacity 1000ms ease;
 }
