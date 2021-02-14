@@ -6,6 +6,7 @@ package ahlers.presence.web.client.resume
  */
 case class ExperienceNodeState(
   index: ExperienceNodeIndex,
+  kind: String,
   id: Option[ExperienceId],
   logo: Option[String],
   cx: Double,

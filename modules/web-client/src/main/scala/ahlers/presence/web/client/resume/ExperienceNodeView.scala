@@ -31,7 +31,7 @@ object ExperienceNodeView {
     val onMouseEnterGlanced: Modifier[ReactiveSvgElement[G]] =
       onMouseOver
         .stopPropagation
-        .mapToValue(nodeState.some) --> glancedNodeStateVar.writer
+        .mapToValue(nodeState.some.filterNot(_.kind == "blank")) --> glancedNodeStateVar.writer
 
     val onClickEnterFocus: Modifier[ReactiveSvgElement[G]] =
       onClick
@@ -60,7 +60,7 @@ object ExperienceNodeView {
         }
 
     g(
-      className := "experience-node-view",
+      className := Seq("experience-node-view", nodeState.kind),
       className <-- $classNames,
       nodeState.logo match {
         case None =>

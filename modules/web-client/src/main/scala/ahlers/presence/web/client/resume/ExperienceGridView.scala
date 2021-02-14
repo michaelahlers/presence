@@ -63,6 +63,7 @@ object ExperienceGridView {
           case Blank(radius) =>
             ExperienceNodeState(
               ExperienceNodeIndex(index),
+              "blank",
               none,
               none,
               hierarchy.x.getOrElse(???),
@@ -70,22 +71,25 @@ object ExperienceGridView {
               radius)
 
           case employment: Employment =>
-            employment
-              .into[ExperienceNodeState]
-              .withFieldConst(_.index, ExperienceNodeIndex(index))
-              .withFieldConst(_.cx, hierarchy.x.getOrElse(???))
-              .withFieldConst(_.cy, hierarchy.y.getOrElse(???))
-              .withFieldConst(_.radius, employment.radius)
-              .transform
+            ExperienceNodeState(
+              ExperienceNodeIndex(index),
+              "employment",
+              employment.id.some,
+              employment.logo.some,
+              hierarchy.x.getOrElse(???),
+              hierarchy.y.getOrElse(???),
+              employment.radius
+            )
 
           case skill: Skill =>
-            skill
-              .into[ExperienceNodeState]
-              .withFieldConst(_.index, ExperienceNodeIndex(index))
-              .withFieldConst(_.cx, hierarchy.x.getOrElse(???))
-              .withFieldConst(_.cy, hierarchy.y.getOrElse(???))
-              .withFieldConst(_.radius, skill.radius)
-              .transform
+            ExperienceNodeState(
+              ExperienceNodeIndex(index),
+              "skill",
+              skill.id.some,
+              skill.logo.some,
+              hierarchy.x.getOrElse(???),
+              hierarchy.y.getOrElse(???),
+              skill.radius)
 
         }
       }
