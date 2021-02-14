@@ -29,7 +29,7 @@ object ExperienceNodeView {
     val $isRevealed =
       EventStream
         .fromValue(true, emitOnce = true)
-        .delay(25 * nodeState.index.toInt)
+        .delay(10 * nodeState.index.toInt)
         .toSignal(false)
 
     /** We could be more clever, but this is easy to understand. */
