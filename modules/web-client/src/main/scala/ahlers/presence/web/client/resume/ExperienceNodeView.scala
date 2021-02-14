@@ -48,7 +48,7 @@ object ExperienceNodeView {
     g(
       className := Seq("experience-node-view", nodeState.kind),
       className <-- $classNames,
-      style := "--delay: %dms".format(nodeState.index.toInt * 10),
+      style := "--revealing-transition-delay: %dms".format(nodeState.index.toInt * 10),
       nodeState.logo match {
         case None =>
           circle(

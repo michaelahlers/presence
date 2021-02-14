@@ -82,7 +82,8 @@ svg g.experience-node-view.skill {
 
 svg g.revealing g.experience-node-view {
   opacity: 1;
-  transition: opacity 100ms ease var(--delay);
+  transition: opacity 100ms ease;
+  transition-delay: var(--revealing-transition-delay);
 }
 
 svg g.presenting g.experience-node-view {
