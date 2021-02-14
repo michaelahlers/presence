@@ -224,8 +224,6 @@ object ExperienceGridView {
   def render($focusedExperienceId: Signal[Option[ExperienceId]]): ReactiveSvgElement[SVG] = {
     import svg._
 
-    val glancedNodeStateBus = new EventBus[Option[ExperienceNodeState]]
-
     val $focusedNodeState: Signal[Option[ExperienceNodeState]] =
       $focusedExperienceId
         .map {
@@ -235,7 +233,7 @@ object ExperienceGridView {
 
     val nodeRenders =
       nodeStates
-        .map(ExperienceNodeView.render(_, glancedNodeStateBus, $focusedNodeState))
+        .map(ExperienceNodeView.render(_, $focusedNodeState))
 
     svg(
       className := "experience-grid-view",
@@ -247,10 +245,7 @@ object ExperienceGridView {
       onMountZoom($focusedNodeState),
       onWindowResizeZoom($focusedNodeState),
       onFocusedNodeZoom($focusedNodeState),
-      onClickExitFocus,
-      glancedNodeStateBus.events.toSignal(none).combineWith($focusedNodeState) --> { case (glancedNodeState, focusedNodeState) =>
-        println(s"glanced: ${glancedNodeState.flatMap(_.id).map(_.toText)}; focused: ${focusedNodeState.flatMap(_.id).map(_.toText)}; ")
-      }
+      onClickExitFocus
     )
   }
 

@@ -76,18 +76,37 @@ svg g.experience-node-view.revealed {
   transition: opacity 250ms ease;
 }
 
-svg g.experience-node-view.employment.revealed.not-focused,
-svg g.experience-node-view.employment.revealed.not-glanced,
-svg g.experience-node-view.skill.revealed.not-focused,
-svg g.experience-node-view.skill.revealed.not-glanced  {
+svg g.experience-node-view.revealed.focused {
+  opacity: 1;
+  transition: opacity 250ms ease;
+}
+
+svg g.experience-node-view.revealed.not-focused {
   opacity: 0.25;
   transition: opacity 1000ms ease;
 }
 
-svg g.experience-node-view.employment.revealed.glanced,
-svg g.experience-node-view.employment.revealed.focused,
-svg g.experience-node-view.skill.revealed.glanced,
-svg g.experience-node-view.skill.revealed.focused {
+svg > g {
+  pointer-events: none;
+}
+
+svg > g,
+svg > g > g.experience-node-view.blank {
+  pointer-events: none;
+}
+
+svg > g > g.experience-node-view {
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+svg > g:hover > g.experience-node-view.revealed {
+  opacity: 0.25;
+  transition: opacity 1000ms ease;
+}
+
+svg > g:hover > g.experience-node-view.revealed.focused,
+svg > g:hover > g.experience-node-view.revealed:hover {
   opacity: 1;
   transition: opacity 250ms ease;
 }
