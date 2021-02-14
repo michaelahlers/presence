@@ -213,7 +213,7 @@ object ExperienceGridView {
       }
     }
 
-  val onClickFocus: Modifier[ReactiveSvgElement[SVG]] =
+  val onClickExitFocus: Modifier[ReactiveSvgElement[SVG]] =
     onClick
       .stopPropagation
       .mapToValue(UnfocusedResumePage) --> (UiState.router.pushState(_))
@@ -252,7 +252,7 @@ object ExperienceGridView {
       onMountZoom($focusedNodeState),
       onWindowResizeZoom($focusedNodeState),
       onFocusedNodeZoom($focusedNodeState),
-      onClickFocus
+      onClickExitFocus
     )
   }
 
