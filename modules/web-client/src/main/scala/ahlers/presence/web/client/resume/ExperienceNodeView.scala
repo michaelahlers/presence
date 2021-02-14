@@ -17,7 +17,7 @@ object ExperienceNodeView {
 
   def render(
     nodeState: ExperienceNodeState,
-    glancedNodeStateVar: Var[Option[ExperienceNodeState]],
+    glancedNodeStateBus: EventBus[Option[ExperienceNodeState]],
     $focusedNodeState: Signal[Option[ExperienceNodeState]]
   ): ReactiveSvgElement[G] = {
     import svg._
@@ -28,10 +28,15 @@ object ExperienceNodeView {
         .delay(10 * nodeState.index.toInt)
         .toSignal(false)
 
-    val onMouseEnterGlanced: Modifier[ReactiveSvgElement[G]] =
-      onMouseOver
+    val onMouseEnterGlanced = //: Modifier[ReactiveSvgElement[G]] =
+      onMouseEnter
         .stopPropagation
-        .mapToValue(nodeState.some.filterNot(_.kind == "blank")) --> glancedNodeStateVar.writer
+        .mapToValue(nodeState.some.filterNot(_.kind == "blank")) --> glancedNodeStateBus.writer
+
+    val onMouseExitGlanced = //: Modifier[ReactiveSvgElement[G]] =
+      onMouseOut
+        .stopPropagation
+        .mapToValue(none) --> glancedNodeStateBus.writer
 
     val onClickEnterFocus: Modifier[ReactiveSvgElement[G]] =
       onClick
@@ -43,7 +48,7 @@ object ExperienceNodeView {
     /** We could be more clever, but this is easy to understand. */
     val $classNames: Signal[Map[String, Boolean]] =
       $isRevealed
-        .combineWith(glancedNodeStateVar.signal)
+        .combineWith(glancedNodeStateBus.events.debounce(100).toSignal(none))
         .combineWith($focusedNodeState)
         .map { case ((isRevealed, glancedNodeState), focusedNodeState) =>
           val isGlanced = glancedNodeState.contains(nodeState)
@@ -76,10 +81,11 @@ object ExperienceNodeView {
             x := nodeState.x.toString,
             y := nodeState.y.toString,
             width := nodeState.width.toString,
-            height := nodeState.height.toString
+            height := nodeState.height.toString,
+            onMouseEnterGlanced,
+            onMouseExitGlanced
           )
       },
-      onMouseEnterGlanced,
       onClickEnterFocus
     )
   }
