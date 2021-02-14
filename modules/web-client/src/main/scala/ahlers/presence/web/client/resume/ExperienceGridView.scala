@@ -5,10 +5,8 @@ import ahlers.presence.web.client.UiState.UnfocusedResumePage
 import cats.syntax.apply._
 import cats.syntax.option._
 import com.raquo.airstream.eventbus.EventBus
-import com.raquo.airstream.eventstream.PeriodicEventStream
 import com.raquo.airstream.signal.Signal
 import com.raquo.domtypes.generic.Modifier
-import com.raquo.laminar.CollectionCommand
 import com.raquo.laminar.api.L._
 import com.raquo.laminar.nodes.ReactiveSvgElement
 import d3.laminar.syntax.zoom._
@@ -229,18 +227,8 @@ object ExperienceGridView {
           case Some(id) => nodeStates.find(_.id.contains(id))
         }
 
-    /** Gradually emit rendered experience nodes, which get appended to the illustration. */
-    val nodeRenderStream =
-      new PeriodicEventStream[Int](
-        initial = 0,
-        next =
-          Some(_)
-            .map(_ + 1)
-            .filter(_ < nodeStates.size)
-            .map((_, 10)),
-        emitInitial = true,
-        resetOnStop = false)
-        .map(nodeStates(_))
+    val nodeRenders =
+      nodeStates
         .map(ExperienceNodeView.render(_, $focusedNodeState))
 
     svg(
@@ -249,7 +237,7 @@ object ExperienceGridView {
       zoomBehavior --> zoomTransformBus.writer.contramap(_.transform),
       g(
         transform <-- zoomTransformBus.events.map(_.toString()),
-        children.command <-- nodeRenderStream.map(CollectionCommand.Append(_))),
+        nodeRenders),
       onMountZoom($focusedNodeState),
       onWindowResizeZoom($focusedNodeState),
       onFocusedNodeZoom($focusedNodeState),

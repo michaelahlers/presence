@@ -68,26 +68,20 @@ main.resume {
 }
 
 svg g.experience-node-view {
-  opacity: 0.1;
-}
-
-@keyframes experience-node-view-reveal {
-  100% {
-    opacity: 1;
-  }
+  opacity: 0;
 }
 
 svg g.experience-node-view.revealed {
   opacity: 1;
-  transition: opacity 500ms ease;
+  transition: opacity 250ms ease;
 }
 
-svg g.experience-node-view.focused {
+svg g.experience-node-view.revealed.focused {
   opacity: 1;
   transition: opacity 250ms ease;
 }
 
-svg g.experience-node-view.blurred {
+svg g.experience-node-view.revealed.blurred {
   opacity: 0.25;
   transition: opacity 1000ms ease;
 }

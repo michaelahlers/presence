@@ -26,18 +26,25 @@ object ExperienceNodeView {
           .map(FocusedResumePage(_))
           .getOrElse(UnfocusedResumePage)) --> (UiState.router.pushState(_))
 
+    val $isRevealed =
+      EventStream
+        .fromValue(true, emitOnce = true)
+        .delay(25 * nodeState.index.toInt)
+        .toSignal(false)
+
     /** We could be more clever, but this is easy to understand. */
     val $classNames =
-      $focusedNodeState.map { focusedNodeState =>
-        val isRevealed = focusedNodeState.isEmpty
-        val isFocused = focusedNodeState.contains(nodeState)
-        val isBlurred = !focusedNodeState.forall(_ == nodeState)
+      $isRevealed
+        .combineWith($focusedNodeState)
+        .map { case (isRevealed, focusedNodeState) =>
+          val isFocused = focusedNodeState.contains(nodeState)
+          val isBlurred = !focusedNodeState.forall(_ == nodeState)
 
-        Map(
-          "revealed" -> isRevealed,
-          "focused" -> isFocused,
-          "blurred" -> isBlurred)
-      }
+          Map(
+            "revealed" -> isRevealed,
+            "focused" -> isFocused,
+            "blurred" -> isBlurred)
+        }
 
     g(
       className := "experience-node-view",
