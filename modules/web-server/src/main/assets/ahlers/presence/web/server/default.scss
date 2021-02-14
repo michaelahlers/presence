@@ -76,12 +76,14 @@ svg g.experience-node-view.revealed {
   transition: opacity 250ms ease;
 }
 
+svg g.experience-node-view.revealed.not-focused,
+svg g.experience-node-view.revealed.not-glanced  {
+  opacity: 0.25;
+  transition: opacity 1000ms ease;
+}
+
+svg g.experience-node-view.revealed.glanced,
 svg g.experience-node-view.revealed.focused {
   opacity: 1;
   transition: opacity 250ms ease;
-}
-
-svg g.experience-node-view.revealed.blurred {
-  opacity: 0.25;
-  transition: opacity 1000ms ease;
 }
