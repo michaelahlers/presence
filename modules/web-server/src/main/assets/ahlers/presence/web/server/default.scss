@@ -67,52 +67,39 @@ main.resume {
   height: 100%;
 }
 
-@keyframes experience-node-view-reveal {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
 svg g.experience-node-view {
   opacity: 0;
-  animation: experience-node-view-reveal 250ms ease var(--delay);
-  animation-fill-mode: forwards;
 }
 
-svg g.experience-node-view.focused {
-  opacity: 1;
-  transition: opacity 250ms ease;
-}
-
-svg g.experience-node-view.not-focused {
-  opacity: 0.25;
-  transition: opacity 1000ms ease;
-}
-
-svg > g {
+svg g.experience-node-view.blank {
   pointer-events: none;
 }
 
-svg > g,
-svg > g > g.experience-node-view.blank {
-  pointer-events: none;
-}
-
-svg > g > g.experience-node-view {
+svg g.experience-node-view.employment,
+svg g.experience-node-view.skill {
   cursor: pointer;
-  pointer-events: auto;
 }
 
-svg > g:hover > g.experience-node-view.revealed {
-  opacity: 0.25;
-  transition: opacity 1000ms ease;
+svg g.revealing g.experience-node-view {
+  opacity: 1;
+  transition: opacity 100ms ease var(--delay);
 }
 
-svg > g:hover > g.experience-node-view.revealed.focused,
-svg > g:hover > g.experience-node-view.revealed:hover {
+svg g.presenting g.experience-node-view {
   opacity: 1;
   transition: opacity 250ms ease;
+}
+
+svg g.glancing g.experience-node-view,
+svg g.focusing g.experience-node-view {
+  opacity: 0.1;
+  transition: opacity 500ms ease;
+}
+
+svg g.glancing g.experience-node-view.glanced,
+svg g.glancing g.experience-node-view.focused,
+svg g.focusing g.experience-node-view.glanced,
+svg g.focusing g.experience-node-view.focused {
+  opacity: 1;
+  transition: opacity 100ms ease;
 }

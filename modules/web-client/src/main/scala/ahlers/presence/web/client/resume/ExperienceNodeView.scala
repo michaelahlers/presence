@@ -1,12 +1,10 @@
 package ahlers.presence.web.client.resume
 
-import cats.syntax.option._
 import ahlers.presence.web.client.UiState
 import ahlers.presence.web.client.UiState.{ FocusedResumePage, UnfocusedResumePage }
 import com.raquo.domtypes.generic.Modifier
 import com.raquo.laminar.api.L._
 import com.raquo.laminar.nodes.ReactiveSvgElement
-import org.scalajs.dom
 import org.scalajs.dom.svg.G
 
 /**
@@ -17,15 +15,11 @@ object ExperienceNodeView {
 
   def render(
     nodeState: ExperienceNodeState,
-    $focusedNodeState: Signal[Option[ExperienceNodeState]]
+    $glancedNodeStates: Signal[Set[ExperienceNodeState]],
+    $focusedNodeState: Signal[Option[ExperienceNodeState]],
+    modifiers: Modifier[ReactiveSvgElement[G]]*
   ): ReactiveSvgElement[G] = {
     import svg._
-
-    val $isRevealed: Signal[Boolean] =
-      EventStream
-        .fromValue(true, emitOnce = true)
-        .delay(10 * nodeState.index.toInt)
-        .toSignal(false)
 
     val onClickEnterFocus: Modifier[ReactiveSvgElement[G]] =
       onClick
@@ -34,18 +28,21 @@ object ExperienceNodeView {
           .map(FocusedResumePage(_))
           .getOrElse(UnfocusedResumePage)) --> (UiState.router.pushState(_))
 
-    /** We could be more clever, but this is easy to understand. */
-    val $classNames: Signal[Map[String, Boolean]] =
-      $isRevealed
-        .combineWith($focusedNodeState)
-        .map { case (isRevealed, focusedNodeState) =>
-          val isFocused = focusedNodeState.contains(nodeState)
-          val isNotFocused = !focusedNodeState.forall(_ == nodeState)
+    val $isGlanced: Signal[Boolean] =
+      $glancedNodeStates.map(_
+        .contains(nodeState))
 
+    val $isFocused: Signal[Boolean] =
+      $focusedNodeState.map(_
+        .contains(nodeState))
+
+    val $classNames: Signal[Map[String, Boolean]] =
+      $isGlanced
+        .combineWith($isFocused)
+        .map { case (isGlanced, isFocused) =>
           Map(
-            "revealed" -> isRevealed,
-            "focused" -> isFocused,
-            "not-focused" -> isNotFocused)
+            "glanced" -> isGlanced,
+            "focused" -> isFocused)
         }
 
     g(
@@ -68,7 +65,8 @@ object ExperienceNodeView {
             width := nodeState.width.toString,
             height := nodeState.height.toString)
       },
-      onClickEnterFocus
+      onClickEnterFocus,
+      modifiers
     )
   }
 
