@@ -5,6 +5,7 @@ import ahlers.presence.web.client.UiState.UnfocusedResumePage
 import cats.syntax.apply._
 import cats.syntax.option._
 import com.raquo.airstream.eventbus.EventBus
+import com.raquo.airstream.eventstream.PeriodicEventStream
 import com.raquo.airstream.signal.Signal
 import com.raquo.domtypes.generic.Modifier
 import com.raquo.laminar.api.L._
@@ -13,7 +14,6 @@ import d3.laminar.syntax.zoom._
 import d3v4.d3
 import d3v4.d3.{ Transform, ZoomBehavior }
 import d3v4.d3hierarchy.{ Hierarchy, Pack, Packed }
-import io.scalaland.chimney.dsl.TransformerOps
 import org.scalajs.dom
 import org.scalajs.dom.svg.SVG
 
@@ -224,6 +224,11 @@ object ExperienceGridView {
   def render($focusedExperienceId: Signal[Option[ExperienceId]]): ReactiveSvgElement[SVG] = {
     import svg._
 
+    val glancedNodeStatesVar: Var[Set[ExperienceNodeState]] = Var(Set.empty)
+
+    val $glancedNodeStates: Signal[Set[ExperienceNodeState]] =
+      glancedNodeStatesVar.signal
+
     val $focusedNodeState: Signal[Option[ExperienceNodeState]] =
       $focusedExperienceId
         .map {
@@ -233,13 +238,71 @@ object ExperienceGridView {
 
     val nodeRenders =
       nodeStates
-        .map(ExperienceNodeView.render(_, $focusedNodeState))
+        .map { nodeState =>
+          val onMouseEnterGlanced =
+            onMouseEnter --> (_ => glancedNodeStatesVar.update(_ + nodeState))
+
+          val onMouseLeaveGlanced =
+            onMouseLeave --> (_ => glancedNodeStatesVar.update(_ - nodeState))
+
+          ExperienceNodeView
+            .render(
+              nodeState,
+              $glancedNodeStates,
+              $focusedNodeState,
+              onMouseEnterGlanced,
+              onMouseLeaveGlanced)
+        }
+
+    /**
+     * View's lifecycle.
+     * @todo Clean up this initial attempt.
+     */
+    sealed abstract class Phase(val isWaiting: Boolean = false, val isRevealing: Boolean = false, val isPresenting: Boolean = false)
+    object Phase {
+      case object Waiting extends Phase(isWaiting = true)
+      case object Revealing extends Phase(isRevealing = true)
+      case object Presenting extends Phase(isPresenting = true)
+    }
+
+    val $phase = {
+      import Phase._
+      new PeriodicEventStream[Phase](
+        initial = Waiting,
+        next = {
+          case Waiting => Some((Revealing, 100))
+          case Revealing => Some((Presenting, 5000))
+          case Presenting => none
+        },
+        emitInitial = false,
+        resetOnStop = false)
+        .toSignal(Waiting)
+    }
+
+    val $isGlancing: Signal[Boolean] = $glancedNodeStates.map(_.nonEmpty)
+    val $isFocusing: Signal[Boolean] = $focusedNodeState.map(_.nonEmpty)
+
+    val $classNames: Signal[Map[String, Boolean]] =
+      $phase
+        .combineWith($isGlancing)
+        .combineWith($isFocusing)
+        .map { case ((phase, isGlancing), isFocusing) =>
+          dom.console.debug(s"Foo: $phase; isGlancing: $isGlancing, isFocusing: $isFocusing")
+
+          Map(
+            "waiting" -> phase.isWaiting,
+            "revealing" -> phase.isRevealing,
+            "presenting" -> phase.isPresenting,
+            "glancing" -> isGlancing,
+            "focusing" -> isFocusing)
+        }
 
     svg(
       className := "experience-grid-view",
       className := Seq("flex-fill", "bg-dark"),
       zoomBehavior --> zoomTransformBus.writer.contramap(_.transform),
       g(
+        className <-- $classNames,
         transform <-- zoomTransformBus.events.map(_.toString()),
         nodeRenders),
       onMountZoom($focusedNodeState),
