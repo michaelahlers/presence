@@ -278,8 +278,15 @@ object ExperienceGridView {
         .toSignal(Waiting)
     }
 
-    val $isGlancing: Signal[Boolean] = $glancedNodeStates.map(_.nonEmpty)
-    val $isFocusing: Signal[Boolean] = $focusedNodeState.map(_.nonEmpty)
+    /** Indicates if the viewer is hovering over any of the experiences, debounced to avoid rapid transitions between glancing and not. */
+    val $isGlancing: Signal[Boolean] =
+      $glancedNodeStates.map(_.nonEmpty)
+        .changes
+        .debounce(250)
+        .toSignal(false)
+
+    val $isFocusing: Signal[Boolean] =
+      $focusedNodeState.map(_.nonEmpty)
 
     val $classNames: Signal[Map[String, Boolean]] =
       $phase
