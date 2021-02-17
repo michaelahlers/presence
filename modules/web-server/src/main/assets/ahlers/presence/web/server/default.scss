@@ -101,6 +101,27 @@ svg g.glancing g.experience-node-view.glanced,
 svg g.glancing g.experience-node-view.focused,
 svg g.focusing g.experience-node-view.glanced,
 svg g.focusing g.experience-node-view.focused {
+  z-index: 100;
   opacity: 1;
   transition: opacity 100ms ease;
+}
+
+// Tag name
+g.experience-node-view foreignObject {
+  pointer-events: none;
+}
+
+g.experience-node-view label {
+  opacity: 0;
+  height: 100%;
+  padding-left: 60px;
+  padding-right: 20px;
+  color: $navbar-dark-hover-color;
+  font-size: 30px;
+  background-color: #292929;
+}
+
+svg g.glancing g.experience-node-view.glanced label {
+  opacity: 1;
+  //transition: opacity 100ms ease;
 }

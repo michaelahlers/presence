@@ -165,6 +165,7 @@ package object resume {
         ExperienceId("livesafe"),
         ExperienceBrief.Employment.Company(
           "LiveSafe",
+          none,
           "Rosslyn",
           "Virginia"),
         Asset.versioned("/ahlers/presence/web/experiences/livesafe-brief.svg").absoluteUrl.toString()
@@ -175,6 +176,7 @@ package object resume {
         ExperienceId("trss"),
         ExperienceBrief.Employment.Company(
           "Thompson-Reuters Special Services",
+          "TRSS".some,
           "McLean",
           "Virginia"),
         Asset.versioned("/ahlers/presence/web/experiences/trss-brief.svg").absoluteUrl.toString()
@@ -185,6 +187,7 @@ package object resume {
         ExperienceId("verizon-business"),
         ExperienceBrief.Employment.Company(
           "Verizon Business",
+          "Verizon".some,
           "Ashburn",
           "Virginia"),
         Asset.versioned("/ahlers/presence/web/experiences/verizon-brief.svg").absoluteUrl.toString()

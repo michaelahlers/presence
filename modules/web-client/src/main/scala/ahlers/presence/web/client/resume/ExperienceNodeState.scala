@@ -8,6 +8,7 @@ case class ExperienceNodeState(
   index: ExperienceNodeIndex,
   kind: String,
   id: Option[ExperienceId],
+  label: Option[String],
   logo: Option[String],
   cx: Double,
   cy: Double,

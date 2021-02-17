@@ -66,6 +66,7 @@ object ExperienceGridView {
               "blank",
               none,
               none,
+              none,
               hierarchy.x.getOrElse(???),
               hierarchy.y.getOrElse(???),
               radius)
@@ -75,6 +76,7 @@ object ExperienceGridView {
               ExperienceNodeIndex(index),
               "employment",
               employment.id.some,
+              employment.company.shortName.getOrElse(employment.company.name).some,
               employment.logo.some,
               hierarchy.x.getOrElse(???),
               hierarchy.y.getOrElse(???),
@@ -86,10 +88,12 @@ object ExperienceGridView {
               ExperienceNodeIndex(index),
               "skill",
               skill.id.some,
+              skill.name.toText.some,
               skill.logo.some,
               hierarchy.x.getOrElse(???),
               hierarchy.y.getOrElse(???),
-              skill.radius)
+              skill.radius
+            )
 
         }
       }

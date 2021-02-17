@@ -58,6 +58,7 @@ object ExperienceBrief {
   object Employment {
     case class Company(
       name: String,
+      shortName: Option[String],
       city: String,
       state: String)
   }

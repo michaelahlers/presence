@@ -49,7 +49,22 @@ object ExperienceNodeView {
       className := Seq("experience-node-view", nodeState.kind),
       className <-- $classNames,
       style := "--revealing-transition-delay: %dms".format(nodeState.index.toInt * 10),
+      nodeState.label match {
+
+        case None =>
+          new CommentNode("(no label)")
+
+        case Some(label) =>
+          foreignObject(
+            x := (nodeState.x - 5).toString,
+            y := (nodeState.y - 5).toString,
+            width := "100%",
+            height := (nodeState.radius * 2 + 10).toString,
+            ExperienceLabelView.render(label))
+
+      },
       nodeState.logo match {
+
         case None =>
           circle(
             cx := nodeState.cx.toString,
@@ -57,6 +72,7 @@ object ExperienceNodeView {
             r := nodeState.radius.toString,
             fill := "#292929"
           )
+
         case Some(logo: String) =>
           image(
             xlinkHref := logo,
@@ -64,6 +80,7 @@ object ExperienceNodeView {
             y := nodeState.y.toString,
             width := nodeState.width.toString,
             height := nodeState.height.toString)
+
       },
       onClickEnterFocus,
       modifiers
