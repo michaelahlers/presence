@@ -88,13 +88,13 @@ svg g.revealing g.experience-node-view {
 
 svg g.presenting g.experience-node-view {
   opacity: 1;
-  transition: opacity 100ms ease;
+  transition: opacity 250ms ease;
 }
 
 svg g.glancing g.experience-node-view,
 svg g.focusing g.experience-node-view {
   opacity: 0.1;
-  transition: opacity 500ms ease;
+  transition: opacity 750ms ease;
 }
 
 svg g.glancing g.experience-node-view.glanced,
