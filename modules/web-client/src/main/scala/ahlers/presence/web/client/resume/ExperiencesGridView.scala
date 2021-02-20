@@ -247,7 +247,7 @@ object ExperiencesGridView {
           case Some(id) => nodeStates.find(_.id.contains(id))
         }
 
-    val nodeRenders =
+    val idleRenders =
       nodeStates
         .map { nodeState =>
           val onMouseEnterGlanced =
@@ -350,7 +350,7 @@ object ExperiencesGridView {
       g(
         className <-- $classNames,
         transform <-- zoomTransformBus.events.map(_.toString()),
-        nodeRenders,
+        idleRenders,
         focusRenders,
         glanceRenders),
       onMountZoom($focusedNodeState),
