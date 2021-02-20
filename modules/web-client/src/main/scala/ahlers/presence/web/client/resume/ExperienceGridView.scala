@@ -265,7 +265,7 @@ object ExperienceGridView {
             $glancedNodeStates
               .map(_.contains(nodeState))
 
-          ExperienceLabeledView
+          ExperienceGlanceView
             .render(
               nodeState,
               className.toggle("glanced") <-- $isGlanced)

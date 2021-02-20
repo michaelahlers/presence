@@ -106,17 +106,17 @@ svg g.focusing g.experience-node-view.focused {
   transition: opacity 100ms ease;
 }
 
-g.experience-label-view {
+svg g g.experience-glance-view {
   pointer-events: none;
   opacity: 0;
   transition: opacity 250ms ease;
 }
 
-svg g.glancing g.experience-label-view.glanced {
+svg g g.experience-glance-view.glanced {
   opacity: 1;
 }
 
-g.experience-label-view label {
+svg g g.experience-glance-view label {
   height: 100%;
   padding-left: 60px;
   padding-right: 20px;
