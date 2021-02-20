@@ -12,23 +12,15 @@ import org.scalajs.dom.svg._
 object ExperienceFocusView {
 
   def render(
-    nodeState: ExperienceNodeState,
+    nodeState: ExperienceNodeState.Brief,
     modifiers: Modifier[ReactiveSvgElement[G]]*
   ): ReactiveSvgElement[G] = {
-
-    ///** Must be declared prior to importing from [[svg]]. */
-    //val labelRender: Label =
-    //  label(
-    //    xmlns := "http://www.w3.org/1999/xhtml",
-    //    className := "rounded-pill",
-    //    nodeState.label.getOrElse(???))
-
     import svg._
 
     g(
       className := Seq("experience-focus-view"),
       image(
-        xlinkHref := nodeState.logo.getOrElse(???),
+        xlinkHref := nodeState.logo,
         x := nodeState.x.toString,
         y := nodeState.y.toString,
         width := nodeState.width.toString,

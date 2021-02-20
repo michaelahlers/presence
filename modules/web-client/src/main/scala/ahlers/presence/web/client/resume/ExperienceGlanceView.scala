@@ -1,5 +1,6 @@
 package ahlers.presence.web.client.resume
 
+import ahlers.presence.web.client.resume.ExperienceBrief.{ Employment, Skill }
 import com.raquo.domtypes.generic.Modifier
 import com.raquo.laminar.api.L._
 import com.raquo.laminar.nodes._
@@ -12,7 +13,7 @@ import org.scalajs.dom.svg._
 object ExperienceGlanceView {
 
   def render(
-    nodeState: ExperienceNodeState,
+    nodeState: ExperienceNodeState.Brief,
     modifiers: Modifier[ReactiveSvgElement[G]]*
   ): ReactiveSvgElement[G] = {
 
@@ -21,7 +22,8 @@ object ExperienceGlanceView {
       label(
         xmlns := "http://www.w3.org/1999/xhtml",
         className := "rounded-pill",
-        nodeState.label.getOrElse(???))
+        nodeState.label
+      )
 
     import svg._
 
@@ -31,10 +33,10 @@ object ExperienceGlanceView {
         x := (nodeState.x - 5).toString,
         y := (nodeState.y - 5).toString,
         width := "100%",
-        height := (nodeState.radius * 2 + 10).toString,
+        height := (nodeState.r * 2 + 10).toString,
         labelRender),
       image(
-        xlinkHref := nodeState.logo.getOrElse(???),
+        xlinkHref := nodeState.logo,
         x := nodeState.x.toString,
         y := nodeState.y.toString,
         width := nodeState.width.toString,

@@ -12,16 +12,16 @@ import org.scalajs.dom.svg.G
 object ExperienceIdleView {
 
   def render(
-    nodeState: ExperienceNodeState,
+    nodeState: ExperienceNodeState.Brief,
     modifiers: Modifier[ReactiveSvgElement[G]]*
   ): ReactiveSvgElement[G] = {
     import svg._
 
     g(
-      className := Seq("experience-idle-view", nodeState.kind),
+      className := Seq("experience-idle-view"),
       style := "--revealing-transition-delay: %dms".format(nodeState.index.toInt * 10),
       image(
-        xlinkHref := nodeState.logo.getOrElse(???),
+        xlinkHref := nodeState.logo,
         x := nodeState.x.toString,
         y := nodeState.y.toString,
         width := nodeState.width.toString,

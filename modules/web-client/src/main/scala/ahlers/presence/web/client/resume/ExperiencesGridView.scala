@@ -19,6 +19,7 @@ import org.scalajs.dom.svg.SVG
 
 import scala.scalajs.js
 import scala.scalajs.js.JSConverters.JSRichIterableOnce
+import scala.scalajs.js.|
 
 /**
  * @since January 31, 2021
@@ -33,19 +34,26 @@ object ExperiencesGridView {
   val zoomTransformBus: EventBus[Transform] = new EventBus()
 
   val nodeStates: Seq[ExperienceNodeState] = {
-    import ExperienceBrief.{ Blank, Employment, Skill }
+    import ExperienceBrief.{ Employment, Skill }
 
-    val packed: Pack[ExperienceBrief] =
+    val packed: Pack[ExperienceNodeState] =
       d3.pack()
-        .radius(_.data match {
-          case blank: Blank => blank.radius * 1.2d
-          case employment: Employment => employment.radius * 1.2d
-          case skill: Skill => skill.radius * 1.2d
-        })
+        .radius(_.data.r * 1.2d)
 
-    val hierarchy: Hierarchy[ExperienceBrief] with Packed = {
-      val root = Blank(0)
-      val children = experiences.descriptions ++ Seq.tabulate(500)(index => Blank(18d + Math.pow(index, 2) / 750))
+    val hierarchy: Hierarchy[ExperienceNodeState] with Packed = {
+      val root: ExperienceNodeState = ExperienceNodeState.Root
+      val children: Seq[ExperienceNodeState] =
+        (experiences.descriptions.map(_.some) ++ Seq.fill(500)(none))
+          .zipWithIndex
+          .map {
+            case (None, index) =>
+              ExperienceNodeState.Blank(ExperienceNodeIndex(index), 0, 0, 18d + Math.pow(index.toInt, 2) / 750)
+            case (Some(skill: Skill), index) =>
+              ExperienceNodeState.Brief(ExperienceNodeIndex(index), 0, 0, 20d, skill.id, skill.name.toText, skill.logo)
+            case (Some(employment: Employment), index) =>
+              ExperienceNodeState.Brief(ExperienceNodeIndex(index), 0, 0, 20d, employment.id, employment.company.shortName.getOrElse(employment.company.name), employment.logo)
+          }
+
       packed(d3.hierarchy(
         root,
         {
@@ -56,46 +64,17 @@ object ExperiencesGridView {
 
     hierarchy.children.orNull
       .toSeq
-      //.take(1)
-      .zipWithIndex
-      .map { case (hierarchy, index) =>
+      .map { hierarchy =>
         hierarchy.data match {
-
-          case Blank(radius) =>
-            ExperienceNodeState(
-              ExperienceNodeIndex(index),
-              "blank",
-              none,
-              none,
-              none,
-              hierarchy.x.getOrElse(???),
-              hierarchy.y.getOrElse(???),
-              radius)
-
-          case employment: Employment =>
-            ExperienceNodeState(
-              ExperienceNodeIndex(index),
-              "employment",
-              employment.id.some,
-              employment.company.shortName.getOrElse(employment.company.name).some,
-              employment.logo.some,
-              hierarchy.x.getOrElse(???),
-              hierarchy.y.getOrElse(???),
-              employment.radius
-            )
-
-          case skill: Skill =>
-            ExperienceNodeState(
-              ExperienceNodeIndex(index),
-              "skill",
-              skill.id.some,
-              skill.name.toText.some,
-              skill.logo.some,
-              hierarchy.x.getOrElse(???),
-              hierarchy.y.getOrElse(???),
-              skill.radius
-            )
-
+          case ExperienceNodeState.Root => ???
+          case blank: ExperienceNodeState.Blank =>
+            blank.copy(
+              cx = hierarchy.x.getOrElse(???),
+              cy = hierarchy.y.getOrElse(???))
+          case brief: ExperienceNodeState.Brief =>
+            brief.copy(
+              cx = hierarchy.x.getOrElse(???),
+              cy = hierarchy.y.getOrElse(???))
         }
       }
   }
@@ -241,25 +220,26 @@ object ExperiencesGridView {
     val $glancedNodeStates: Signal[Set[ExperienceNodeState]] =
       glancedNodeStatesVar.signal
 
-    val $focusedNodeState: Signal[Option[ExperienceNodeState]] =
+    val $focusedNodeState: Signal[Option[ExperienceNodeState.Brief]] =
       $focusedExperienceId
         .map {
           case None => none
-          case Some(id) => nodeStates.find(_.id.contains(id))
+          case Some(id) =>
+            nodeStates.collectFirst {
+              case brief: ExperienceNodeState.Brief if id == brief.id => brief
+            }
         }
 
     val blankRenders =
       nodeStates
-        .filter(_.kind == "blank")
-        .map { nodeState =>
+        .collect { case nodeState: ExperienceNodeState.Blank =>
           ExperienceBlankView
             .render(nodeState)
         }
 
     val idleRenders =
       nodeStates
-        .filterNot(_.kind == "blank")
-        .map { nodeState =>
+        .collect { case nodeState: ExperienceNodeState.Brief =>
           val onMouseEnterGlanced =
             onMouseEnter --> (_ => glancedNodeStatesVar.update(_ + nodeState))
 
@@ -269,9 +249,7 @@ object ExperiencesGridView {
           val onClickEnterFocus =
             onClick
               .stopPropagation
-              .mapToValue(nodeState.id
-                .map(FocusedResumePage(_))
-                .getOrElse(UnfocusedResumePage)) --> (UiState.router.pushState(_))
+              .mapToValue(FocusedResumePage(nodeState.id)) --> (UiState.router.pushState(_))
 
           ExperienceIdleView
             .render(
@@ -283,8 +261,7 @@ object ExperiencesGridView {
 
     val focusRenders =
       nodeStates
-        .filterNot(_.kind == "blank")
-        .map { nodeState =>
+        .collect { case nodeState: ExperienceNodeState.Brief =>
           val $isFocused =
             $focusedNodeState
               .map(_.contains(nodeState))
@@ -297,8 +274,7 @@ object ExperiencesGridView {
 
     val glanceRenders =
       nodeStates
-        .filterNot(_.kind == "blank")
-        .map { nodeState =>
+        .collect { case nodeState: ExperienceNodeState.Brief =>
           val $isGlanced =
             $glancedNodeStates
               .combineWith($focusedNodeState)
