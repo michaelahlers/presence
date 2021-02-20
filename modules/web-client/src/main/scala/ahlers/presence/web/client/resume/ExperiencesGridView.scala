@@ -33,25 +33,25 @@ object ExperiencesGridView {
 
   val zoomTransformBus: EventBus[Transform] = new EventBus()
 
-  val nodeStates: Seq[ExperienceNodeState] = {
+  val briefStates: Seq[ExperienceBriefState] = {
     import ExperienceBrief.{ Employment, Skill }
 
-    val packed: Pack[ExperienceNodeState] =
+    val packed: Pack[ExperienceBriefState] =
       d3.pack()
         .radius(_.data.r * 1.2d)
 
-    val hierarchy: Hierarchy[ExperienceNodeState] with Packed = {
-      val root: ExperienceNodeState = ExperienceNodeState.Root
-      val children: Seq[ExperienceNodeState] =
+    val hierarchy: Hierarchy[ExperienceBriefState] with Packed = {
+      val root: ExperienceBriefState = ExperienceBriefState.Root
+      val children: Seq[ExperienceBriefState] =
         (experiences.descriptions.map(_.some) ++ Seq.fill(500)(none))
           .zipWithIndex
           .map {
             case (None, index) =>
-              ExperienceNodeState.Blank(ExperienceNodeIndex(index), 0, 0, 18d + Math.pow(index.toInt, 2) / 750)
+              ExperienceBriefState.Blank(ExperienceBriefIndex(index), 0, 0, 18d + Math.pow(index.toInt, 2) / 750)
             case (Some(skill: Skill), index) =>
-              ExperienceNodeState.Brief(ExperienceNodeIndex(index), 0, 0, 20d, skill.id, skill.name.toText, skill.logo)
+              ExperienceBriefState.Brief(ExperienceBriefIndex(index), 0, 0, 20d, skill.id, skill.name.toText, skill.logo)
             case (Some(employment: Employment), index) =>
-              ExperienceNodeState.Brief(ExperienceNodeIndex(index), 0, 0, 20d, employment.id, employment.company.shortName.getOrElse(employment.company.name), employment.logo)
+              ExperienceBriefState.Brief(ExperienceBriefIndex(index), 0, 0, 20d, employment.id, employment.company.shortName.getOrElse(employment.company.name), employment.logo)
           }
 
       packed(d3.hierarchy(
@@ -66,12 +66,12 @@ object ExperiencesGridView {
       .toSeq
       .map { hierarchy =>
         hierarchy.data match {
-          case ExperienceNodeState.Root => ???
-          case blank: ExperienceNodeState.Blank =>
+          case ExperienceBriefState.Root => ???
+          case blank: ExperienceBriefState.Blank =>
             blank.copy(
               cx = hierarchy.x.getOrElse(???),
               cy = hierarchy.y.getOrElse(???))
-          case brief: ExperienceNodeState.Brief =>
+          case brief: ExperienceBriefState.Brief =>
             brief.copy(
               cx = hierarchy.x.getOrElse(???),
               cy = hierarchy.y.getOrElse(???))
@@ -79,10 +79,10 @@ object ExperiencesGridView {
       }
   }
 
-  val defaultNodeState: ExperienceNodeState = nodeStates.head
+  val defaultNodeState: ExperienceBriefState = briefStates.head
 
   /** Initial zoom effect, starting wide and narrowing gradually. */
-  def onMountZoom($focusedNodeState: Signal[Option[ExperienceNodeState]]): Modifier[ReactiveSvgElement[SVG]] =
+  def onMountZoom($focusedNodeState: Signal[Option[ExperienceBriefState]]): Modifier[ReactiveSvgElement[SVG]] =
     onMountCallback { context =>
       import context.{ owner, thisNode }
       import thisNode.ref.{ clientHeight, clientWidth }
@@ -131,7 +131,7 @@ object ExperiencesGridView {
       }
     }
 
-  def onWindowResizeZoom($focusedNodeState: Signal[Option[ExperienceNodeState]]): Modifier[ReactiveSvgElement[SVG]] =
+  def onWindowResizeZoom($focusedNodeState: Signal[Option[ExperienceBriefState]]): Modifier[ReactiveSvgElement[SVG]] =
     inContext { thisNode =>
       import thisNode.ref.{ clientHeight, clientWidth }
 
@@ -169,7 +169,7 @@ object ExperiencesGridView {
       }
     }
 
-  def onFocusedNodeZoom($focusedNodeState: Signal[Option[ExperienceNodeState]]): Modifier[ReactiveSvgElement[SVG]] =
+  def onFocusedNodeZoom($focusedNodeState: Signal[Option[ExperienceBriefState]]): Modifier[ReactiveSvgElement[SVG]] =
     inContext { thisNode =>
       import thisNode.ref.{ clientHeight, clientWidth }
 
@@ -215,31 +215,31 @@ object ExperiencesGridView {
   def render($focusedExperienceId: Signal[Option[ExperienceId]]): ReactiveSvgElement[SVG] = {
     import svg._
 
-    val glancedNodeStatesVar: Var[Set[ExperienceNodeState]] = Var(Set.empty)
+    val glancedNodeStatesVar: Var[Set[ExperienceBriefState]] = Var(Set.empty)
 
-    val $glancedNodeStates: Signal[Set[ExperienceNodeState]] =
+    val $glancedNodeStates: Signal[Set[ExperienceBriefState]] =
       glancedNodeStatesVar.signal
 
-    val $focusedNodeState: Signal[Option[ExperienceNodeState.Brief]] =
+    val $focusedNodeState: Signal[Option[ExperienceBriefState.Brief]] =
       $focusedExperienceId
         .map {
           case None => none
           case Some(id) =>
-            nodeStates.collectFirst {
-              case brief: ExperienceNodeState.Brief if id == brief.id => brief
+            briefStates.collectFirst {
+              case brief: ExperienceBriefState.Brief if id == brief.id => brief
             }
         }
 
     val blankRenders =
-      nodeStates
-        .collect { case nodeState: ExperienceNodeState.Blank =>
-          ExperienceBlankView
+      briefStates
+        .collect { case nodeState: ExperienceBriefState.Blank =>
+          ExperienceBriefBlankView
             .render(nodeState)
         }
 
     val idleRenders =
-      nodeStates
-        .collect { case nodeState: ExperienceNodeState.Brief =>
+      briefStates
+        .collect { case nodeState: ExperienceBriefState.Brief =>
           val onMouseEnterGlanced =
             onMouseEnter --> (_ => glancedNodeStatesVar.update(_ + nodeState))
 
@@ -251,7 +251,7 @@ object ExperiencesGridView {
               .stopPropagation
               .mapToValue(FocusedResumePage(nodeState.id)) --> (UiState.router.pushState(_))
 
-          ExperienceIdleView
+          ExperienceBriefIdleView
             .render(
               nodeState,
               onMouseEnterGlanced,
@@ -260,28 +260,28 @@ object ExperiencesGridView {
         }
 
     val focusRenders =
-      nodeStates
-        .collect { case nodeState: ExperienceNodeState.Brief =>
+      briefStates
+        .collect { case nodeState: ExperienceBriefState.Brief =>
           val $isFocused =
             $focusedNodeState
               .map(_.contains(nodeState))
 
-          ExperienceFocusView
+          ExperienceBriefFocusView
             .render(
               nodeState,
               className.toggle("focused") <-- $isFocused)
         }
 
     val glanceRenders =
-      nodeStates
-        .collect { case nodeState: ExperienceNodeState.Brief =>
+      briefStates
+        .collect { case nodeState: ExperienceBriefState.Brief =>
           val $isGlanced =
             $glancedNodeStates
               .combineWith($focusedNodeState)
               .map { case (x, y) => x.diff(y.toSet) }
               .map(_.contains(nodeState))
 
-          ExperienceGlanceView
+          ExperienceBriefGlanceView
             .render(
               nodeState,
               className.toggle("glanced") <-- $isGlanced)

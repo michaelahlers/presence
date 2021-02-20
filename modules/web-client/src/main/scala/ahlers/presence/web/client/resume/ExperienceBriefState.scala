@@ -5,18 +5,18 @@ import cats.syntax.option
  * @since January 31, 2021
  * @author <a href="mailto:michael@ahlers.consulting">Michael Ahlers</a>
  */
-sealed trait ExperienceNodeState {
+sealed trait ExperienceBriefState {
 
-  def index: ExperienceNodeIndex
+  def index: ExperienceBriefIndex
   def cx: Double
   def cy: Double
   def r: Double
 
 }
 
-object ExperienceNodeState {
+object ExperienceBriefState {
 
-  case object Root extends ExperienceNodeState {
+  case object Root extends ExperienceBriefState {
     override def index = ???
     override def cx = ???
     override def cy = ???
@@ -24,23 +24,23 @@ object ExperienceNodeState {
   }
 
   case class Blank(
-    index: ExperienceNodeIndex,
+    index: ExperienceBriefIndex,
     cx: Double,
     cy: Double,
     r: Double)
-    extends ExperienceNodeState
+    extends ExperienceBriefState
 
   case class Brief(
-    index: ExperienceNodeIndex,
+    index: ExperienceBriefIndex,
     cx: Double,
     cy: Double,
     r: Double,
     id: ExperienceId,
     label: String,
     logo: String)
-    extends ExperienceNodeState
+    extends ExperienceBriefState
 
-  implicit class Syntax(private val self: ExperienceNodeState) extends AnyVal {
+  implicit class Syntax(private val self: ExperienceBriefState) extends AnyVal {
     import self._
 
     def x: Double = cx - r
