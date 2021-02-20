@@ -1,7 +1,7 @@
 package ahlers.presence.web.client.resume
 
 import ahlers.presence.web.client.UiState
-import ahlers.presence.web.client.UiState.UnfocusedResumePage
+import ahlers.presence.web.client.UiState.{ FocusedResumePage, UnfocusedResumePage }
 import cats.syntax.apply._
 import cats.syntax.option._
 import com.raquo.airstream.eventbus.EventBus
@@ -266,13 +266,19 @@ object ExperiencesGridView {
           val onMouseLeaveGlanced =
             onMouseLeave --> (_ => glancedNodeStatesVar.update(_ - nodeState))
 
+          val onClickEnterFocus =
+            onClick
+              .stopPropagation
+              .mapToValue(nodeState.id
+                .map(FocusedResumePage(_))
+                .getOrElse(UnfocusedResumePage)) --> (UiState.router.pushState(_))
+
           ExperienceIdleView
             .render(
               nodeState,
-              //$glancedNodeStates,
-              //$focusedNodeState,
               onMouseEnterGlanced,
-              onMouseLeaveGlanced)
+              onMouseLeaveGlanced,
+              onClickEnterFocus)
         }
 
     val focusRenders =

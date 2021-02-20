@@ -1,7 +1,5 @@
 package ahlers.presence.web.client.resume
 
-import ahlers.presence.web.client.UiState
-import ahlers.presence.web.client.UiState.{ FocusedResumePage, UnfocusedResumePage }
 import com.raquo.domtypes.generic.Modifier
 import com.raquo.laminar.api.L._
 import com.raquo.laminar.nodes.ReactiveSvgElement
@@ -19,13 +17,6 @@ object ExperienceIdleView {
   ): ReactiveSvgElement[G] = {
     import svg._
 
-    val onClickEnterFocus: Modifier[ReactiveSvgElement[G]] =
-      onClick
-        .stopPropagation
-        .mapToValue(nodeState.id
-          .map(FocusedResumePage(_))
-          .getOrElse(UnfocusedResumePage)) --> (UiState.router.pushState(_))
-
     g(
       className := Seq("experience-idle-view", nodeState.kind),
       style := "--revealing-transition-delay: %dms".format(nodeState.index.toInt * 10),
@@ -36,7 +27,6 @@ object ExperienceIdleView {
         width := nodeState.width.toString,
         height := nodeState.height.toString
       ),
-      onClickEnterFocus,
       modifiers
     )
   }
