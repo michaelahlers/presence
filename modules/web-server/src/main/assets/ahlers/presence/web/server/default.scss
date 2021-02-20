@@ -107,13 +107,16 @@ svg g g.experience-focus-view.focused {
   opacity: 1;
 }
 
-svg g g.experience-focus-view label {
+svg g g.experience-focus-view div  {
   height: 100%;
+  background-color: #292929;
+}
+
+svg g g.experience-focus-view div label {
   padding-left: 60px;
   padding-right: 20px;
   color: $navbar-dark-hover-color;
   font-size: 30px;
-  background-color: #292929;
 }
 
 svg g g.experience-glance-view {
@@ -126,11 +129,14 @@ svg g g.experience-glance-view.glanced {
   opacity: 1;
 }
 
-svg g g.experience-glance-view label {
+svg g g.experience-glance-view div  {
   height: 100%;
+  background-color: #292929;
+}
+
+svg g g.experience-glance-view div label {
   padding-left: 60px;
   padding-right: 20px;
   color: $navbar-dark-hover-color;
   font-size: 30px;
-  background-color: #292929;
 }

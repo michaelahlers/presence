@@ -56,6 +56,7 @@ object ExperiencesGridView {
 
     hierarchy.children.orNull
       .toSeq
+      //.take(1)
       .zipWithIndex
       .map { case (hierarchy, index) =>
         hierarchy.data match {
@@ -139,10 +140,12 @@ object ExperiencesGridView {
                 .duration(3000d),
               d3.zoomIdentity
                 .translate(
-                  clientWidth / 2,
-                  clientHeight / 2)
+                  focusedNodeState.radius * 2 + 100,
+                  focusedNodeState.radius * 2 + 150)
                 .scale(5d)
-                .translate(-focusedNodeState.cx, -focusedNodeState.cy)
+                .translate(
+                  -focusedNodeState.cx,
+                  -focusedNodeState.cy)
             )
 
       }
@@ -175,10 +178,13 @@ object ExperiencesGridView {
               d3.select(thisNode.ref),
               d3.zoomIdentity
                 .translate(
-                  clientWidth / 2,
-                  clientHeight / 2)
+                  focusedNodeState.radius * 2 + 100,
+                  focusedNodeState.radius * 2 + 150)
                 .scale(5)
-                .translate(-focusedNodeState.cx, -focusedNodeState.cy))
+                .translate(
+                  -focusedNodeState.cx,
+                  -focusedNodeState.cy)
+            )
 
       }
     }
@@ -210,10 +216,12 @@ object ExperiencesGridView {
                 .duration(1000d),
               d3.zoomIdentity
                 .translate(
-                  clientWidth / 2,
-                  clientHeight / 2)
+                  focusedNodeState.radius * 2 + 100,
+                  focusedNodeState.radius * 2 + 150)
                 .scale(5)
-                .translate(-focusedNodeState.cx, -focusedNodeState.cy)
+                .translate(
+                  -focusedNodeState.cx,
+                  -focusedNodeState.cy)
             )
 
       }
