@@ -11,60 +11,58 @@ import org.scalajs.dom.svg.G
  * @since January 31, 2021
  * @author <a href="mailto:michael@ahlers.consulting">Michael Ahlers</a>
  */
-object ExperienceNodeView {
+object ExperienceLabeledView {
 
   def render(
     nodeState: ExperienceNodeState,
     //$glancedNodeStates: Signal[Set[ExperienceNodeState]],
-    $focusedNodeState: Signal[Option[ExperienceNodeState]],
+    //$focusedNodeState: Signal[Option[ExperienceNodeState]],
     modifiers: Modifier[ReactiveSvgElement[G]]*
   ): ReactiveSvgElement[G] = {
     import svg._
 
-    val onClickEnterFocus: Modifier[ReactiveSvgElement[G]] =
-      onClick
-        .stopPropagation
-        .mapToValue(nodeState.id
-          .map(FocusedResumePage(_))
-          .getOrElse(UnfocusedResumePage)) --> (UiState.router.pushState(_))
+    //val onClickEnterFocus: Modifier[ReactiveSvgElement[G]] =
+    //  onClick
+    //    .stopPropagation
+    //    .mapToValue(nodeState.id
+    //      .map(FocusedResumePage(_))
+    //      .getOrElse(UnfocusedResumePage)) --> (UiState.router.pushState(_))
 
     //val $isGlanced: Signal[Boolean] =
     //  $glancedNodeStates.map(_
     //    .contains(nodeState))
 
-    val $isFocused: Signal[Boolean] =
-      $focusedNodeState.map(_
-        .contains(nodeState))
+    //val $isFocused: Signal[Boolean] =
+    //  $focusedNodeState.map(_
+    //    .contains(nodeState))
 
-    val $classNames: Signal[Map[String, Boolean]] =
-      //$isGlanced
-      //.combineWith($isFocused)
-      //.map { case (isGlanced, isFocused) =>
-      $isFocused
-        .map { isFocused =>
-          Map(
-            //"glanced" -> isGlanced,
-            "focused" -> isFocused)
-        }
+    //val $classNames: Signal[Map[String, Boolean]] =
+    //  $isGlanced
+    //    .combineWith($isFocused)
+    //    .map { case (isGlanced, isFocused) =>
+    //      Map(
+    //        "glanced" -> isGlanced,
+    //        "focused" -> isFocused)
+    //    }
 
     g(
-      className := Seq("experience-node-view", nodeState.kind),
-      className <-- $classNames,
+      className := Seq("experience-label-view", nodeState.kind),
+      //className <-- $classNames,
       style := "--revealing-transition-delay: %dms".format(nodeState.index.toInt * 10),
-      //nodeState.label match {
-      //
-      //  case None =>
-      //    new CommentNode("(no label)")
-      //
-      //  case Some(label) =>
-      //    foreignObject(
-      //      x := (nodeState.x - 5).toString,
-      //      y := (nodeState.y - 5).toString,
-      //      width := "100%",
-      //      height := (nodeState.radius * 2 + 10).toString,
-      //      ExperienceLabelView.render(label))
-      //
-      //},
+      nodeState.label match {
+
+        case None =>
+          new CommentNode("(no label)")
+
+        case Some(label) =>
+          foreignObject(
+            x := (nodeState.x - 5).toString,
+            y := (nodeState.y - 5).toString,
+            width := "100%",
+            height := (nodeState.radius * 2 + 10).toString,
+            ExperienceLabelView.render(label))
+
+      },
       nodeState.logo match {
 
         case None =>
@@ -84,7 +82,6 @@ object ExperienceNodeView {
             height := nodeState.height.toString)
 
       },
-      onClickEnterFocus,
       modifiers
     )
   }

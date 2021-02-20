@@ -106,22 +106,21 @@ svg g.focusing g.experience-node-view.focused {
   transition: opacity 100ms ease;
 }
 
-// Tag name
-g.experience-node-view foreignObject {
+g.experience-label-view {
   pointer-events: none;
+  opacity: 0;
+  transition: opacity 250ms ease;
 }
 
-g.experience-node-view label {
-  opacity: 0;
+svg g.glancing g.experience-label-view.glanced {
+  opacity: 1;
+}
+
+g.experience-label-view label {
   height: 100%;
   padding-left: 60px;
   padding-right: 20px;
   color: $navbar-dark-hover-color;
   font-size: 30px;
   background-color: #292929;
-}
-
-svg g.glancing g.experience-node-view.glanced label {
-  opacity: 1;
-  //transition: opacity 100ms ease;
 }
