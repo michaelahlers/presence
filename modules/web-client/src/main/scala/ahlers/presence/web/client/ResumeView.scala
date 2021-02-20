@@ -25,7 +25,7 @@ object ResumeView {
 
     article(
       className := "d-flex flex-column h-100",
-      ExperienceGridView.render($focusedExperienceId) //,
+      ExperiencesGridView.render($focusedExperienceId) //,
       //div(
       //  className := "container-fluid",
       //  div(
