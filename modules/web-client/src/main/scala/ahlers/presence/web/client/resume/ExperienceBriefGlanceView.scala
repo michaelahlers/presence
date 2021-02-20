@@ -1,6 +1,6 @@
 package ahlers.presence.web.client.resume
 
-import ahlers.presence.web.client.resume.ExperienceBrief.{ Employment, Skill }
+import ahlers.presence.web.client.resume.ExperienceDetail.{ Employment, Skill }
 import com.raquo.domtypes.generic.Modifier
 import com.raquo.laminar.api.L._
 import com.raquo.laminar.nodes._

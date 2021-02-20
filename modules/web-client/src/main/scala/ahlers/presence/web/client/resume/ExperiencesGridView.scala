@@ -34,7 +34,7 @@ object ExperiencesGridView {
   val zoomTransformBus: EventBus[Transform] = new EventBus()
 
   val briefStates: Seq[ExperienceBriefState] = {
-    import ExperienceBrief.{ Employment, Skill }
+    import ExperienceDetail.{ Employment, Skill }
 
     val packed: Pack[ExperienceBriefState] =
       d3.pack()

@@ -15,155 +15,155 @@ package object resume {
   object experiences {
 
     val Akka =
-      ExperienceBrief.Skill(
+      ExperienceDetail.Skill(
         ExperienceId("akka"),
         ExperienceName("Akka"),
         Asset.versioned("/ahlers/presence/web/experiences/akka-brief.svg").absoluteUrl.toString())
 
     val Bootstrap =
-      ExperienceBrief.Skill(
+      ExperienceDetail.Skill(
         ExperienceId("bootstrap"),
         ExperienceName("Bootstrap"),
         Asset.versioned("/ahlers/presence/web/experiences/bootstrap-brief.svg").absoluteUrl.toString())
 
     val CSS =
-      ExperienceBrief.Skill(
+      ExperienceDetail.Skill(
         ExperienceId("css"),
         ExperienceName("CSS"),
         Asset.versioned("/ahlers/presence/web/experiences/css3-brief.svg").absoluteUrl.toString())
 
     val D3 =
-      ExperienceBrief.Skill(
+      ExperienceDetail.Skill(
         ExperienceId("d3"),
         ExperienceName("D3"),
         Asset.versioned("/ahlers/presence/web/experiences/d3-brief.svg").absoluteUrl.toString())
 
     val DataGrip =
-      ExperienceBrief.Skill(
+      ExperienceDetail.Skill(
         ExperienceId("datagrip"),
         ExperienceName("DataGrip"),
         Asset.versioned("/ahlers/presence/web/experiences/datagrip-brief.svg").absoluteUrl.toString())
 
     val Flyway =
-      ExperienceBrief.Skill(
+      ExperienceDetail.Skill(
         ExperienceId("flyway"),
         ExperienceName("Flyway"),
         Asset.versioned("/ahlers/presence/web/experiences/flyway-brief.svg").absoluteUrl.toString())
 
     val Git =
-      ExperienceBrief.Skill(
+      ExperienceDetail.Skill(
         ExperienceId("git"),
         ExperienceName("Git"),
         Asset.versioned("/ahlers/presence/web/experiences/git-brief.svg").absoluteUrl.toString())
 
     val GitHub =
-      ExperienceBrief.Skill(
+      ExperienceDetail.Skill(
         ExperienceId("github"),
         ExperienceName("GitHub"),
         Asset.versioned("/ahlers/presence/web/experiences/github-brief.svg").absoluteUrl.toString())
 
     val IntelliJ =
-      ExperienceBrief.Skill(
+      ExperienceDetail.Skill(
         ExperienceId("intellij-idea"),
         ExperienceName("IntelliJ IDEA"),
         Asset.versioned("/ahlers/presence/web/experiences/intellij-idea-brief.svg").absoluteUrl.toString()
       )
 
     val HTML =
-      ExperienceBrief.Skill(
+      ExperienceDetail.Skill(
         ExperienceId("html"),
         ExperienceName("HTML"),
         Asset.versioned("/ahlers/presence/web/experiences/html5-brief.svg").absoluteUrl.toString())
 
     val Java =
-      ExperienceBrief.Skill(
+      ExperienceDetail.Skill(
         ExperienceId("java"),
         ExperienceName("Java"),
         Asset.versioned("/ahlers/presence/web/experiences/java-brief.svg").absoluteUrl.toString())
 
     val JavaScript =
-      ExperienceBrief.Skill(
+      ExperienceDetail.Skill(
         ExperienceId("javascript"),
         ExperienceName("JavaScript"),
         Asset.versioned("/ahlers/presence/web/experiences/javascript-brief.svg").absoluteUrl.toString()
       )
 
     val jQuery =
-      ExperienceBrief.Skill(
+      ExperienceDetail.Skill(
         ExperienceId("jquery"),
         ExperienceName("jQuery"),
         Asset.versioned("/ahlers/presence/web/experiences/jquery-brief.svg").absoluteUrl.toString())
 
     val Kafka =
-      ExperienceBrief.Skill(
+      ExperienceDetail.Skill(
         ExperienceId("kafka"),
         ExperienceName("Kafka"),
         Asset.versioned("/ahlers/presence/web/experiences/kafka-brief.svg").absoluteUrl.toString())
 
     val SBT =
-      ExperienceBrief.Skill(
+      ExperienceDetail.Skill(
         ExperienceId("sbt"),
         ExperienceName("SBT"),
         Asset.versioned("/ahlers/presence/web/experiences/sbt-brief.svg").absoluteUrl.toString())
 
     val Scala =
-      ExperienceBrief.Skill(
+      ExperienceDetail.Skill(
         ExperienceId("scala"),
         ExperienceName("Scala"),
         Asset.versioned("/ahlers/presence/web/experiences/scala-brief.svg").absoluteUrl.toString())
 
     val ScalaJs =
-      ExperienceBrief.Skill(
+      ExperienceDetail.Skill(
         ExperienceId("scala.js"),
         ExperienceName("Scala.js"),
         Asset.versioned("/ahlers/presence/web/experiences/scala.js-brief.svg").absoluteUrl.toString())
 
     val Slick =
-      ExperienceBrief.Skill(
+      ExperienceDetail.Skill(
         ExperienceId("slick"),
         ExperienceName("Slick"),
         Asset.versioned("/ahlers/presence/web/experiences/slick-brief.svg").absoluteUrl.toString())
 
     val Lagom =
-      ExperienceBrief.Skill(
+      ExperienceDetail.Skill(
         ExperienceId("lagom"),
         ExperienceName("Lagom"),
         Asset.versioned("/ahlers/presence/web/experiences/lagom-brief.svg").absoluteUrl.toString())
 
     val Linux =
-      ExperienceBrief.Skill(
+      ExperienceDetail.Skill(
         ExperienceId("linux"),
         ExperienceName("Linux"),
         Asset.versioned("/ahlers/presence/web/experiences/linux-brief.svg").absoluteUrl.toString())
 
     val MySQL =
-      ExperienceBrief.Skill(
+      ExperienceDetail.Skill(
         ExperienceId("mysql"),
         ExperienceName("MySQL"),
         Asset.versioned("/ahlers/presence/web/experiences/mysql-brief.svg").absoluteUrl.toString())
 
     val MongoDB =
-      ExperienceBrief.Skill(
+      ExperienceDetail.Skill(
         ExperienceId("mongodb"),
         ExperienceName("mongodb"),
         Asset.versioned("/ahlers/presence/web/experiences/mongodb-brief.svg").absoluteUrl.toString())
 
-    val PlayFramework = ExperienceBrief.Skill(
+    val PlayFramework = ExperienceDetail.Skill(
       ExperienceId("play-framework"),
       ExperienceName("Play Framework"),
       Asset.versioned("/ahlers/presence/web/experiences/play-framework-brief.svg").absoluteUrl.toString()
     )
 
-    val PostgreSQL = ExperienceBrief.Skill(
+    val PostgreSQL = ExperienceDetail.Skill(
       ExperienceId("postgresql"),
       ExperienceName("PostgreSQL"),
       Asset.versioned("/ahlers/presence/web/experiences/postgresql-brief.svg").absoluteUrl.toString()
     )
 
     val LiveSafe =
-      ExperienceBrief.Employment(
+      ExperienceDetail.Employment(
         ExperienceId("livesafe"),
-        ExperienceBrief.Employment.Company(
+        ExperienceDetail.Employment.Company(
           "LiveSafe",
           none,
           "Rosslyn",
@@ -172,9 +172,9 @@ package object resume {
       )
 
     val ThompsonReutersSpecialServices =
-      ExperienceBrief.Employment(
+      ExperienceDetail.Employment(
         ExperienceId("trss"),
-        ExperienceBrief.Employment.Company(
+        ExperienceDetail.Employment.Company(
           "Thompson-Reuters Special Services",
           "TRSS".some,
           "McLean",
@@ -183,9 +183,9 @@ package object resume {
       )
 
     val VerizonBusiness =
-      ExperienceBrief.Employment(
+      ExperienceDetail.Employment(
         ExperienceId("verizon-business"),
-        ExperienceBrief.Employment.Company(
+        ExperienceDetail.Employment.Company(
           "Verizon Business",
           "Verizon".some,
           "Ashburn",
@@ -193,7 +193,7 @@ package object resume {
         Asset.versioned("/ahlers/presence/web/experiences/verizon-brief.svg").absoluteUrl.toString()
       )
 
-    val descriptions: Seq[ExperienceBrief] =
+    val descriptions: Seq[ExperienceDetail] =
       Akka ::
         Bootstrap ::
         CSS ::
@@ -223,7 +223,7 @@ package object resume {
         VerizonBusiness ::
         Nil
 
-    val relationSets: Seq[Set[_ <: ExperienceBrief]] =
+    val relationSets: Seq[Set[_ <: ExperienceDetail]] =
       Set(Akka, Lagom, PlayFramework, Scala, Slick) ::
         Set(Bootstrap, CSS) ::
         Set(Flyway, PostgreSQL, Slick) ::
