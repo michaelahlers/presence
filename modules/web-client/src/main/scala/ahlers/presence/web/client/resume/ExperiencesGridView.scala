@@ -102,6 +102,7 @@ object ExperiencesGridView {
 
   val defaultNodeState: ExperienceNodeState = nodeStates.head
 
+  /** Initial zoom effect, starting wide and narrowing gradually. */
   def onMountZoom($focusedNodeState: Signal[Option[ExperienceNodeState]]): Modifier[ReactiveSvgElement[SVG]] =
     onMountCallback { context =>
       import context.{ owner, thisNode }
