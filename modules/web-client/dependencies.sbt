@@ -15,7 +15,7 @@ libraryDependencies ++=
     "io.circe" %%% "circe-core" % "0.14.0-M3" ::
     "io.circe" %%% "circe-generic" % "0.14.0-M3" ::
     "io.circe" %%% "circe-parser" % "0.14.0-M3" ::
-    "io.circe" %%% "circe-shapes" % "0.14.0-M2" ::
+    "io.circe" %%% "circe-shapes" % "0.14.0-M3" ::
     "io.github.cquiroz" %%% "scala-java-time" % "2.1.0" ::
     "io.lemonlabs" %%% "scala-uri" % "3.0.0" ::
     "io.scalaland" %%% "chimney" % "0.6.1" ::
