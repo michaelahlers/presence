@@ -13,7 +13,7 @@ import org.scalajs.dom.svg._
 object ExperienceBriefGlanceView {
 
   def render(
-    nodeState: ExperienceBriefState.Brief,
+    briefState: ExperienceBriefState.Brief,
     modifiers: Modifier[ReactiveSvgElement[G]]*
   ): ReactiveSvgElement[G] = {
 
@@ -22,7 +22,7 @@ object ExperienceBriefGlanceView {
       label(
         xmlns := "http://www.w3.org/1999/xhtml",
         className := "rounded-pill",
-        nodeState.label
+        briefState.label
       )
 
     import svg._
@@ -30,17 +30,17 @@ object ExperienceBriefGlanceView {
     g(
       className := Seq("experience-glance-view"),
       foreignObject(
-        x := (nodeState.x - 5).toString,
-        y := (nodeState.y - 5).toString,
+        x := (briefState.x - 5).toString,
+        y := (briefState.y - 5).toString,
         width := "100%",
-        height := (nodeState.r * 2 + 10).toString,
+        height := (briefState.r * 2 + 10).toString,
         labelRender),
       image(
-        xlinkHref := nodeState.logo,
-        x := nodeState.x.toString,
-        y := nodeState.y.toString,
-        width := nodeState.width.toString,
-        height := nodeState.height.toString
+        xlinkHref := briefState.logo,
+        x := briefState.x.toString,
+        y := briefState.y.toString,
+        width := briefState.width.toString,
+        height := briefState.height.toString
       ),
       modifiers
     )

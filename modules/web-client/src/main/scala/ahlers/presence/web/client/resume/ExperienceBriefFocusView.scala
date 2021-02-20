@@ -12,7 +12,7 @@ import org.scalajs.dom.svg._
 object ExperienceBriefFocusView {
 
   def render(
-    nodeState: ExperienceBriefState.Brief,
+    briefState: ExperienceBriefState.Brief,
     modifiers: Modifier[ReactiveSvgElement[G]]*
   ): ReactiveSvgElement[G] = {
     import svg._
@@ -20,11 +20,11 @@ object ExperienceBriefFocusView {
     g(
       className := Seq("experience-focus-view"),
       image(
-        xlinkHref := nodeState.logo,
-        x := nodeState.x.toString,
-        y := nodeState.y.toString,
-        width := nodeState.width.toString,
-        height := nodeState.height.toString
+        xlinkHref := briefState.logo,
+        x := briefState.x.toString,
+        y := briefState.y.toString,
+        width := briefState.width.toString,
+        height := briefState.height.toString
       ),
       modifiers
     )
