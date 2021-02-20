@@ -17,11 +17,11 @@ object ExperienceGlanceView {
   ): ReactiveSvgElement[G] = {
 
     /** Must be declared prior to importing from [[svg]]. */
-    val summaryRender: Div =
-      div(
+    val labelRender: Label =
+      label(
         xmlns := "http://www.w3.org/1999/xhtml",
         className := "rounded-pill",
-        label(nodeState.label.getOrElse(???)))
+        nodeState.label.getOrElse(???))
 
     import svg._
 
@@ -32,7 +32,7 @@ object ExperienceGlanceView {
         y := (nodeState.y - 5).toString,
         width := "100%",
         height := (nodeState.radius * 2 + 10).toString,
-        summaryRender),
+        labelRender),
       image(
         xlinkHref := nodeState.logo.getOrElse(???),
         x := nodeState.x.toString,

@@ -141,8 +141,8 @@ object ExperiencesGridView {
                 .duration(3000d),
               d3.zoomIdentity
                 .translate(
-                  focusedNodeState.radius * 2 + 100,
-                  focusedNodeState.radius * 2 + 150)
+                  clientWidth / 2,
+                  clientHeight / 2)
                 .scale(5d)
                 .translate(
                   -focusedNodeState.cx,
@@ -179,8 +179,8 @@ object ExperiencesGridView {
               d3.select(thisNode.ref),
               d3.zoomIdentity
                 .translate(
-                  focusedNodeState.radius * 2 + 100,
-                  focusedNodeState.radius * 2 + 150)
+                  clientWidth / 2,
+                  clientHeight / 2)
                 .scale(5)
                 .translate(
                   -focusedNodeState.cx,
@@ -217,8 +217,8 @@ object ExperiencesGridView {
                 .duration(1000d),
               d3.zoomIdentity
                 .translate(
-                  focusedNodeState.radius * 2 + 100,
-                  focusedNodeState.radius * 2 + 150)
+                  clientWidth / 2,
+                  clientHeight / 2)
                 .scale(5)
                 .translate(
                   -focusedNodeState.cx,
@@ -248,8 +248,17 @@ object ExperiencesGridView {
           case Some(id) => nodeStates.find(_.id.contains(id))
         }
 
+    val blankRenders =
+      nodeStates
+        .filter(_.kind == "blank")
+        .map { nodeState =>
+          ExperienceBlankView
+            .render(nodeState)
+        }
+
     val idleRenders =
       nodeStates
+        .filterNot(_.kind == "blank")
         .map { nodeState =>
           val onMouseEnterGlanced =
             onMouseEnter --> (_ => glancedNodeStatesVar.update(_ + nodeState))
@@ -286,6 +295,8 @@ object ExperiencesGridView {
         .map { nodeState =>
           val $isGlanced =
             $glancedNodeStates
+              .combineWith($focusedNodeState)
+              .map { case (x, y) => x.diff(y.toSet) }
               .map(_.contains(nodeState))
 
           ExperienceGlanceView
@@ -351,6 +362,7 @@ object ExperiencesGridView {
       g(
         className <-- $classNames,
         transform <-- zoomTransformBus.events.map(_.toString()),
+        blankRenders,
         idleRenders,
         focusRenders,
         glanceRenders),

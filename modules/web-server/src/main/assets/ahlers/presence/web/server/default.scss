@@ -67,11 +67,12 @@ main.resume {
   height: 100%;
 }
 
+svg g g.experience-blank-view ,
 svg g g.experience-idle-view {
   opacity: 0;
 }
 
-svg g g.experience-idle-view.blank {
+svg g g.experience-blank-view {
   pointer-events: none;
 }
 
@@ -86,11 +87,24 @@ svg g.revealing g.experience-idle-view {
   transition-delay: var(--revealing-transition-delay);
 }
 
+svg g.revealing g.experience-blank-view {
+  opacity: 0.5;
+  transition: opacity 500ms ease;
+  transition-delay: var(--revealing-transition-delay);
+}
+
 svg g.presenting g.experience-idle-view {
   opacity: 1;
   transition: opacity 250ms ease;
 }
 
+svg g.presenting g.experience-blank-view {
+  opacity: 0.5;
+  transition: opacity 250ms ease;
+}
+
+svg g.glancing g.experience-blank-view,
+svg g.focusing g.experience-blank-view,
 svg g.glancing g.experience-idle-view,
 svg g.focusing g.experience-idle-view {
   opacity: 0.1;
@@ -107,17 +121,14 @@ svg g g.experience-focus-view.focused {
   opacity: 1;
 }
 
-svg g g.experience-focus-view div  {
-  height: 100%;
-  background-color: #292929;
-}
-
-svg g g.experience-focus-view div label {
-  padding-left: 60px;
-  padding-right: 20px;
-  color: $navbar-dark-hover-color;
-  font-size: 30px;
-}
+//svg g g.experience-focus-view label {
+//  height: 100%;
+//  padding-left: 60px;
+//  padding-right: 20px;
+//  color: $navbar-dark-hover-color;
+//  background-color: #292929;
+//  font-size: 30px;
+//}
 
 svg g g.experience-glance-view {
   pointer-events: none;
@@ -129,14 +140,11 @@ svg g g.experience-glance-view.glanced {
   opacity: 1;
 }
 
-svg g g.experience-glance-view div  {
+svg g g.experience-glance-view label {
   height: 100%;
-  background-color: #292929;
-}
-
-svg g g.experience-glance-view div label {
   padding-left: 60px;
   padding-right: 20px;
-  color: $navbar-dark-hover-color;
+  color: $navbar-dark-active-color;
+  background-color: $gray-900;
   font-size: 30px;
 }
