@@ -248,16 +248,30 @@ object ExperienceGridView {
           val onMouseLeaveGlanced =
             onMouseLeave --> (_ => glancedNodeStatesVar.update(_ - nodeState))
 
-          ExperienceNodeView
+          ExperienceIdleView
             .render(
               nodeState,
               //$glancedNodeStates,
-              $focusedNodeState,
+              //$focusedNodeState,
               onMouseEnterGlanced,
               onMouseLeaveGlanced)
         }
 
-    val labelRenders =
+    val focusRenders =
+      nodeStates
+        .filterNot(_.kind == "blank")
+        .map { nodeState =>
+          val $isFocused =
+            $focusedNodeState
+              .map(_.contains(nodeState))
+
+          ExperienceFocusView
+            .render(
+              nodeState,
+              className.toggle("focused") <-- $isFocused)
+        }
+
+    val glanceRenders =
       nodeStates
         .filterNot(_.kind == "blank")
         .map { nodeState =>
@@ -329,7 +343,8 @@ object ExperienceGridView {
         className <-- $classNames,
         transform <-- zoomTransformBus.events.map(_.toString()),
         nodeRenders,
-        labelRenders),
+        focusRenders,
+        glanceRenders),
       onMountZoom($focusedNodeState),
       onWindowResizeZoom($focusedNodeState),
       onFocusedNodeZoom($focusedNodeState),
