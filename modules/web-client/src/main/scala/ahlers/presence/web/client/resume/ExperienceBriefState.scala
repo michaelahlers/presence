@@ -1,47 +1,43 @@
 package ahlers.presence.web.client.resume
-import cats.syntax.option
+
+import cats.syntax.option._
+import ahlers.presence.experiences.{ Experience, ExperienceKey, ExperienceLogo, ExperienceName }
+import ahlers.presence.web.client.resume.ExperienceBriefState.Mode
 
 /**
  * @since January 31, 2021
  * @author <a href="mailto:michael@ahlers.consulting">Michael Ahlers</a>
  */
-sealed trait ExperienceBriefState {
-
-  def index: ExperienceBriefIndex
-  def cx: Double
-  def cy: Double
-  def r: Double
-
-}
+case class ExperienceBriefState(
+  index: ExperienceBriefIndex,
+  mode: Mode,
+  cx: Double,
+  cy: Double,
+  r: Double)
 
 object ExperienceBriefState {
 
-  case object Root extends ExperienceBriefState {
-    override def index = ???
-    override def cx = ???
-    override def cy = ???
-    override def r = ???
+  sealed abstract class Mode(
+    val isRoot: Boolean = false,
+    val isBlank: Boolean = false,
+    val isContent: Boolean = false)
+
+  object Mode {
+    case object Root extends Mode(isRoot = true)
+    case object Blank extends Mode(isBlank = true)
+    case class Content(experience: Experience) extends Mode(isContent = true)
   }
 
-  case class Blank(
-    index: ExperienceBriefIndex,
-    cx: Double,
-    cy: Double,
-    r: Double)
-    extends ExperienceBriefState
-
-  case class Brief(
-    index: ExperienceBriefIndex,
-    cx: Double,
-    cy: Double,
-    r: Double,
-    id: ExperienceId,
-    label: String,
-    logo: String)
-    extends ExperienceBriefState
+  import Mode._
 
   implicit class Syntax(private val self: ExperienceBriefState) extends AnyVal {
     import self._
+
+    def key: Option[ExperienceKey] =
+      mode match {
+        case Root | Blank => none
+        case Content(experience) => experience.key.some
+      }
 
     def x: Double = cx - r
     def y: Double = cy - r

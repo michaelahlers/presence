@@ -1,26 +1,26 @@
 - key: "livesafe"
   brief:
-    logo: "/ahlers/presence/web/experiences/akka-brief.svg"
+    logo: "/assets/ahlers/presence/web/experiences/livesafe-brief.svg"
     name: "LiveSafe"
   detail:
     kind: "Employment"
     name: "LiveSafe"
-    logo: "/ahlers/presence/web/experiences/akka-detail.svg"
+    logo: "/assets/ahlers/presence/web/experiences/livesafe-detail.svg"
 
 - key: "trss"
   brief:
-    logo: "/ahlers/presence/web/experiences/bootstrap-brief.svg"
+    logo: "/assets/ahlers/presence/web/experiences/trss-brief.svg"
     name: "TRSS"
   detail:
     kind: "Employment"
     name: "Thomson Reuters Special Services"
-    logo: "/ahlers/presence/web/experiences/bootstrap-detail.svg"
+    logo: "/assets/ahlers/presence/web/experiences/trss-detail.svg"
 
 - key: "verizon"
   brief:
-    logo: "/ahlers/presence/web/experiences/css-brief.svg"
+    logo: "/assets/ahlers/presence/web/experiences/verizon-brief.svg"
     name: "Verizon"
   detail:
     kind: "Employment"
     name: "Verizon Business"
-    logo: "/ahlers/presence/web/experiences/css-detail.svg"
+    logo: "/assets/ahlers/presence/web/experiences/verizon-detail.svg"

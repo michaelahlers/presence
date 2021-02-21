@@ -20,8 +20,8 @@ object ExperienceFocusView {
     experienceKey: ExperienceKey,
     experience: Experience,
     $experience: Signal[Experience],
-    $focusedExperience: Signal[Option[Experience]],
-    focusedExperienceObserver: Observer[Option[Experience]]
+    $focusedExperienceKey: Signal[Option[ExperienceKey]],
+    focusedExperienceObserver: Observer[Option[ExperienceKey]]
   ): Div = {
     val headerRender =
       div(
@@ -50,7 +50,7 @@ object ExperienceFocusView {
           "Close"))
 
     val $isRaised: Signal[Boolean] =
-      $focusedExperience
+      $focusedExperienceKey
         .combineWith($experience)
         .map2(_.contains(_))
 

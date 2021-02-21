@@ -1,27 +1,27 @@
 - key: "akka"
   brief:
-    logo: "/ahlers/presence/web/experiences/akka-brief.svg"
+    logo: "/assets/ahlers/presence/web/experiences/akka-brief.svg"
     name: "Akka"
   detail:
     kind: "Skill"
     name: "Akka"
-    logo: "/ahlers/presence/web/experiences/akka-detail.svg"
+    logo: "/assets/ahlers/presence/web/experiences/akka-detail.svg"
 
 - key: "bootstrap"
   brief:
-    logo: "/ahlers/presence/web/experiences/bootstrap-brief.svg"
+    logo: "/assets/ahlers/presence/web/experiences/bootstrap-brief.svg"
     name: "Bootstrap"
   detail:
     kind: "Skill"
     name: "Twitter Bootstrap"
-    logo: "/ahlers/presence/web/experiences/bootstrap-detail.svg"
+    logo: "/assets/ahlers/presence/web/experiences/bootstrap-detail.svg"
 
 - key: "css"
   brief:
-    logo: "/ahlers/presence/web/experiences/css-brief.svg"
+    logo: "/assets/ahlers/presence/web/experiences/css3-brief.svg"
     name: "CSS"
   detail:
     kind: "Skill"
     name: "Cascading Style Sheets"
-    logo: "/ahlers/presence/web/experiences/css-detail.svg"
+    logo: "/assets/ahlers/presence/web/experiences/css3-detail.svg"
 
