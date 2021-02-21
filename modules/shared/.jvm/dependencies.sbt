@@ -1,3 +1,6 @@
+libraryDependencies +=
+  "io.lemonlabs" %% "scala-uri" % "3.0.0"
+
 libraryDependencies ++=
   "io.circe" %% "circe-core" % "0.13.0" ::
     "io.circe" %% "circe-generic" % "0.13.0" ::
