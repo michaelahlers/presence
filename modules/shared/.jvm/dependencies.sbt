@@ -1,5 +1,6 @@
 libraryDependencies ++=
-  "io.circe" %% "circe-core" % "0.14.0-M3" ::
-    "io.circe" %% "circe-generic" % "0.14.0-M3" ::
-    "io.circe" %% "circe-parser" % "0.14.0-M3" ::
+  "io.circe" %% "circe-core" % "0.13.0" ::
+    "io.circe" %% "circe-generic" % "0.13.0" ::
+    "io.circe" %% "circe-generic-extras" % "0.13.0" ::
+    "io.circe" %% "circe-parser" % "0.13.0" ::
     Nil
