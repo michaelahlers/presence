@@ -1,7 +1,7 @@
 package ahlers.presence.web.client.resume
 
-import ahlers.presence.web.client.UiState
-import ahlers.presence.web.client.UiState.UnfocusedResumePage
+import ahlers.presence.experiences.{ Experience, ExperienceKey }
+import cats.syntax.option._
 import com.raquo.domtypes.generic.Modifier
 import com.raquo.laminar.api.L._
 
@@ -9,33 +9,36 @@ import com.raquo.laminar.api.L._
  * @since February 20, 2021
  * @author <a href="mailto:michael@ahlers.consulting">Michael Ahlers</a>
  */
-object ExperienceDetailSkillView {
+object ExperienceFocusView {
 
-  val onClickExitFocus: Modifier[Element] =
+  val onClickClose =
     onClick
       .stopPropagation
-      .mapToValue(UnfocusedResumePage) --> (UiState.router.pushState(_))
+      .mapToValue(none)
 
   def render(
-    skillDetail: ExperienceDetail.Skill,
-    $focusedExperienceId: Signal[Option[ExperienceId]],
-    modifiers: Modifier[Div]*
+    experienceKey: ExperienceKey,
+    experience: Experience,
+    $experience: Signal[Experience],
+    $focusedExperience: Signal[Option[Experience]],
+    focusedExperienceObserver: Observer[Option[Experience]]
   ): Div = {
     val headerRender =
       div(
         className("modal-header"),
         h1(
           className("modal-title"),
-          skillDetail.id.toText),
+          child.text <-- $experience.map(_.brief.name.toText)),
         button(
           tpe("button"),
           className("btn-close"),
-          onClickExitFocus))
+          onClickClose --> focusedExperienceObserver)
+      )
 
     val bodyRender =
       div(
         className("modal-body"),
-        p(skillDetail.name.toText))
+        p(child.text <-- $experience.map(_.detail.name.toText)))
 
     val footerRender =
       div(
@@ -43,16 +46,18 @@ object ExperienceDetailSkillView {
         button(
           tpe("button"),
           className("btn", "btn-secondary"),
-          onClickExitFocus,
+          onClickClose --> focusedExperienceObserver,
           "Close"))
 
     val $isRaised: Signal[Boolean] =
-      $focusedExperienceId.map(_.contains(skillDetail.id))
+      $focusedExperience
+        .combineWith($experience)
+        .map2(_.contains(_))
 
     div(
       className("modal", "fade", "d-block"),
       className.toggle("show") <-- $isRaised,
-      tabIndex := -1,
+      tabIndex(-1),
       div(
         className("modal-dialog", "modal-fullscreen"),
         div(
@@ -60,8 +65,7 @@ object ExperienceDetailSkillView {
           headerRender,
           bodyRender,
           footerRender
-        )),
-      $focusedExperienceId.map(_.filter(_ == skillDetail.id)) --> (x => UiState.modalsVar.update(_.filterNot(_ == skillDetail.id.toText) ++ x.map(_.toText)))
+        ))
     )
   }
 
