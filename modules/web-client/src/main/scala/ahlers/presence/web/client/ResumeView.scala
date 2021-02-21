@@ -24,21 +24,10 @@ object ResumeView {
       }
 
     article(
-      className := "d-flex flex-column h-100",
-      ExperiencesGridView.render($focusedExperienceId) //,
-      //div(
-      //  className := "container-fluid",
-      //  div(
-      //    className := "row",
-      //    div(
-      //      className := "col-12",
-      //      span("Node Radius: "),
-      //      input(
-      //        value <-- $nodeRadius.map(_.toString()),
-      //        inContext(el => onEnterPress.mapTo(el.ref.value).map(_.toDouble) --> nodeRadiusVar.writer))
-      //    )
-      //  )
-      //)
+      className := Seq("d-flex", "h-100"),
+      ExperiencesGridView.render($focusedExperienceId),
+      experiences.skills.map(ExperienceDetailSkillView.render(_, $focusedExperienceId)),
+      experiences.employments.map(ExperienceDetailEmploymentView.render(_, $focusedExperienceId))
     )
 
   }
