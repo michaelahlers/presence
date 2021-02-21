@@ -338,8 +338,7 @@ object ExperiencesGridView {
         }
 
     svg(
-      className := "experience-grid-view",
-      className := Seq("flex-fill", "bg-dark"),
+      className("experience-grid-view", "w-100", "h-100", "bg-dark"),
       zoomBehavior --> zoomTransformBus.writer.contramap(_.transform),
       g(
         className <-- $classNames,
