@@ -3,11 +3,6 @@ package ahlers.presence.web.client
 import com.raquo.laminar.api.L._
 import org.scalajs.dom
 import slogging.{ HttpLoggerFactory, LazyLogging, LoggerConfig }
-import d3v4._
-import d3v4.d3hierarchy.{ Hierarchy, Packed }
-
-import scala.scalajs.js
-import scala.scalajs.js.JSConverters._
 
 /**
  * @author <a href="michael@ahlers.consulting">Michael Ahlers</a>
@@ -68,25 +63,18 @@ object WebClientApplication extends App with LazyLogging {
   Seq("h-100")
     .foreach(dom
       .document
-      .body
+      .head
       .parentElement
-      .classList
-      .add(_))
-
-  Seq("d-flex", "flex-column", "h-100")
-    .foreach(dom
-      .document
-      .body
       .classList
       .add(_))
 
   documentEvents
     .onDomContentLoaded
-    .mapToValue(Seq(
+    .mapToValue(body(
+      className := Seq("d-flex", "flex-column", "h-100"),
       HeaderView(),
       MainView(),
       FooterView()))
-    .foreach(_.foreach(
-      render(dom.document.body, _)))(unsafeWindowOwner)
+    .foreach(render(dom.document.head.parentElement, _))(unsafeWindowOwner)
 
 }
