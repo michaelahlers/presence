@@ -49,6 +49,9 @@ object UiState extends LazyLogging {
       serializePage = _.asJson.noSpaces,
       deserializePage = decode[UiState](_).valueOr(throw _))
 
+  val modalsVar: Var[Set[String]] = Var(Set.empty)
+  val $modals: Signal[Set[String]] = modalsVar.signal
+
   //router
   //  .$currentPage
   //  .foreach(state =>
