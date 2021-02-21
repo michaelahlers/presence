@@ -1,1 +1,0 @@
-name := "presence-shared"
