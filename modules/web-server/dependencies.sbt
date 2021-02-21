@@ -10,7 +10,7 @@ libraryDependencies +=
   "com.vmunier" %% "scalajs-scripts" % "1.1.4"
 
 libraryDependencies ++=
-  "io.circe" %% "circe-yaml" % "0.13.0" ::
+  "io.circe" %% "circe-yaml" % "0.13.1" ::
     Nil
 
 libraryDependencies ++=
