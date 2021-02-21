@@ -4,6 +4,7 @@
     name: "Akka"
   detail:
     kind: "Skill"
+    name: "Akka"
     logo: "/ahlers/presence/web/experiences/akka-detail.svg"
 
 - key: "bootstrap"
@@ -12,6 +13,7 @@
     name: "Bootstrap"
   detail:
     kind: "Skill"
+    name: "Twitter Bootstrap"
     logo: "/ahlers/presence/web/experiences/bootstrap-detail.svg"
 
 - key: "css"
@@ -20,5 +22,6 @@
     name: "CSS"
   detail:
     kind: "Skill"
+    name: "Cascading Style Sheets"
     logo: "/ahlers/presence/web/experiences/css-detail.svg"
 
