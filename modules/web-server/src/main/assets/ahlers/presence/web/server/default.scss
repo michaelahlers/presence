@@ -139,3 +139,8 @@ svg g g.experience-glance-view label {
   background-color: $gray-800;
   font-size: 30px;
 }
+
+// Avoids having to meter the class name changes—Bootstrap's own scripts add a display style before adding the show attribute, which is cumbersome.
+.modal:not(.show) {
+  z-index: -1;
+}
