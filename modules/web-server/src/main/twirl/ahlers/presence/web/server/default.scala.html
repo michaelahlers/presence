@@ -33,6 +33,8 @@
       })();
     </script>
 
+    @webJars.locate("font-awesome", "all.js").script(Map(("async","")))
+
     @scalajs.html.scripts(
       "presence-web-client",
       Assets.versioned(_).toString,
@@ -41,10 +43,6 @@
         .map(getClass.getResource(_))
         .flatMap(Option(_))
         .nonEmpty)
-
-    @webJars
-      .locate("font-awesome", "all.js")
-      .script(Map(("async","")))
 
   </head>
 
