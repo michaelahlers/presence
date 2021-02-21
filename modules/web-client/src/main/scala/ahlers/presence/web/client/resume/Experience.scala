@@ -20,62 +20,6 @@ object ExperienceId {
 
 case class ExperienceName(toText: String) extends AnyVal
 
-sealed trait ExperienceBrief
-
-object ExperienceBrief {
-
-  case class Blank(
-    radius: Double)
-    extends ExperienceBrief
-
-  case class Skill(
-    id: ExperienceId,
-    name: ExperienceName,
-    logo: String,
-    radius: Double)
-    extends ExperienceBrief
-
-  object Skill {}
-
-  def skill(
-    id: ExperienceId,
-    name: ExperienceName,
-    logo: String
-  ): Skill =
-    Skill(
-      id,
-      name,
-      logo,
-      20d)
-
-  case class Employment(
-    id: ExperienceId,
-    company: Employment.Company,
-    logo: String,
-    radius: Double)
-    extends ExperienceBrief
-
-  object Employment {
-    case class Company(
-      name: String,
-      shortName: Option[String],
-      city: String,
-      state: String)
-  }
-
-  def employment(
-    id: ExperienceId,
-    company: Employment.Company,
-    logo: String
-  ): Employment =
-    Employment(
-      id,
-      company,
-      logo,
-      20d)
-
-}
-
 //case class ExperienceLinkUi(
 //  source: ExperienceNodeUi,
 //  target: ExperienceNodeUi)

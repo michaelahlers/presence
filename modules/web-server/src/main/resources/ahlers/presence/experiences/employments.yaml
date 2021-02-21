@@ -1,0 +1,23 @@
+- key: "livesafe"
+  brief:
+    logo: "/ahlers/presence/web/experiences/akka-brief.svg"
+    name: "LiveSafe"
+  detail:
+    kind: "Employment"
+    logo: "/ahlers/presence/web/experiences/akka-detail.svg"
+
+- key: "trss"
+  brief:
+    logo: "/ahlers/presence/web/experiences/bootstrap-brief.svg"
+    name: "TRSS"
+  detail:
+    kind: "Employment"
+    logo: "/ahlers/presence/web/experiences/bootstrap-detail.svg"
+
+- key: "verizon"
+  brief:
+    logo: "/ahlers/presence/web/experiences/css-brief.svg"
+    name: "Verizon"
+  detail:
+    kind: "Employment"
+    logo: "/ahlers/presence/web/experiences/css-detail.svg"

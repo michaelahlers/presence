@@ -1,0 +1,1 @@
+name := "presence-shared-jvm"

@@ -1,4 +1,12 @@
+libraryDependencies +=
+  "io.lemonlabs" %%% "scala-uri" % "3.0.0"
+
+libraryDependencies +=
+  "org.scala-js" %%% "scalajs-java-time" % "1.0.0"
+
 libraryDependencies ++=
-  "com.typesafe.play" %%% "play-json" % "2.9.1" ::
-    "org.scala-js" %%% "scalajs-java-time" % "1.0.0" ::
+  "io.circe" %%% "circe-core" % "0.13.0" ::
+    "io.circe" %%% "circe-generic" % "0.13.0" ::
+    "io.circe" %%% "circe-generic-extras" % "0.13.0" ::
+    "io.circe" %%% "circe-parser" % "0.13.0" ::
     Nil
