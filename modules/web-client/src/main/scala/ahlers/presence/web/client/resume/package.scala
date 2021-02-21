@@ -1,5 +1,6 @@
 package ahlers.presence.web.client
 
+import ahlers.presence.web.client.resume.ExperienceDetail.{ Employment, Skill }
 import cats.syntax.semigroup._
 import cats.instances.map._
 import cats.instances.set._
@@ -222,6 +223,12 @@ package object resume {
         ThompsonReutersSpecialServices ::
         VerizonBusiness ::
         Nil
+
+    val skills: Seq[Skill] =
+      descriptions.collect { case skill: Skill => skill }
+
+    val employments: Seq[Employment] =
+      descriptions.collect { case employment: Employment => employment }
 
     val relationSets: Seq[Set[_ <: ExperienceDetail]] =
       Set(Akka, Lagom, PlayFramework, Scala, Slick) ::
