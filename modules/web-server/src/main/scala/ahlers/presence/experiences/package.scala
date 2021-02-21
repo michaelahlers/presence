@@ -1,22 +1,21 @@
-package ahlers.presence.web
+package ahlers.presence
 
-import ahlers.presence.experiences._
+import better.files.Resource
 import cats.syntax.apply._
+import cats.syntax.either._
 import io.circe._
 import io.circe.generic.extras._
+import io.circe.yaml.parser._
 import io.circe.generic.extras.defaults._
 import io.circe.generic.extras.semiauto._
+
+import scala.util.Try
 
 /**
  * @since February 21, 2021
  * @author <a href="mailto:michael@ahlers.consulting">Michael Ahlers</a>
  */
-object GetExperiences
-
-case class GetExperiencesResponse(
-  records: Seq[Experience])
-
-object GetExperiencesResponse {
+package object experiences {
 
   implicit private val codecExperienceName: Codec[ExperienceName] =
     deriveUnwrappedCodec
@@ -41,7 +40,19 @@ object GetExperiencesResponse {
   implicit private val codecExperience: Codec[Experience] =
     deriveConfiguredCodec
 
-  implicit val codecGetExperiencesResponse: Codec[GetExperiencesResponse] =
-    deriveConfiguredCodec
+  lazy val employments: Seq[Experience] =
+    Try(Resource.my.getAsString("employments.yaml")).toEither
+      .flatMap(parse(_))
+      .flatMap(_.as[Seq[Experience]])
+      .valueOr(throw _)
+
+  lazy val skills: Seq[Experience] =
+    Try(Resource.my.getAsString("skills.yaml")).toEither
+      .flatMap(parse(_))
+      .flatMap(_.as[Seq[Experience]])
+      .valueOr(throw _)
+
+  lazy val all: Seq[Experience] =
+    employments ++ skills
 
 }

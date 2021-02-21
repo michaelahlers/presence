@@ -1,9 +1,11 @@
-POST        /logs                ahlers.presence.web.server.WebClientController.postLogs
+GET         /api/v1/experiences        ahlers.presence.web.server.WebClientController.getExperiences()
 
-GET         /assets/*file        controllers.Assets.versioned(path = "/public", file: Asset)
+POST        /logs                      ahlers.presence.web.server.WebClientController.postLogs()
 
-->          /libraries           webjars.Routes
+GET         /assets/*file              controllers.Assets.versioned(path = "/public", file: Asset)
+
+->          /libraries                 webjars.Routes
 
 # https://stackoverflow.com/a/21802675
-GET         /                    ahlers.presence.web.server.WebClientController.getDefault(path: Path = Path.Empty)
-GET         /*path               ahlers.presence.web.server.WebClientController.getDefault(path: Path)
+GET         /                          ahlers.presence.web.server.WebClientController.getDefault(path: Path = Path.Empty)
+GET         /*path                     ahlers.presence.web.server.WebClientController.getDefault(path: Path)
