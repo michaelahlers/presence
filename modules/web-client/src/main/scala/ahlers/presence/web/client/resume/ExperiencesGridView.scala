@@ -251,7 +251,11 @@ object ExperiencesGridView {
         g(children <--
           $briefStates
             .map(_.filter(_.mode.isContent))
-            .split(_.index)(ExperienceBriefGlanceView.render(_, _, _, glancedExperienceKeysVar.signal)))
+            .split(_.index)(ExperienceBriefFocusView.render(_, _, _, $focusedExperienceKey))),
+        g(children <--
+          $briefStates
+            .map(_.filter(_.mode.isContent))
+            .split(_.index)(ExperienceBriefGlanceView.render(_, _, _, $focusedExperienceKey, glancedExperienceKeysVar.signal)))
       ),
       inContext { thisNode =>
         import thisNode.ref.{ clientHeight, clientWidth }

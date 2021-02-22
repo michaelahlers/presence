@@ -1,15 +1,11 @@
 package ahlers.presence.web.client.resume
 
-import com.raquo.domtypes.generic.Modifier
-import com.raquo.laminar.api.L._
-import com.raquo.laminar.nodes._
-import org.scalajs.dom.svg._
+import ahlers.presence.experiences.{ ExperienceKey, ExperienceName }
+import ahlers.presence.web.client.resume.ExperienceBriefState.Mode._
 import com.raquo.domtypes.generic.Modifier
 import com.raquo.laminar.api.L._
 import com.raquo.laminar.nodes.ReactiveSvgElement
 import org.scalajs.dom.svg.G
-import ExperienceBriefState.Mode._
-import ahlers.presence.experiences.{ Experience, ExperienceKey, ExperienceName }
 
 /**
  * @since January 31, 2021
@@ -21,6 +17,7 @@ object ExperienceBriefGlanceView {
     index: ExperienceBriefIndex,
     state: ExperienceBriefState,
     $state: Signal[ExperienceBriefState],
+    $focusedExperienceKey: Signal[Option[ExperienceKey]],
     $glancedExperienceKeys: Signal[Set[ExperienceKey]],
     modifiers: Modifier[ReactiveSvgElement[G]]*
   ): ReactiveSvgElement[G] = {
@@ -35,11 +32,13 @@ object ExperienceBriefGlanceView {
     import svg._
 
     val $isGlanced: Signal[Boolean] =
-      $glancedExperienceKeys
+      $focusedExperienceKey
+        .combineWith($glancedExperienceKeys)
         .combineWith($state)
         .map {
-          case (glancedExperienceKeys, ExperienceBriefState(_, Content(experience), _, _, _)) =>
-            glancedExperienceKeys.contains(experience.key)
+          case ((focusedExperienceKey, glancedExperienceKeys), ExperienceBriefState(_, Content(experience), _, _, _)) =>
+            !focusedExperienceKey.contains(experience.key) &&
+              glancedExperienceKeys.contains(experience.key)
         }
 
     g(
