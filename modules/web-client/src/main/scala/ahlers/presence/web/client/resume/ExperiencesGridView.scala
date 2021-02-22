@@ -68,43 +68,57 @@ object ExperiencesGridView {
       }
   }
 
-//def onWindowResizeZoom($focusedBriefState: Signal[Option[ExperienceBriefState]]): Modifier[ReactiveSvgElement[SVG]] =
-//  inContext { thisNode =>
-//    import thisNode.ref.{ clientHeight, clientWidth }
-//
-//    windowEvents
-//      .onResize
-//      .withCurrentValueOf($focusedBriefState) --> {
-//
-//      case (_, None) =>
-//        //val briefState = defaultBriefState
-//        //import briefState.{ cx, cy }
-//
-//        zoomBehavior
-//          .transform(
-//            d3.select(thisNode.ref),
-//            d3.zoomIdentity
-//              .translate(
-//                clientWidth / 2,
-//                clientHeight / 2))
-//      //.translate(-cx, -cy))
-//
-//      case (_, Some(focusedBriefState)) =>
-//        zoomBehavior
-//          .transform(
-//            d3.select(thisNode.ref),
-//            d3.zoomIdentity
-//              .translate(
-//                clientWidth / 2,
-//                clientHeight / 2)
-//              .scale(5)
-//              .translate(
-//                -focusedBriefState.cx,
-//                -focusedBriefState.cy)
-//          )
-//
-//    }
-//  }
+  def onWindowResizeZoom($states: Signal[Seq[ExperienceBriefState]], $focusedExperienceKey: Signal[Option[ExperienceKey]]): Modifier[ReactiveSvgElement[SVG]] =
+    inContext { thisNode =>
+      import thisNode.ref.{ clientHeight, clientWidth }
+
+      windowEvents
+        .onResize
+        .withCurrentValueOf($states)
+        .withCurrentValueOf($focusedExperienceKey)
+        .map {
+          case ((_, states), Some(focusedExperienceKey)) =>
+            (states.headOption, states.find(_.key.contains(focusedExperienceKey)))
+          case ((_, states), None) =>
+            (states.headOption, none)
+        } --> {
+
+        case (None, None) =>
+          zoomBehavior
+            .transform(
+              d3.select(thisNode.ref),
+              d3.zoomIdentity
+                .translate(
+                  clientWidth / 2,
+                  clientHeight / 2))
+
+        case (Some(state), None) =>
+          zoomBehavior
+            .transform(
+              d3.select(thisNode.ref),
+              d3.zoomIdentity
+                .translate(
+                  clientWidth / 2,
+                  clientHeight / 2)
+                .translate(
+                  -state.cx,
+                  -state.cy))
+
+        case (_, Some(state)) =>
+          zoomBehavior
+            .transform(
+              d3.select(thisNode.ref),
+              d3.zoomIdentity
+                .translate(
+                  clientWidth / 2,
+                  clientHeight / 2)
+                .scale(5)
+                .translate(
+                  -state.cx,
+                  -state.cy))
+
+      }
+    }
 
   val onClickExitFocus =
     onClick
@@ -124,73 +138,6 @@ object ExperiencesGridView {
         .map(briefStates(_))
 
     val glancedExperienceKeysVar: Var[Set[ExperienceKey]] = Var(Set.empty)
-
-    //val $focusedBriefState: Signal[Option[ExperienceBriefState.Brief]] =
-    //  $focusedExperienceKeyId
-    //    .map {
-    //      case None => none
-    //      case Some(id) =>
-    //        briefStates.collectFirst {
-    //          case brief: ExperienceBriefState.Brief if id == brief.id => brief
-    //        }
-    //    }
-
-//val blankRenders =
-//  briefStates
-//    .collect { case briefState: ExperienceBriefState.Blank =>
-//      ExperienceBriefBlankView
-//        .render(briefState)
-//    }
-
-//val idleRenders =
-//  briefStates
-//    .collect { case briefState: ExperienceBriefState.Brief =>
-//      val onMouseEnterGlanced =
-//        onMouseEnter --> (_ => glancedBriefStatesVar.update(_ + briefState))
-//
-//      val onMouseLeaveGlanced =
-//        onMouseLeave --> (_ => glancedBriefStatesVar.update(_ - briefState))
-//
-//      val onClickEnterFocus =
-//        onClick
-//          .stopPropagation
-//          .mapToValue(FocusedResumePage(briefState.id)) --> (UiState.router.pushState(_))
-//
-//      ExperienceBriefIdleView
-//        .render(
-//          briefState,
-//          onMouseEnterGlanced,
-//          onMouseLeaveGlanced,
-//          onClickEnterFocus)
-//    }
-//
-//val focusRenders =
-//  briefStates
-//    .collect { case briefState: ExperienceBriefState.Brief =>
-//      val $isFocused =
-//        $focusedBriefState
-//          .map(_.contains(briefState))
-//
-//      ExperienceBriefFocusView
-//        .render(
-//          briefState,
-//          className.toggle("focused") <-- $isFocused)
-//    }
-//
-//val glanceRenders =
-//  briefStates
-//    .collect { case briefState: ExperienceBriefState.Brief =>
-//      val $isGlanced =
-//        $glancedBriefStates
-//          .combineWith($focusedBriefState)
-//          .map { case (x, y) => x.diff(y.toSet) }
-//          .map(_.contains(briefState))
-//
-//      ExperienceBriefGlanceView
-//        .render(
-//          briefState,
-//          className.toggle("glanced") <-- $isGlanced)
-//    }
 
     /**
      * View's lifecycle.
@@ -213,9 +160,9 @@ object ExperiencesGridView {
             new PeriodicEventStream[Phase](
               initial = Waiting,
               next = {
-                case Loading => Some((Waiting, 0))
+                case Loading => ???
                 case Waiting => Some((Revealing, 100))
-                case Revealing => Some((Presenting, 5000))
+                case Revealing => Some((Presenting, 3000))
                 case Presenting => none
               },
               emitInitial = false,
@@ -223,6 +170,8 @@ object ExperiencesGridView {
               .toSignal(Waiting)
         }
     }
+
+    $phase.foreach(println(_))(unsafeWindowOwner)
 
     /** Indicates if the viewer is hovering over any of the experiences, debounced to avoid rapid transitions between glancing and not. */
     val $isGlancing: Signal[Boolean] =
@@ -257,6 +206,7 @@ object ExperiencesGridView {
             .map(_.filter(_.mode.isContent))
             .split(_.index)(ExperienceBriefGlanceView.render(_, _, _, $focusedExperienceKey, glancedExperienceKeysVar.signal)))
       ),
+      onWindowResizeZoom($briefStates, $focusedExperienceKey),
       inContext { thisNode =>
         import thisNode.ref.{ clientHeight, clientWidth }
         import Phase._
@@ -270,6 +220,15 @@ object ExperiencesGridView {
             case ((phase, states), None) =>
               (phase, states.headOption, none)
           } --> {
+
+          case (_, None, _) =>
+            zoomBehavior
+              .transform(
+                d3.select(thisNode.ref),
+                d3.zoomIdentity
+                  .translate(
+                    clientWidth / 2,
+                    clientHeight / 2))
 
           case (Revealing, Some(state), None) =>
             zoomBehavior
@@ -354,7 +313,7 @@ object ExperiencesGridView {
                     -state.cy))
 
           case x =>
-            println(s"Unhandled: $x")
+          //println(s"Unhandled: $x")
 
         }
       },
