@@ -25,3 +25,191 @@
     name: "Cascading Style Sheets"
     logo: "/assets/ahlers/presence/web/experiences/css3-detail.svg"
 
+- key: "d3"
+  brief:
+    logo: "/assets/ahlers/presence/web/experiences/d3-brief.svg"
+    name: "D3.js"
+  detail:
+    kind: "Skill"
+    name: "D3.js"
+    logo: "/assets/ahlers/presence/web/experiences/d3-detail.svg"
+
+- key: "datagrip"
+  brief:
+    name: "DataGrip"
+    logo: "/assets/ahlers/presence/web/experiences/datagrip-brief.svg"
+  detail:
+    kind: "Skill"
+    name: "DataGrip"
+    logo: "/assets/ahlers/presence/web/experiences/datagrip-detail.svg"
+
+- key: "flyway"
+  brief:
+    name: "Flyway"
+    logo: "/assets/ahlers/presence/web/experiences/flyway-brief.svg"
+  detail:
+    kind: "Skill"
+    name: "Flyway"
+    logo: "/assets/ahlers/presence/web/experiences/flyway-detail.svg"
+
+- key: "git"
+  brief:
+    name: "Git"
+    logo: "/assets/ahlers/presence/web/experiences/git-brief.svg"
+  detail:
+    kind: "Skill"
+    name: "Git"
+    logo: "/assets/ahlers/presence/web/experiences/git-detail.svg"
+
+- key: "github"
+  brief:
+    name: "GitHub"
+    logo: "/assets/ahlers/presence/web/experiences/github-brief.svg"
+  detail:
+    kind: "Skill"
+    name: "GitHub"
+    logo: "/assets/ahlers/presence/web/experiences/github-detail.svg"
+
+- key: "intellij-idea"
+  brief:
+    name: "IntelliJ IDEA"
+    logo: "/assets/ahlers/presence/web/experiences/intellij-idea-brief.svg"
+  detail:
+    kind: "Skill"
+    name: "IntelliJ IDEA"
+    logo: "/assets/ahlers/presence/web/experiences/intellij-idea-detail.svg"
+
+- key: "html"
+  brief:
+    name: "HTML"
+    logo: "/assets/ahlers/presence/web/experiences/html5-brief.svg"
+  detail:
+    kind: "Skill"
+    name: "HTML"
+    logo: "/assets/ahlers/presence/web/experiences/html5-detail.svg"
+
+- key: "java"
+  brief:
+    name: "Java"
+    logo: "/assets/ahlers/presence/web/experiences/java-brief.svg"
+  detail:
+    kind: "Skill"
+    name: "Java"
+    logo: "/assets/ahlers/presence/web/experiences/java-detail.svg"
+
+- key: "javascript"
+  brief:
+    name: "JavaScript"
+    logo: "/assets/ahlers/presence/web/experiences/javascript-brief.svg"
+  detail:
+    kind: "Skill"
+    name: "JavaScript"
+    logo: "/assets/ahlers/presence/web/experiences/javascript-detail.svg"
+
+- key: "jquery"
+  brief:
+    name: "jQuery"
+    logo: "/assets/ahlers/presence/web/experiences/jquery-brief.svg"
+  detail:
+    kind: "Skill"
+    name: "jQuery"
+    logo: "/assets/ahlers/presence/web/experiences/jquery-detail.svg"
+
+- key: "kafka"
+  brief:
+    name: "Kafka"
+    logo: "/assets/ahlers/presence/web/experiences/kafka-brief.svg"
+  detail:
+    kind: "Skill"
+    name: "Kafka"
+    logo: "/assets/ahlers/presence/web/experiences/kafka-detail.svg"
+
+- key: "sbt"
+  brief:
+    name: "SBT"
+    logo: "/assets/ahlers/presence/web/experiences/sbt-brief.svg"
+  detail:
+    kind: "Skill"
+    name: "SBT"
+    logo: "/assets/ahlers/presence/web/experiences/sbt-detail.svg"
+
+- key: "scala"
+  brief:
+    name: "Scala"
+    logo: "/assets/ahlers/presence/web/experiences/scala-brief.svg"
+  detail:
+    kind: "Skill"
+    name: "Scala"
+    logo: "/assets/ahlers/presence/web/experiences/scala-detail.svg"
+
+- key: "scala.js"
+  brief:
+    name: "ScalaJs"
+    logo: "/assets/ahlers/presence/web/experiences/scala.js-brief.svg"
+  detail:
+    kind: "Skill"
+    name: "ScalaJs"
+    logo: "/assets/ahlers/presence/web/experiences/scala.js-detail.svg"
+
+- key: "slick"
+  brief:
+    name: "Slick"
+    logo: "/assets/ahlers/presence/web/experiences/slick-brief.svg"
+  detail:
+    kind: "Skill"
+    name: "Slick"
+    logo: "/assets/ahlers/presence/web/experiences/slick-detail.svg"
+
+- key: "lagom"
+  brief:
+    name: "Lagom"
+    logo: "/assets/ahlers/presence/web/experiences/lagom-brief.svg"
+  detail:
+    kind: "Skill"
+    name: "Lagom"
+    logo: "/assets/ahlers/presence/web/experiences/lagom-detail.svg"
+
+- key: "linux"
+  brief:
+    name: "Linux"
+    logo: "/assets/ahlers/presence/web/experiences/linux-brief.svg"
+  detail:
+    kind: "Skill"
+    name: "Linux"
+    logo: "/assets/ahlers/presence/web/experiences/linux-detail.svg"
+
+- key: "mysql"
+  brief:
+    name: "MySQL"
+    logo: "/assets/ahlers/presence/web/experiences/mysql-brief.svg"
+  detail:
+    kind: "Skill"
+    name: "MySQL"
+    logo: "/assets/ahlers/presence/web/experiences/mysql-detail.svg"
+
+- key: "mongodb"
+  brief:
+    name: "MongoDB"
+    logo: "/assets/ahlers/presence/web/experiences/mongodb-brief.svg"
+  detail:
+    kind: "Skill"
+    name: "MongoDB"
+    logo: "/assets/ahlers/presence/web/experiences/mongodb-detail.svg"
+
+- key: "play-framework"
+  brief:
+    name: "PlayFramework"
+    logo: "/assets/ahlers/presence/web/experiences/play-framework-brief.svg"
+  detail:
+    kind: "Skill"
+    name: "PlayFramework"
+    logo: "/assets/ahlers/presence/web/experiences/play-framework-detail.svg"
+
+- key: "postgresql"
+  brief:
+    name: "PostgreSQL"
+    logo: "/assets/ahlers/presence/web/experiences/postgresql-brief.svg"
+  detail:
+    kind: "Skill"
+    name: "PostgreSQL"
+    logo: "/assets/ahlers/presence/web/experiences/postgresql-detail.svg"
