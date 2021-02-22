@@ -116,11 +116,11 @@ svg g.glancing g.experience-brief-view.blank {
 svg g g.experience-brief-focus-view {
   pointer-events: none;
   opacity: 0;
+  transition: opacity 250ms ease;
 }
 
 svg g g.experience-brief-focus-view.focused {
   opacity: 1;
-  transition: opacity 250ms ease;
 }
 
 svg g g.experience-brief-glance-view {
