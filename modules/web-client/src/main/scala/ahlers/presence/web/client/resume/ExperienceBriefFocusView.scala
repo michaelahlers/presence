@@ -28,6 +28,8 @@ object ExperienceBriefFocusView {
         .map {
           case (glancedExperienceKeys, ExperienceBriefState(_, Content(experience), _, _, _)) =>
             glancedExperienceKeys.contains(experience.key)
+          case _ =>
+            false
         }
 
     g(
