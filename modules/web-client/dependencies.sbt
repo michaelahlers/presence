@@ -16,7 +16,7 @@ libraryDependencies ++=
     //"io.circe" %%% "circe-generic" % "0.13.0" ::
     //"io.circe" %%% "circe-parser" % "0.13.0" ::
     //"io.circe" %%% "circe-shapes" % "0.14.0-M2" ::
-    "io.github.cquiroz" %%% "scala-java-time" % "2.1.0" ::
+    "io.github.cquiroz" %%% "scala-java-time" % "2.2.0" ::
     "io.scalaland" %%% "chimney" % "0.6.1" ::
     "org.querki" %%% "jquery-facade" % "2.0" ::
     "org.scala-js" %%% "scalajs-dom" % "1.1.0" ::
