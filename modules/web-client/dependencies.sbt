@@ -2,7 +2,7 @@ resolvers += "JitPack".at("https://jitpack.io")
 
 libraryDependencies ++=
   "com.raquo" %%% "airstream" % "0.11.1" ::
-    "com.raquo" %%% "laminar" % "0.11.0" ::
+    "com.raquo" %%% "laminar" % "0.12.1" ::
     "com.raquo" %%% "waypoint" % "0.2.0" ::
     Nil
 
