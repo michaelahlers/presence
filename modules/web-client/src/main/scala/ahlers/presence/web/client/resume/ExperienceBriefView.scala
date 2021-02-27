@@ -45,17 +45,17 @@ object ExperienceBriefView {
             val onClickEnterFocus =
               onClick
                 .stopPropagation
-                .mapToValue(experience.key.some)
+                .mapToStrict(experience.key.some)
 
             val onMouseEnterGlance =
               onMouseEnter
                 .stopPropagation
-                .mapToValue(experience.key)
+                .mapToStrict(experience.key)
 
             val onMouseLeaveGlance =
               onMouseLeave
                 .stopPropagation
-                .mapToValue(experience.key)
+                .mapToStrict(experience.key)
 
             image(
               xlinkHref(experience.brief.logo.toText),

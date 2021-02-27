@@ -23,7 +23,7 @@ object SiteAnchorView {
       className <-- $isActive.map(enabled => Map("active" -> enabled)),
       a(
         className := "nav-link",
-        onClick.preventDefault.mapToValue(uiState) --> UiState.router.pushState _,
+        onClick.preventDefault.mapToStrict(uiState) --> (UiState.router.pushState(_)),
         href := UiState.router.relativeUrlForPage(uiState),
         modifiers
       )

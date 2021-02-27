@@ -22,7 +22,7 @@ object WebClientApplication extends App with LazyLogging {
 
   documentEvents
     .onDomContentLoaded
-    .mapToValue(body(
+    .mapToStrict(body(
       className("d-flex", "flex-column", "h-100"),
       className.toggle("modal-open") <-- UiState.$modals.map(_.nonEmpty),
       HeaderView(),

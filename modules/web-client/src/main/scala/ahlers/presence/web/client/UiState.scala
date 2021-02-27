@@ -40,14 +40,14 @@ object UiState extends LazyLogging {
 
   object router
     extends Router[UiState](
-      initialUrl = window.location.href,
-      origin = window.location.origin.get,
       routes = List(landingRoute, resumeRoute, resumeFocusRoute, contactRoute),
-      owner = unsafeWindowOwner,
-      $popStateEvent = windowEvents.onPopState,
       getPageTitle = _.toString,
       serializePage = _.asJson.noSpaces,
-      deserializePage = decode[UiState](_).valueOr(throw _))
+      deserializePage = decode[UiState](_).valueOr(throw _))(
+      initialUrl = window.location.href,
+      origin = window.location.origin.get,
+      owner = unsafeWindowOwner,
+      $popStateEvent = windowEvents.onPopState)
 
   val modalsVar: Var[Set[String]] = Var(Set.empty)
   val $modals: Signal[Set[String]] = modalsVar.signal
