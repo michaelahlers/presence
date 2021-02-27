@@ -1,11 +1,10 @@
 scalacOptions --=
-  "-Wunused:implicits" ::
+  "-Wunused:explicits" ::
+    "-Wunused:implicits" ::
     "-Wunused:imports" ::
+    "-Wunused:locals" ::
     "-Wunused:params" ::
-    "-Ywarn-unused-import" ::
-    "-Ywarn-unused:imports" ::
-    "-Ywarn-unused:implicits" ::
-    "-Ywarn-unused:locals" ::
-    "-Ywarn-unused:params" ::
-    "-Ywarn-unused:privates" ::
+    "-Wunused:patvars" ::
+    "-Wunused:privates" ::
+    "-Wvalue-discard" ::
     Nil

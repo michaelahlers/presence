@@ -25,7 +25,10 @@ object SiteMenuView {
             className := "navbar-nav me-auto",
             SiteAnchorView(
               UiState.Landing,
-              i(className := "fas fa-home"))
+              i(className := "fas fa-home")),
+            SiteAnchorView(
+              UiState.UnfocusedResumePage,
+              span("Resume"))
             //SiteAnchorView(
             //  UiState.Contact,
             //  span("Contact"))

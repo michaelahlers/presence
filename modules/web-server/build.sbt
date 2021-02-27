@@ -28,9 +28,13 @@ indexWriter ~= (writer => index => s"var versioned = ${writer(index)};")
 
 Compile / herokuAppName :=
   Map(
-    ("stage", "michaelahlers-presence-stage"),
+    ("preview", "michaelahlers-presence-preview"),
     ("public", "michaelahlers-presence-public"))
-    .apply(sys.props.getOrElse("environment", "stage"))
+    .apply(sys.props.getOrElse("stage", "preview"))
 
 Compile / herokuSkipSubProjects := false
 Compile / herokuJdkVersion := "15"
+
+Compile / doc / sources := Nil
+Test / doc / sources := Nil
+//Global / packageDoc / publishArtifact := false

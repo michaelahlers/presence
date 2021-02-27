@@ -34,7 +34,9 @@ $gray-900: #212121;
 }
 
 @keyframes ahlers-consulting-logo-stroke-fade-in {
-  100% { opacity: 1; }
+  100% {
+    opacity: 1;
+  }
 }
 
 svg.ahlers-consulting-logo g g g:nth-child(4) {
@@ -59,4 +61,67 @@ svg.ahlers-consulting-logo g g g:nth-child(1) {
   opacity: 0.02;
   animation: ahlers-consulting-logo-stroke-fade-in 100ms ease 1400ms;
   animation-fill-mode: forwards;
+}
+
+main.resume {
+  height: 100%;
+}
+
+svg g.experience-node-view {
+  opacity: 0;
+}
+
+svg g.experience-node-view.blank {
+  pointer-events: none;
+}
+
+svg g.experience-node-view.employment,
+svg g.experience-node-view.skill {
+  cursor: pointer;
+}
+
+svg g.revealing g.experience-node-view {
+  opacity: 1;
+  transition: opacity 250ms ease;
+  transition-delay: var(--revealing-transition-delay);
+}
+
+svg g.presenting g.experience-node-view {
+  opacity: 1;
+  transition: opacity 250ms ease;
+}
+
+svg g.glancing g.experience-node-view,
+svg g.focusing g.experience-node-view {
+  opacity: 0.1;
+  transition: opacity 750ms ease;
+}
+
+svg g.glancing g.experience-node-view.glanced,
+svg g.glancing g.experience-node-view.focused,
+svg g.focusing g.experience-node-view.glanced,
+svg g.focusing g.experience-node-view.focused {
+  z-index: 100;
+  opacity: 1;
+  transition: opacity 100ms ease;
+}
+
+// Tag name
+g.experience-node-view foreignObject {
+  pointer-events: none;
+}
+
+g.experience-node-view label {
+  opacity: 0;
+  height: 100%;
+  padding-left: 60px;
+  padding-right: 20px;
+  color: $navbar-dark-hover-color;
+  font-size: 30px;
+  background-color: #292929;
+}
+
+svg g.glancing g.experience-node-view.glanced label {
+  opacity: 1;
+  //transition: opacity 100ms ease;
 }
