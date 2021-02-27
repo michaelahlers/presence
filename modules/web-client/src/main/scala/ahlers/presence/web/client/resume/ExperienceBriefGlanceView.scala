@@ -36,9 +36,14 @@ object ExperienceBriefGlanceView {
         .combineWith($glancedExperienceKeys)
         .combineWith($state)
         .map {
-          case ((focusedExperienceKey, glancedExperienceKeys), ExperienceBriefState(_, Content(experience), _, _, _)) =>
+
+          case (focusedExperienceKey, glancedExperienceKeys, ExperienceBriefState(_, Content(experience), _, _, _)) =>
             !focusedExperienceKey.contains(experience.key) &&
               glancedExperienceKeys.contains(experience.key)
+
+          case _ =>
+            false
+
         }
 
     g(

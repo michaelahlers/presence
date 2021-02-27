@@ -14,13 +14,13 @@ libraryDependencies ++=
     Nil
 
 libraryDependencies ++=
-  "com.github.julien-truffaut" %% "monocle-core" % "3.0.0-M1" ::
-    "com.github.julien-truffaut" %% "monocle-macro" % "3.0.0-M1" ::
+  "com.github.julien-truffaut" %% "monocle-core" % "3.0.0-M2" ::
+    "com.github.julien-truffaut" %% "monocle-macro" % "3.0.0-M2" ::
     Nil
 
 libraryDependencies ++=
   "org.webjars" % "bootstrap" % "5.0.0-beta2" ::
-    "org.webjars.npm" % "bootstrap-icons" % "1.3.0" ::
+    "org.webjars.npm" % "bootstrap-icons" % "1.4.0" ::
     "org.webjars" % "font-awesome" % "5.15.2" ::
     "org.webjars" % "jquery" % "3.5.1" ::
     "org.webjars" %% "webjars-play" % "2.8.0-1" ::

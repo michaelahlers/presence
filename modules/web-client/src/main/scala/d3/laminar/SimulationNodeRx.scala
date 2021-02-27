@@ -1,7 +1,7 @@
 package d3.laminar
 
 import cats.syntax.option._
-import com.raquo.airstream.signal.{ StrictSignal, Var }
+import com.raquo.airstream.state.{ StrictSignal, Var }
 import d3v4.{ Index, SimulationNode }
 
 import scala.scalajs.js

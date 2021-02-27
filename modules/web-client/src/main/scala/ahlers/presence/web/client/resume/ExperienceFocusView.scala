@@ -14,7 +14,7 @@ object ExperienceFocusView {
   val onClickClose =
     onClick
       .stopPropagation
-      .mapToValue(none)
+      .mapToStrict(none)
 
   def render(
     experienceKey: ExperienceKey,
@@ -52,7 +52,7 @@ object ExperienceFocusView {
     val $isRaised: Signal[Boolean] =
       $focusedExperienceKey
         .combineWith($experience)
-        .map2(_.contains(_))
+        .mapN(_.contains(_))
 
     div(
       className("modal", "fade", "d-block"),
