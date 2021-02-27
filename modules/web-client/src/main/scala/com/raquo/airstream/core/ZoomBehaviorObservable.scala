@@ -1,6 +1,6 @@
 package com.raquo.airstream.core
 
-import com.raquo.airstream.eventstream.EventStream
+import com.raquo.airstream.core.EventStream
 import d3v4.d3
 import d3v4.d3.ZoomEvent
 import d3v4.d3zoom.ZoomBehavior

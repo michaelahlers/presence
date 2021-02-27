@@ -8,7 +8,7 @@ import cats.instances.option._
 import ahlers.presence.web.client.UiState.{ FocusedResumePage, ResumePage, UnfocusedResumePage }
 import ahlers.presence.web.client.resume._
 import cats.syntax.apply._
-import com.raquo.airstream.signal.Signal
+import com.raquo.airstream.core.Signal
 import io.circe.scalajs._
 import io.circe.syntax._
 import com.raquo.laminar.api.L._

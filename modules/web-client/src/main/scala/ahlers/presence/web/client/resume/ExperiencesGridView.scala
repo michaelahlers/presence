@@ -6,8 +6,8 @@ import ahlers.presence.web.client.UiState.{ FocusedResumePage, UnfocusedResumePa
 import cats.syntax.apply._
 import cats.syntax.option._
 import com.raquo.airstream.eventbus.EventBus
-import com.raquo.airstream.eventstream.PeriodicEventStream
-import com.raquo.airstream.signal.Signal
+import com.raquo.airstream.timing.PeriodicEventStream
+import com.raquo.airstream.core.Signal
 import com.raquo.domtypes.generic.Modifier
 import com.raquo.laminar.api.L._
 import com.raquo.laminar.nodes.ReactiveSvgElement
@@ -77,9 +77,9 @@ object ExperiencesGridView {
         .withCurrentValueOf($states)
         .withCurrentValueOf($focusedExperienceKey)
         .map {
-          case ((_, states), Some(focusedExperienceKey)) =>
+          case (_, states, Some(focusedExperienceKey)) =>
             (states.headOption, states.find(_.key.contains(focusedExperienceKey)))
-          case ((_, states), None) =>
+          case (_, states, None) =>
             (states.headOption, none)
         } --> {
 
@@ -123,7 +123,7 @@ object ExperiencesGridView {
   val onClickExitFocus =
     onClick
       .stopPropagation
-      .mapToValue(none)
+      .mapToStrict(none)
 
   def render(
     $experiences: Signal[Option[Seq[Experience]]],
@@ -215,9 +215,9 @@ object ExperiencesGridView {
           .combineWith($briefStates)
           .combineWith($focusedExperienceKey)
           .map {
-            case ((phase, states), Some(focusedExperienceKey)) =>
+            case (phase, states, Some(focusedExperienceKey)) =>
               (phase, states.headOption, states.find(_.key.contains(focusedExperienceKey)))
-            case ((phase, states), None) =>
+            case (phase, states, None) =>
               (phase, states.headOption, none)
           } --> {
 
