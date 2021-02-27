@@ -1,5 +1,6 @@
 package ahlers.presence.web.server
 
+import ahlers.presence.web.GetExperiencesResponse
 import ahlers.presence.web.server.WebClientController.LoggingRequest
 import akka.http.scaladsl.model.Uri.Path
 import com.softwaremill.macwire._
@@ -8,6 +9,8 @@ import play.api.libs.functional.syntax._
 import play.api.libs.json._
 import play.api.mvc.{ AbstractController, ControllerComponents }
 import slogging.{ LoggerFactory, MessageLevel, StrictLogging }
+import play.api.http.CirceWriteables._
+import io.circe.syntax._
 
 /**
  * @author <a href="mailto:michael@ahlers.consulting">Michael Ahlers</a>
@@ -19,7 +22,14 @@ class WebClientController(
   extends AbstractController(controllerComponents)
     with StrictLogging {
 
-  def postLogs =
+  def getExperiences() =
+    Action { implicit request =>
+      Ok(GetExperiencesResponse(
+        records = ahlers.presence.experiences.all)
+        .asJson)
+    }
+
+  def postLogs() =
     Action(parse.json[LoggingRequest]) { request =>
       import MessageLevel._
       import request.body

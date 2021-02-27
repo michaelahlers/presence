@@ -3,17 +3,24 @@ libraryDependencies ++=
     "com.softwaremill.macwire" %% "util" % "2.3.7" % Provided ::
     Nil
 
+libraryDependencies +=
+  "com.github.pathikrit" %% "better-files" % "3.9.1"
+
+libraryDependencies +=
+  "com.vmunier" %% "scalajs-scripts" % "1.1.4"
+
 libraryDependencies ++=
-  "com.vmunier" %% "scalajs-scripts" % "1.1.4" ::
+  "io.circe" %% "circe-yaml" % "0.13.1" ::
     Nil
 
 libraryDependencies ++=
-  //"org.webjars.bowergithub.jquery" % "jquery" % "3.5.1" ::
-  //("org.webjars.bowergithub.semantic-org" % "semantic-ui-less" % "2.4.1").excludeAll(ExclusionRule().withArtifact("jquery")) ::
-  //"org.webjars" % "Semantic-UI" % "2.4.1" ::
-  //"org.webjars" % "semantic-ui-less" % "2.4.1" ::
-  "org.webjars" % "bootstrap" % "5.0.0-beta1" ::
-    "org.webjars.npm" % "bootstrap-icons" % "1.3.0" ::
+  "com.github.julien-truffaut" %% "monocle-core" % "3.0.0-M1" ::
+    "com.github.julien-truffaut" %% "monocle-macro" % "3.0.0-M1" ::
+    Nil
+
+libraryDependencies ++=
+  "org.webjars" % "bootstrap" % "5.0.0-beta2" ::
+    "org.webjars.npm" % "bootstrap-icons" % "1.4.0" ::
     "org.webjars" % "font-awesome" % "5.15.2" ::
     "org.webjars" % "jquery" % "3.5.1" ::
     "org.webjars" %% "webjars-play" % "2.8.0-1" ::

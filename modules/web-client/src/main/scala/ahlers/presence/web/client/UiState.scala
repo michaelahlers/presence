@@ -1,6 +1,6 @@
 package ahlers.presence.web.client
 
-import ahlers.presence.web.client.resume.ExperienceId
+import ahlers.presence.experiences.ExperienceKey
 import cats.syntax.either._
 import com.raquo.laminar.api.L._
 import com.raquo.waypoint._
@@ -22,7 +22,7 @@ object UiState extends LazyLogging {
 
   sealed trait ResumePage extends UiState
   case object UnfocusedResumePage extends ResumePage
-  case class FocusedResumePage(experienceId: ExperienceId) extends ResumePage
+  case class FocusedResumePage(experienceId: ExperienceKey) extends ResumePage
 
   case object Contact extends UiState
 
@@ -33,7 +33,7 @@ object UiState extends LazyLogging {
   val resumeFocusRoute: Route[FocusedResumePage, String] =
     Route(
       encode = _.experienceId.toText,
-      decode = fromText => FocusedResumePage(ExperienceId(fromText)),
+      decode = fromText => FocusedResumePage(ExperienceKey(fromText)),
       root / "resume" / segment[String] / endOfSegments)
 
   val contactRoute = Route.static(Contact, root / "contact" / endOfSegments)
@@ -48,6 +48,9 @@ object UiState extends LazyLogging {
       getPageTitle = _.toString,
       serializePage = _.asJson.noSpaces,
       deserializePage = decode[UiState](_).valueOr(throw _))
+
+  val modalsVar: Var[Set[String]] = Var(Set.empty)
+  val $modals: Signal[Set[String]] = modalsVar.signal
 
   //router
   //  .$currentPage

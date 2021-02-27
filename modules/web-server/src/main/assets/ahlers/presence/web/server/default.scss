@@ -67,61 +67,82 @@ main.resume {
   height: 100%;
 }
 
-svg g.experience-node-view {
+svg g g.experience-brief-view {
   opacity: 0;
 }
 
-svg g.experience-node-view.blank {
+svg g g.experience-brief-view.blank {
   pointer-events: none;
 }
 
-svg g.experience-node-view.employment,
-svg g.experience-node-view.skill {
+svg g g.experience-brief-view.content {
   cursor: pointer;
 }
 
-svg g.revealing g.experience-node-view {
+svg g.revealing g.experience-brief-view.content {
   opacity: 1;
   transition: opacity 250ms ease;
   transition-delay: var(--revealing-transition-delay);
 }
 
-svg g.presenting g.experience-node-view {
+svg g.revealing g.experience-brief-view.blank {
+  opacity: 0.5;
+  transition: opacity 500ms ease;
+  transition-delay: var(--revealing-transition-delay);
+}
+
+svg g.presenting g.experience-brief-view.content {
   opacity: 1;
   transition: opacity 250ms ease;
 }
 
-svg g.glancing g.experience-node-view,
-svg g.focusing g.experience-node-view {
+svg g.presenting g.experience-brief-view.blank {
+  opacity: 0.5;
+  transition: opacity 250ms ease;
+}
+
+svg g.focusing g.experience-brief-view.content,
+svg g.glancing g.experience-brief-view.content {
+  opacity: 0.5;
+  transition: opacity 250ms ease;
+}
+
+svg g.focusing g.experience-brief-view.blank,
+svg g.glancing g.experience-brief-view.blank {
   opacity: 0.1;
   transition: opacity 750ms ease;
 }
 
-svg g.glancing g.experience-node-view.glanced,
-svg g.glancing g.experience-node-view.focused,
-svg g.focusing g.experience-node-view.glanced,
-svg g.focusing g.experience-node-view.focused {
-  z-index: 100;
-  opacity: 1;
-  transition: opacity 100ms ease;
-}
-
-// Tag name
-g.experience-node-view foreignObject {
+svg g g.experience-brief-focus-view {
   pointer-events: none;
+  opacity: 0;
+  transition: opacity 250ms ease;
 }
 
-g.experience-node-view label {
+svg g g.experience-brief-focus-view.focused {
+  opacity: 1;
+}
+
+svg g g.experience-brief-glance-view {
+  pointer-events: none;
   opacity: 0;
+  transition: opacity 250ms ease;
+}
+
+svg g g.experience-brief-glance-view.glanced {
+  opacity: 1;
+}
+
+svg g g.experience-brief-glance-view label {
   height: 100%;
   padding-left: 60px;
   padding-right: 20px;
-  color: $navbar-dark-hover-color;
+  color: $navbar-dark-active-color;
+  background-color: $gray-800;
   font-size: 30px;
-  background-color: #292929;
 }
 
-svg g.glancing g.experience-node-view.glanced label {
-  opacity: 1;
-  //transition: opacity 100ms ease;
+// Avoids having to meter the class name changes—Bootstrap's own scripts add a display style before adding the show attribute, which is cumbersome.
+.modal:not(.show) {
+  z-index: -1;
 }
