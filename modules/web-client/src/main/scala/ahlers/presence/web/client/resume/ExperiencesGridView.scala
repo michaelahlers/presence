@@ -12,6 +12,8 @@ import com.raquo.domtypes.generic.Modifier
 import com.raquo.laminar.api.L._
 import com.raquo.laminar.nodes.ReactiveSvgElement
 import d3.laminar.syntax.zoom._
+import d3v4.Circle
+import d3v4.CircleImpl
 import d3v4.d3
 import d3v4.d3.{ Transform, ZoomBehavior }
 import d3v4.d3hierarchy.{ Hierarchy, Pack, Packed }
@@ -19,8 +21,8 @@ import org.scalajs.dom
 import org.scalajs.dom.svg.SVG
 
 import scala.scalajs.js
-import scala.scalajs.js.JSConverters.JSRichIterableOnce
-import scala.scalajs.js.|
+import scala.scalajs.js.JSConverters.{ JSRichIterable, JSRichIterableOnce }
+import scala.scalajs.js.{ |, undefined, UndefOr }
 
 /**
  * @since January 31, 2021
@@ -34,39 +36,25 @@ object ExperiencesGridView {
 
   val zoomTransformBus: EventBus[Transform] = new EventBus()
 
-  def briefStates(experiences: Seq[Experience]): Seq[ExperienceBriefState] = {
-    val packed: Pack[ExperienceBriefState] =
-      d3.pack()
-        .radius(_.data.r * 1.2d)
-
-    val hierarchy: Hierarchy[ExperienceBriefState] with Packed = {
-      val root: ExperienceBriefState = ExperienceBriefState(ExperienceBriefIndex(-1), ExperienceBriefState.Mode.Root, 0, 0, 0)
-      val children: Seq[ExperienceBriefState] =
-        (experiences.map(_.some) ++ Seq.fill(500)(none))
-          .zipWithIndex
-          .map {
-            case (None, index) =>
-              ExperienceBriefState(ExperienceBriefIndex(index), ExperienceBriefState.Mode.Blank, 0, 0, 18d + Math.pow(index.toInt, 2) / 750)
-            case (Some(experience), index) =>
-              ExperienceBriefState(ExperienceBriefIndex(index), ExperienceBriefState.Mode.Content(experience), 0, 0, 20d)
-          }
-
-      packed(d3.hierarchy(
-        root,
-        {
-          case x if root == x => children.toJSArray
-          case _ => js.Array()
-        }))
-    }
-
-    hierarchy.children.orNull
+  def briefStates(experiences: Seq[Experience]): Seq[ExperienceBriefState] =
+    d3.packSiblings(
+      (experiences.map(_.some) ++ Seq.fill(500)(none))
+        .zipWithIndex
+        .map {
+          case (None, index) =>
+            ExperienceBriefState(ExperienceBriefIndex(index), ExperienceBriefState.Mode.Blank, 0, 0, 18d + Math.pow(index.toInt, 2) / 750)
+          case (Some(experience), index) =>
+            ExperienceBriefState(ExperienceBriefIndex(index), ExperienceBriefState.Mode.Content(experience), 0, 0, 20d)
+        }
+        .map(data => CircleImpl(data = data, r = data.r * 1.2d))
+        .toJSArray)
+      .map(circle =>
+        circle
+          .data.get
+          .copy(
+            cx = circle.x.get,
+            cy = circle.y.get))
       .toSeq
-      .map { hierarchy =>
-        hierarchy.data.copy(
-          cx = hierarchy.x.getOrElse(???),
-          cy = hierarchy.y.getOrElse(???))
-      }
-  }
 
   def onWindowResizeZoom($states: Signal[Seq[ExperienceBriefState]], $focusedExperienceKey: Signal[Option[ExperienceKey]]): Modifier[ReactiveSvgElement[SVG]] =
     inContext { thisNode =>
