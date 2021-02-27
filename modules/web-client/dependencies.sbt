@@ -12,11 +12,12 @@ libraryDependencies ++=
     "com.github.japgolly.scalacss" %%% "core" % "0.7.0" ::
     "com.github.julien-truffaut" %%% "monocle-core" % "2.1.0" ::
     "com.github.julien-truffaut" %%% "monocle-macro" % "2.1.0" ::
-    //"io.circe" %%% "circe-core" % "0.13.0" ::
-    //"io.circe" %%% "circe-generic" % "0.13.0" ::
-    //"io.circe" %%% "circe-parser" % "0.13.0" ::
-    //"io.circe" %%% "circe-shapes" % "0.14.0-M2" ::
+    //"io.circe" %%% "circe-core" % "0.14.0-M3" ::
+    //"io.circe" %%% "circe-generic" % "0.14.0-M3" ::
+    //"io.circe" %%% "circe-parser" % "0.14.0-M3" ::
+    //"io.circe" %%% "circe-shapes" % "0.14.0-M3" ::
     "io.github.cquiroz" %%% "scala-java-time" % "2.2.0" ::
+    "io.lemonlabs" %%% "scala-uri" % "3.0.0" ::
     "io.scalaland" %%% "chimney" % "0.6.1" ::
     "org.querki" %%% "jquery-facade" % "2.0" ::
     "org.scala-js" %%% "scalajs-dom" % "1.1.0" ::
