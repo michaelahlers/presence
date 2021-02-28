@@ -16,18 +16,8 @@ object MainView {
       .collectSignal[ResumePage](ResumeView.render(_))
       .collectStatic(UiState.Contact)(ContactPage())
 
-  val pageClassName =
-    UiState.router.$currentPage
-      .map {
-        case UiState.Landing => "landing"
-        case _: UiState.ResumePage => "resume"
-        case UiState.Contact => "contact"
-      }
-
   def apply(): HtmlElement =
     main(
-      //className := "flex-fill",
-      className <-- pageClassName,
       child <-- pageSplitter.$view)
 
 }
