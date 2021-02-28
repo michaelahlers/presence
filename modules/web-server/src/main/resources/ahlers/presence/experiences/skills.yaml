@@ -9,12 +9,20 @@
     commentary: |
       A more _elaborate_ commentary on [Akka](http://akka.io) which works with [Scala](/resume/scala).
 
-      Akka's pretty good because:
+      Akka"s pretty good because:
 
       - It does stuff.
       - And things!
           - Lots of things.
           - Stuff, too.
+  adjacents:
+    - key: "scala"
+    - key: "akka"
+    - key: "play-framework"
+    - key: "sbt"
+    - key: "trss"
+    - key: "verizon"
+    - key: "livesafe"
 
 - key: "bootstrap"
   brief:
@@ -26,6 +34,12 @@
     logo: "/assets/ahlers/presence/web/experiences/bootstrap-detail.svg"
     commentary:
       "Placeholder commentary."
+  adjacents:
+    - key: "css"
+    - key: "javascript"
+    - key: "html"
+    - key: "trss"
+    - key: "verizon"
 
 - key: "css"
   brief:
@@ -37,6 +51,10 @@
     logo: "/assets/ahlers/presence/web/experiences/css3-detail.svg"
     commentary:
       "Placeholder commentary."
+  adjacents:
+    - key: "bootstrap"
+    - key: "trss"
+    - key: "verizon"
 
 - key: "d3"
   brief:
@@ -48,6 +66,10 @@
     logo: "/assets/ahlers/presence/web/experiences/d3-detail.svg"
     commentary:
       "Placeholder commentary."
+  adjacents:
+    - key: "javascript"
+    - key: "css"
+    - key: "html"
 
 - key: "datagrip"
   brief:
@@ -59,6 +81,11 @@
     logo: "/assets/ahlers/presence/web/experiences/datagrip-detail.svg"
     commentary:
       "Placeholder commentary."
+  adjacents:
+    - key: "postgres"
+    - key: "mysql"
+    - key: "livesafe"
+    # - key: "cassandra"
 
 - key: "flyway"
   brief:
@@ -70,6 +97,10 @@
     logo: "/assets/ahlers/presence/web/experiences/flyway-detail.svg"
     commentary:
       "Placeholder commentary."
+  adjacents:
+    - key: "postgres"
+    - key: "mysql"
+    - key: "livesafe"
 
 - key: "git"
   brief:
@@ -81,6 +112,8 @@
     logo: "/assets/ahlers/presence/web/experiences/git-detail.svg"
     commentary:
       "Placeholder commentary."
+  adjacents:
+    - key: "livesafe"
 
 - key: "github"
   brief:
@@ -92,6 +125,9 @@
     logo: "/assets/ahlers/presence/web/experiences/github-detail.svg"
     commentary:
       "Placeholder commentary."
+  adjacents:
+    - key: "livesafe"
+    - key: "git"
 
 - key: "intellij-idea"
   brief:
@@ -103,6 +139,10 @@
     logo: "/assets/ahlers/presence/web/experiences/intellij-idea-detail.svg"
     commentary:
       "Placeholder commentary."
+  adjacents:
+    - key: "livesafe"
+    - key: "scala"
+    - key: "trss"
 
 - key: "html"
   brief:
@@ -114,6 +154,11 @@
     logo: "/assets/ahlers/presence/web/experiences/html5-detail.svg"
     commentary:
       "Placeholder commentary."
+  adjacents:
+    - key: "verizon"
+    - key: "trss"
+    - key: "css"
+    - key: "javascript"
 
 - key: "java"
   brief:
@@ -125,6 +170,8 @@
     logo: "/assets/ahlers/presence/web/experiences/java-detail.svg"
     commentary:
       "Placeholder commentary."
+  adjacents:
+    - key: "verizon"
 
 - key: "javascript"
   brief:
@@ -136,6 +183,12 @@
     logo: "/assets/ahlers/presence/web/experiences/javascript-detail.svg"
     commentary:
       "Placeholder commentary."
+  adjacents:
+    - key: "trss"
+    - key: "verizon"
+    - key: "html"
+    - key: "css"
+    - key: "jquery"
 
 - key: "jquery"
   brief:
@@ -147,6 +200,13 @@
     logo: "/assets/ahlers/presence/web/experiences/jquery-detail.svg"
     commentary:
       "Placeholder commentary."
+  adjacents:
+    - key: "trss"
+    - key: "verizon"
+    - key: "css"
+    - key: "javascript"
+    - key: "html"
+    - key: "bootstrap"
 
 - key: "kafka"
   brief:
@@ -158,6 +218,9 @@
     logo: "/assets/ahlers/presence/web/experiences/kafka-detail.svg"
     commentary:
       "Placeholder commentary."
+  adjacents:
+    - key: "livesafe"
+    - key: "lagom"
 
 - key: "sbt"
   brief:
@@ -169,6 +232,11 @@
     logo: "/assets/ahlers/presence/web/experiences/sbt-detail.svg"
     commentary:
       "Placeholder commentary."
+  adjacents:
+    - key: "livesafe"
+    - key: "trss"
+    - key: "verizon"
+    - key: "scala"
 
 - key: "scala"
   brief:
@@ -180,6 +248,13 @@
     logo: "/assets/ahlers/presence/web/experiences/scala-detail.svg"
     commentary:
       "Placeholder commentary."
+  adjacents:
+    - key: "akka"
+    - key: "play-framework"
+    - key: "sbt"
+    - key: "trss"
+    - key: "verizon"
+    - key: "livesafe"
 
 - key: "scala.js"
   brief:
@@ -191,6 +266,11 @@
     logo: "/assets/ahlers/presence/web/experiences/scala.js-detail.svg"
     commentary:
       "Placeholder commentary."
+  adjacents:
+    - key: "akka"
+    - key: "javascript"
+    - key: "scala"
+    - key: "sbt"
 
 - key: "slick"
   brief:
@@ -202,6 +282,10 @@
     logo: "/assets/ahlers/presence/web/experiences/slick-detail.svg"
     commentary:
       "Placeholder commentary."
+  adjacents:
+    - key: "scala"
+    - key: "postgres"
+    - key: "mysql"
 
 - key: "lagom"
   brief:
@@ -213,6 +297,13 @@
     logo: "/assets/ahlers/presence/web/experiences/lagom-detail.svg"
     commentary:
       "Placeholder commentary."
+  adjacents:
+    - key: "scala"
+    - key: "akka"
+    - key: "play-framework"
+    - key: "slick"
+    - key: "kafka"
+    # - key: "cassandra"
 
 - key: "linux"
   brief:
@@ -224,6 +315,10 @@
     logo: "/assets/ahlers/presence/web/experiences/linux-detail.svg"
     commentary:
       "Placeholder commentary."
+  adjacents:
+    - key: "livesafe"
+    - key: "trss"
+    - key: "verizon"
 
 - key: "mysql"
   brief:
@@ -235,6 +330,11 @@
     logo: "/assets/ahlers/presence/web/experiences/mysql-detail.svg"
     commentary:
       "Placeholder commentary."
+  adjacents:
+    - key: "livesafe"
+    - key: "slick"
+    - key: "flyway"
+    - key: "datagrip"
 
 - key: "mongodb"
   brief:
@@ -246,6 +346,9 @@
     logo: "/assets/ahlers/presence/web/experiences/mongodb-detail.svg"
     commentary:
       "Placeholder commentary."
+  adjacents:
+    - key: "trss"
+    - key: "verizon"
 
 - key: "play-framework"
   brief:
@@ -257,6 +360,13 @@
     logo: "/assets/ahlers/presence/web/experiences/play-framework-detail.svg"
     commentary:
       "Placeholder commentary."
+  adjacents:
+    - key: "livesafe"
+    - key: "trss"
+    - key: "verizon"
+    - key: "scala"
+    - key: "lagom"
+    - key: "akka"
 
 - key: "postgresql"
   brief:
@@ -268,3 +378,8 @@
     logo: "/assets/ahlers/presence/web/experiences/postgresql-detail.svg"
     commentary:
       "Placeholder commentary."
+  adjacents:
+    - key: "livesafe"
+    - key: "slick"
+    - key: "flyway"
+    - key: "datagrip"

@@ -7,4 +7,5 @@ package ahlers.presence.experiences
 case class Experience(
   key: ExperienceKey,
   brief: ExperienceBrief,
-  detail: ExperienceDetail)
+  detail: ExperienceDetail) //,
+//adjacents: Set[ExperienceAdjacent])

@@ -1,32 +1,77 @@
-- key: 'livesafe'
+- key: "livesafe"
   brief:
-    logo: '/assets/ahlers/presence/web/experiences/livesafe-brief.svg'
-    name: 'LiveSafe'
+    logo: "/assets/ahlers/presence/web/experiences/livesafe-brief.svg"
+    name: "LiveSafe"
   detail:
-    kind: 'Employment'
-    name: 'LiveSafe'
-    logo: '/assets/ahlers/presence/web/experiences/livesafe-detail.svg'
+    kind: "Employment"
+    name: "LiveSafe"
+    logo: "/assets/ahlers/presence/web/experiences/livesafe-detail.svg"
     commentary:
-      'Placeholder commentary.'
+      "Placeholder commentary."
+  adjacents:
+    - key: "scala"
+    - key: "akka"
+    - key: "play-framework"
+    - key: "datagrip"
+    - key: "intellij-idea"
+    - key: "flyway"
+    - key: "git"
+    - key: "github"
+    - key: "kafka"
+    - key: "sbt"
+    - key: "slick"
+    - key: "lagom"
+    - key: "linux"
+    - key: "mysql"
+    - key: "postgres"
 
-- key: 'trss'
+- key: "trss"
   brief:
-    logo: '/assets/ahlers/presence/web/experiences/trss-brief.svg'
-    name: 'TRSS'
+    logo: "/assets/ahlers/presence/web/experiences/trss-brief.svg"
+    name: "TRSS"
   detail:
-    kind: 'Employment'
-    name: 'Thomson Reuters Special Services'
-    logo: '/assets/ahlers/presence/web/experiences/trss-detail.svg'
+    kind: "Employment"
+    name: "Thomson Reuters Special Services"
+    logo: "/assets/ahlers/presence/web/experiences/trss-detail.svg"
     commentary:
-      'Placeholder commentary.'
+      "Placeholder commentary."
+  adjacents:
+    - key: "scala"
+    - key: "akka"
+    - key: "play-framework"
+    - key: "intellij-idea"
+    - key: "git"
+    - key: "sbt"
+    - key: "linux"
+    - key: "mongodb"
+    - key: "css"
+    - key: "javascript"
+    - key: "bootstrap"
+    - key: "jquery"
+    - key: "html"
 
-- key: 'verizon'
+- key: "verizon"
   brief:
-    logo: '/assets/ahlers/presence/web/experiences/verizon-brief.svg'
-    name: 'Verizon'
+    logo: "/assets/ahlers/presence/web/experiences/verizon-brief.svg"
+    name: "Verizon"
   detail:
-    kind: 'Employment'
-    name: 'Verizon Business'
-    logo: '/assets/ahlers/presence/web/experiences/verizon-detail.svg'
+    kind: "Employment"
+    name: "Verizon Business"
+    logo: "/assets/ahlers/presence/web/experiences/verizon-detail.svg"
     commentary:
-      'Placeholder commentary.'
+      "Placeholder commentary."
+  adjacents:
+    - key: "scala"
+    - key: "akka"
+    - key: "play-framework"
+    # - key: "svn"
+    - key: "sbt"
+    - key: "linux"
+    - key: "mongodb"
+    - key: "css"
+    - key: "html"
+    - key: "java"
+    - key: "javascript"
+    - key: "bootstrap"
+    - key: "jquery"
+    # -key: "redis"
