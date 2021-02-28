@@ -13,7 +13,7 @@ libraryDependencies ++=
 
 libraryDependencies ++=
   "com.github.julien-truffaut" %% "monocle-core" % "3.0.0-M2" ::
-    "com.github.julien-truffaut" %% "monocle-macro" % "3.0.0-M2" ::
+    "com.github.julien-truffaut" %% "monocle-macro" % "3.0.0-M3" ::
     Nil
 
 libraryDependencies ++=
