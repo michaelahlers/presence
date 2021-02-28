@@ -92,7 +92,7 @@ object ExperiencesGridView {
               d3.select(thisNode.ref)
                 .transition()
                 .duration(3000d)
-                .on("end", phaseVar.set(Presenting)),
+                .on("end", () => phaseVar.set(Presenting)),
               d3.zoomIdentity
                 .translate(
                   thisNode.ref.clientWidth / 2,
@@ -107,7 +107,7 @@ object ExperiencesGridView {
               d3.select(thisNode.ref)
                 .transition()
                 .duration(3000d)
-                .on("end", phaseVar.set(Presenting)),
+                .on("end", () => phaseVar.set(Presenting)),
               d3.zoomIdentity
                 .translate(
                   thisNode.ref.clientWidth / 2,
@@ -225,6 +225,9 @@ object ExperiencesGridView {
       //g(
       // transform <-- centeringTransformVar.signal.map(_.toString()),
       g(
+        className.toggle("loading") <-- $phase.map(Loading == _),
+        className.toggle("revealing") <-- $phase.map(Revealing == _),
+        className.toggle("presenting") <-- $phase.map(Presenting == _),
         className.toggle("glancing") <-- $isGlancing,
         className.toggle("focusing") <-- $isFocusing,
         transform <-- zoomingTransformVar.signal.map(_.toString()),
@@ -238,13 +241,13 @@ object ExperiencesGridView {
         g(children <--
           $states
             .map(_.filter(_.mode.isContent))
-            .split(_.index)(ExperienceBriefGlanceView.render(_, _, _, $focusedExperienceKey, glancedExperienceKeysVar.signal))),
+            .split(_.index)(ExperienceBriefGlanceView.render(_, _, _, $focusedExperienceKey, glancedExperienceKeysVar.signal))) /*,
         circle(
           r("10"),
           cx("0"),
           cy("0"),
           fill("white")
-        )
+        )*/
       ),
       onPhaseZooming(zoomBehavior, phaseVar, $focusedState),
       onClickExitFocus --> focusedExperienceObserver,
