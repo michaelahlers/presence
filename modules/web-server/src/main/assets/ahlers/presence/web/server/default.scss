@@ -63,12 +63,18 @@ svg.ahlers-consulting-logo g g g:nth-child(1) {
   animation-fill-mode: forwards;
 }
 
-main.resume,
-main.resume article,
-main.resume article svg {
+// Without this, the initial size of the grid view is too short, causing an awkward revealing transition.
+// TODO: Investigate simplifying this.
+body.resume main,
+body.resume article,
+body.resume article svg {
   display: block;
   width: 100%;
   height: 100%;
+}
+
+body.resume footer {
+  display: none;
 }
 
 svg g g.experience-brief-view {
