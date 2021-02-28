@@ -23,6 +23,9 @@ package object experiences {
   implicit private val codecExperienceKey: Codec[ExperienceKey] =
     deriveUnwrappedCodec
 
+  implicit private val codecExperienceCommentary: Codec[ExperienceCommentary] =
+    deriveUnwrappedCodec
+
   implicit private val encoderExperienceKey: Encoder[ExperienceLogo] =
     Encoder[String].contramap(_.toText)
 
