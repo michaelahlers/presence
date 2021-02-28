@@ -10,10 +10,9 @@ object FooterView {
 
   def apply(): HtmlElement =
     footer(
-      //className := "footer mt-auto bg-dark",
-      //div(
-      //  className := "container-fluid",
-      //  ContactInformationView())
-    )
+      className("footer", "bg-dark"),
+      div(
+        className("container-fluid"),
+        ContactInformationView()))
 
 }
