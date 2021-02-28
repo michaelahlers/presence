@@ -23,6 +23,13 @@ import scala.scalajs.js.JSConverters.JSRichIterableOnce
  */
 object ExperiencesGridView {
 
+  sealed trait Phase
+  object Phase {
+    case object Loading extends Phase
+    case object Revealing extends Phase
+    case object Presenting extends Phase
+  }
+
   def briefStates(experiences: Seq[Experience]): Seq[ExperienceBriefState] = {
     val circles: js.Array[Circle[ExperienceBriefState] with Packed] =
       d3.packSiblings((experiences.map(_.some) ++ Seq.fill(500)(none))
@@ -50,16 +57,19 @@ object ExperiencesGridView {
 
   def onLoadZooming(
     zoomBehavior: ZoomBehavior[dom.EventTarget],
-    $states: Signal[Option[Seq[ExperienceBriefState]]],
+    phaseVar: Var[Phase],
     $focusedState: Signal[Option[ExperienceBriefState]]
-  ): Modifier[SvgElement] =
+  ): Modifier[SvgElement] = {
+    import Phase._
+
     inContext { thisNode =>
-      $states.withCurrentValueOf($focusedState)
-        .map { case (states, focusedState) =>
-          dom.console.log("onLoadZooming", "isLoading", states.isEmpty, "isFocused", focusedState.nonEmpty)
-          (states, focusedState)
+      phaseVar.signal.combineWith($focusedState)
+        .map { case (phase, focusedState) =>
+          dom.console.log("onLoadZooming", "phase", phase.toString, "focusedState", focusedState.flatMap(_.key).map(_.toText).getOrElse("(none)"))
+          (phase, focusedState)
         } --> {
-        case (None, _) =>
+
+        case (Loading, _) =>
           zoomBehavior
             .transform(
               d3.select(thisNode.ref),
@@ -69,24 +79,55 @@ object ExperiencesGridView {
                   thisNode.ref.clientHeight / 2)
                 .scale(0.5d))
 
-        case (_, None) =>
+        case (Revealing, None) =>
           zoomBehavior
             .transform(
               d3.select(thisNode.ref)
                 .transition()
-                .duration(3000d),
+                .duration(3000d)
+                .on("end", () => phaseVar.set(Presenting)),
+              d3.zoomIdentity
+                .translate(
+                  thisNode.ref.clientWidth / 2,
+                  thisNode.ref.clientHeight / 2)
+                .scale(1d)
+            )
+
+        case (Revealing, Some(state)) =>
+          zoomBehavior
+            .transform(
+              d3.select(thisNode.ref)
+                .transition()
+                .duration(3000d)
+                .on("end", () => phaseVar.set(Presenting)),
+              d3.zoomIdentity
+                .translate(
+                  thisNode.ref.clientWidth / 2,
+                  thisNode.ref.clientHeight / 2)
+                .scale(5d)
+                .translate(
+                  -state.cx,
+                  -state.cy)
+            )
+
+        case (Presenting, None) =>
+          zoomBehavior
+            .transform(
+              d3.select(thisNode.ref)
+                .transition()
+                .duration(1000d),
               d3.zoomIdentity
                 .translate(
                   thisNode.ref.clientWidth / 2,
                   thisNode.ref.clientHeight / 2)
                 .scale(1d))
 
-        case (_, Some(state)) =>
+        case (Presenting, Some(state)) =>
           zoomBehavior
             .transform(
               d3.select(thisNode.ref)
                 .transition()
-                .duration(3000d),
+                .duration(1000d),
               d3.zoomIdentity
                 .translate(
                   thisNode.ref.clientWidth / 2,
@@ -99,6 +140,7 @@ object ExperiencesGridView {
 
       }
     }
+  }
 
   //def onResizeCentering(observer: Observer[Transform]): Modifier[SvgElement] =
   //  inContext { thisNode =>
@@ -126,24 +168,28 @@ object ExperiencesGridView {
     focusedExperienceObserver: Observer[Option[ExperienceKey]]
   ): ReactiveSvgElement[SVG] = {
     import svg._
+    import Phase._
 
     val zoomBehavior: ZoomBehavior[dom.EventTarget] =
       d3.zoom()
         .scaleExtent(js.Array(0.5d, 5d))
 
-    val $states: Signal[Option[Seq[ExperienceBriefState]]] =
+    val $states: Signal[Seq[ExperienceBriefState]] =
       $experiences
         .map {
-          case None => none
-          case Some(experiences) => briefStates(experiences).some
+          case None => Nil
+          case Some(experiences) => briefStates(experiences)
         }
 
     val $focusedState: Signal[Option[ExperienceBriefState]] =
       $states.combineWith($focusedExperienceKey)
         .mapN {
-          case (Some(states), Some(focusedKey)) => states.find(_.key.contains(focusedKey))
+          case (states, Some(focusedKey)) => states.find(_.key.contains(focusedKey))
           case (_, _) => none
         }
+
+    val phaseVar: Var[Phase] = Var(Loading)
+    val $phase: Signal[Phase] = phaseVar.signal
 
     val glancedExperienceKeysVar: Var[Set[ExperienceKey]] = Var(Set.empty)
 
@@ -174,16 +220,13 @@ object ExperiencesGridView {
         transform <-- zoomingTransformVar.signal.map(_.toString()),
         g(children <--
           $states
-            .map(_.getOrElse(Nil))
             .split(_.index)(ExperienceBriefView.render(_, _, _, focusedExperienceObserver, glancedExperienceKeysVar))),
         g(children <--
           $states
-            .map(_.getOrElse(Nil))
             .map(_.filter(_.mode.isContent))
             .split(_.index)(ExperienceBriefFocusView.render(_, _, _, $focusedExperienceKey))),
         g(children <--
           $states
-            .map(_.getOrElse(Nil))
             .map(_.filter(_.mode.isContent))
             .split(_.index)(ExperienceBriefGlanceView.render(_, _, _, $focusedExperienceKey, glancedExperienceKeysVar.signal))),
         circle(
@@ -193,11 +236,17 @@ object ExperiencesGridView {
           fill("white")
         )
       ),
-      onLoadZooming(zoomBehavior, $states, $focusedState),
+      onLoadZooming(zoomBehavior, phaseVar, $focusedState),
       onClickExitFocus --> focusedExperienceObserver,
       //onResizeCentering(centeringTransformVar.writer),
       //centeringTransformVar.signal --> (dom.console.debug("centeringTransform", _)),
-      zoomingTransformVar.signal --> (dom.console.debug("zoomingTransform", _))
+      //zoomingTransformVar.signal --> (dom.console.debug("zoomingTransform", _)),
+      $states.combineWith($focusedState).withCurrentValueOf(phaseVar.signal).map {
+        case (Nil, _, _) => Loading
+        case (_, _, Loading) => Revealing
+        case (_, _, Revealing) => Presenting
+        case (_, _, phase) => phase
+      } --> phaseVar.writer
     )
   }
 
