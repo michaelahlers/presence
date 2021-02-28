@@ -2,6 +2,7 @@ package ahlers.presence.web.client.resume
 
 import ahlers.presence.experiences.{ Experience, ExperienceKey }
 import ahlers.presence.web.client.UiState
+import ahlers.presence.web.client.UiState.FocusedResumePage
 import cats.syntax.option._
 import com.raquo.laminar.api.L._
 import io.lemonlabs.uri.Url
@@ -124,12 +125,23 @@ object ExperienceFocusView {
     val bodyRender =
       div(
         className("modal-body"),
-        child <--
+        div(child <--
           $experience
             .map(_.detail.commentary.toText)
             .map(transformer.parser
               .parse(_)
-              .fold(error => p(s"""Couldn't render commentary. ${error.message}"""), _.content.toNode))
+              .fold(error => p(s"""Couldn't render commentary. ${error.message}"""), _.content.toNode))),
+        div(ul(children <--
+          $experience
+            .map(_.adjacents
+              .toList
+              .map { adjacent =>
+                val uiState = FocusedResumePage(adjacent.key)
+                li(a(
+                  href(UiState.router.relativeUrlForPage(uiState)),
+                  onClick.preventDefault.mapToStrict(uiState) --> (UiState.router.pushState(_)),
+                  adjacent.key.toText))
+              })))
       )
 
     val footerRender =

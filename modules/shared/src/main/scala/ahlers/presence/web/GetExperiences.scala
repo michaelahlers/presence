@@ -25,7 +25,7 @@ object GetExperiencesResponse {
     deriveUnwrappedCodec
 
   implicit private val codecExperienceAdjacent: Codec[ExperienceAdjacent] =
-    deriveUnwrappedCodec
+    deriveConfiguredCodec
 
   implicit private val codecExperienceCommentary: Codec[ExperienceCommentary] =
     deriveUnwrappedCodec
