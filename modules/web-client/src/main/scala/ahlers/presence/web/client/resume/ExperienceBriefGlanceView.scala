@@ -53,7 +53,7 @@ object ExperienceBriefGlanceView {
         $state.map(state =>
           state.mode match {
 
-            case Root | Blank => ???
+            case Blank => ???
 
             case Content(experience) =>
               Seq(

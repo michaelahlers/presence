@@ -32,8 +32,6 @@ object ExperienceBriefView {
       child <-- $state.map(state =>
         state.mode match {
 
-          case Root => ???
-
           case Blank =>
             circle(
               cx(state.cx.toString),

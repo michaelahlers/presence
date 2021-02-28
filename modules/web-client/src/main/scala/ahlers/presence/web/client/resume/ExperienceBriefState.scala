@@ -1,8 +1,8 @@
 package ahlers.presence.web.client.resume
 
-import cats.syntax.option._
-import ahlers.presence.experiences.{ Experience, ExperienceKey, ExperienceLogo, ExperienceName }
+import ahlers.presence.experiences.{ Experience, ExperienceKey }
 import ahlers.presence.web.client.resume.ExperienceBriefState.Mode
+import cats.syntax.option._
 
 /**
  * @since January 31, 2021
@@ -23,7 +23,6 @@ object ExperienceBriefState {
     val isContent: Boolean = false)
 
   object Mode {
-    case object Root extends Mode(isRoot = true)
     case object Blank extends Mode(isBlank = true)
     case class Content(experience: Experience) extends Mode(isContent = true)
   }
@@ -35,7 +34,7 @@ object ExperienceBriefState {
 
     def key: Option[ExperienceKey] =
       mode match {
-        case Root | Blank => none
+        case Blank => none
         case Content(experience) => experience.key.some
       }
 

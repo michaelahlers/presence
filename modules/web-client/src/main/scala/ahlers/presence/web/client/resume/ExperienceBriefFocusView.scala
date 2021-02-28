@@ -1,7 +1,7 @@
 package ahlers.presence.web.client.resume
 
 import ahlers.presence.experiences.ExperienceKey
-import ahlers.presence.web.client.resume.ExperienceBriefState.Mode.{ Blank, Content, Root }
+import ahlers.presence.web.client.resume.ExperienceBriefState.Mode.{ Blank, Content }
 import com.raquo.domtypes.generic.Modifier
 import com.raquo.laminar.api.L._
 import com.raquo.laminar.nodes._
@@ -39,7 +39,7 @@ object ExperienceBriefFocusView {
         $state.map(state =>
           state.mode match {
 
-            case Root | Blank => ???
+            case Blank => ???
 
             case Content(experience) =>
               image(
