@@ -1,14 +1,14 @@
 package ahlers.presence.web.client.resume
 
 import ahlers.presence.experiences.{ Experience, ExperienceKey }
+import ahlers.presence.web.client.UiState
 import cats.syntax.option._
-import com.raquo.domtypes.generic.Modifier
 import com.raquo.laminar.api.L._
+import io.lemonlabs.uri.Url
 import laika.api.Transformer
-import laika.ast.{ Block, Emphasized, Paragraph, RootElement }
 import laika.format.{ AST, Markdown }
 import laika.markdown.github.GitHubFlavor
-import laika.parse.code.CodeCategory.Markup.Emphasized
+
 import scala.annotation.tailrec
 
 /**
@@ -49,13 +49,32 @@ object ExperienceFocusView {
           i(element.content.map(_.toNode))
         case element: SpanLink =>
           element.target match {
-            case link: ExternalTarget =>
+
+            case link: ExternalTarget if Url.parse(link.url).hostOption.nonEmpty =>
               a(
                 href(link.url),
                 target("_blank"),
                 element.content.map(_.toNode))
-            case target: InternalTarget =>
-              commentNode(s"${target.getClass}")
+
+            case link: ExternalTarget =>
+              UiState.router.pageForRelativeUrl(link.url) match {
+                case None =>
+                  a(
+                    href(link.url),
+                    target("_blank"),
+                    element.content.map(_.toNode))
+
+                case Some(uiState) =>
+                  a(
+                    href(link.url),
+                    onClick.preventDefault.mapToStrict(uiState) --> (UiState.router.pushState(_)),
+                    element.content.map(_.toNode))
+
+              }
+
+            case link =>
+              commentNode(s"${link.getClass}")
+
           }
         case element =>
           commentNode(s"${element.getClass}.")
@@ -88,8 +107,9 @@ object ExperienceFocusView {
         child <--
           $experience
             .map(_.detail.commentary.toText)
-            .map(transformer.parser.parse(_).getOrElse(???))
-            .map(_.content.toNode)
+            .map(transformer.parser
+              .parse(_)
+              .fold(error => p(s"""Couldn't render commentary. ${error.message}"""), _.content.toNode))
       )
 
     val footerRender =
