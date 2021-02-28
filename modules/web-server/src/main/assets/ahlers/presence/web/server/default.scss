@@ -63,7 +63,11 @@ svg.ahlers-consulting-logo g g g:nth-child(1) {
   animation-fill-mode: forwards;
 }
 
-main.resume {
+main.resume,
+main.resume article,
+main.resume article svg {
+  display: block;
+  width: 100%;
   height: 100%;
 }
 
@@ -71,34 +75,34 @@ svg g g.experience-brief-view {
   opacity: 0;
 }
 
+//svg g g.experience-brief-view.blank {
+//  pointer-events: none;
+//}
+//
+//svg g g.experience-brief-view.content {
+//  cursor: pointer;
+//}
+
+svg g g.experience-brief-view.content {
+  opacity: 1;
+  //transition: opacity 250ms ease;
+  //transition-delay: var(--revealing-transition-delay);
+}
+
 svg g g.experience-brief-view.blank {
-  pointer-events: none;
+  opacity: 0.5;
+  //transition: opacity 500ms ease;
+  //transition-delay: var(--revealing-transition-delay);
 }
 
 svg g g.experience-brief-view.content {
-  cursor: pointer;
+  //opacity: 1;
+  //transition: opacity 250ms ease;
 }
 
-svg g.revealing g.experience-brief-view.content {
-  opacity: 1;
-  transition: opacity 250ms ease;
-  transition-delay: var(--revealing-transition-delay);
-}
-
-svg g.revealing g.experience-brief-view.blank {
-  opacity: 0.5;
-  transition: opacity 500ms ease;
-  transition-delay: var(--revealing-transition-delay);
-}
-
-svg g.presenting g.experience-brief-view.content {
-  opacity: 1;
-  transition: opacity 250ms ease;
-}
-
-svg g.presenting g.experience-brief-view.blank {
-  opacity: 0.5;
-  transition: opacity 250ms ease;
+svg g g.experience-brief-view.blank {
+  //opacity: 0.5;
+  //transition: opacity 250ms ease;
 }
 
 svg g.focusing g.experience-brief-view.content,

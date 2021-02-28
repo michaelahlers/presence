@@ -55,7 +55,6 @@ object ResumeView {
       focusedExperienceKeyBus.writer
 
     article(
-      className := Seq("d-flex", "h-100"),
       onFocusedExperience,
       ExperiencesGridView.render($experiences, $focusedExperienceKey, focusedExperienceKeyObserver),
       children <--
