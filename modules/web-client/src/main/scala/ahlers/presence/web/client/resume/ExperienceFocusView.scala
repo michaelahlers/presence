@@ -50,8 +50,7 @@ object ExperienceFocusView {
           "Close"))
 
     val $isRaised: Signal[Boolean] =
-      $focusedExperienceKey
-        .combineWith($experience)
+      $focusedExperienceKey.combineWith($experience.map(_.key))
         .mapN(_.contains(_))
 
     div(
@@ -59,7 +58,7 @@ object ExperienceFocusView {
       className.toggle("show") <-- $isRaised,
       tabIndex(-1),
       div(
-        className("modal-dialog", "modal-fullscreen"),
+        className("modal-dialog", "modal-dialog-centered", "modal-dialog-scrollable"),
         div(
           className("modal-content"),
           headerRender,
