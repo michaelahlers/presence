@@ -23,6 +23,10 @@ import scala.scalajs.js.JSConverters.JSRichIterableOnce
  */
 object ExperiencesGridView {
 
+  /**
+   * Represents a trivial finite-state machine.
+   * @todo Document more thoroughly and formalize the transitions.
+   */
   sealed trait Phase
   object Phase {
     case object Loading extends Phase
@@ -55,7 +59,7 @@ object ExperiencesGridView {
             cy = circle.y.get - enclosure.y.get))
   }
 
-  def onLoadZooming(
+  def onPhaseZooming(
     zoomBehavior: ZoomBehavior[dom.EventTarget],
     phaseVar: Var[Phase],
     $focusedState: Signal[Option[ExperienceBriefState]]
@@ -64,11 +68,13 @@ object ExperiencesGridView {
 
     inContext { thisNode =>
       phaseVar.signal.combineWith($focusedState)
+      /** @todo Implement tap syntax. */
         .map { case (phase, focusedState) =>
-          dom.console.log("onLoadZooming", "phase", phase.toString, "focusedState", focusedState.flatMap(_.key).map(_.toText).getOrElse("(none)"))
+          dom.console.log("onPhaseZooming", "phase", phase.toString, "focusedState", focusedState.flatMap(_.key).map(_.toText).getOrElse("(none)"))
           (phase, focusedState)
         } --> {
 
+        /** When [[Loading]], set a wide view, regardless any state. */
         case (Loading, _) =>
           zoomBehavior
             .transform(
@@ -79,13 +85,14 @@ object ExperiencesGridView {
                   thisNode.ref.clientHeight / 2)
                 .scale(0.5d))
 
+        /** When [[Revealing]] and ''not'' focused, slowly zoom to overview. */
         case (Revealing, None) =>
           zoomBehavior
             .transform(
               d3.select(thisNode.ref)
                 .transition()
                 .duration(3000d)
-                .on("end", () => phaseVar.set(Presenting)),
+                .on("end", phaseVar.set(Presenting)),
               d3.zoomIdentity
                 .translate(
                   thisNode.ref.clientWidth / 2,
@@ -93,13 +100,14 @@ object ExperiencesGridView {
                 .scale(1d)
             )
 
+        /** When [[Revealing]] and focused, slowly zoom to narrow view. */
         case (Revealing, Some(state)) =>
           zoomBehavior
             .transform(
               d3.select(thisNode.ref)
                 .transition()
                 .duration(3000d)
-                .on("end", () => phaseVar.set(Presenting)),
+                .on("end", phaseVar.set(Presenting)),
               d3.zoomIdentity
                 .translate(
                   thisNode.ref.clientWidth / 2,
@@ -110,6 +118,7 @@ object ExperiencesGridView {
                   -state.cy)
             )
 
+        /** When [[Presenting]] and unfocused, where the user now has control, quickly zoom to overview. */
         case (Presenting, None) =>
           zoomBehavior
             .transform(
@@ -122,6 +131,7 @@ object ExperiencesGridView {
                   thisNode.ref.clientHeight / 2)
                 .scale(1d))
 
+        /** When [[Presenting]] and unfocused, where the user now has control, quickly zoom to narrow view. */
         case (Presenting, Some(state)) =>
           zoomBehavior
             .transform(
@@ -236,11 +246,15 @@ object ExperiencesGridView {
           fill("white")
         )
       ),
-      onLoadZooming(zoomBehavior, phaseVar, $focusedState),
+      onPhaseZooming(zoomBehavior, phaseVar, $focusedState),
       onClickExitFocus --> focusedExperienceObserver,
       //onResizeCentering(centeringTransformVar.writer),
       //centeringTransformVar.signal --> (dom.console.debug("centeringTransform", _)),
       //zoomingTransformVar.signal --> (dom.console.debug("zoomingTransform", _)),
+      /**
+       * @see [[Phase]]
+       * @todo Formalize this quick-and-dirty transition logic.
+       */
       $states.combineWith($focusedState).withCurrentValueOf(phaseVar.signal).map {
         case (Nil, _, _) => Loading
         case (_, _, Loading) => Revealing
