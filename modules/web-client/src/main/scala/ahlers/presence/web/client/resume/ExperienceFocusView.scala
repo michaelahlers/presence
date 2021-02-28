@@ -39,14 +39,19 @@ object ExperienceFocusView {
     def toNode: Node = {
       import laika.ast._
       element match {
+
         case element: RootElement =>
           div(element.content.map(_.toNode))
+
         case element: Paragraph =>
           p(element.content.map(_.toNode))
+
         case element: Text =>
           textToNode(element.content)
+
         case element: Emphasized =>
           i(element.content.map(_.toNode))
+
         case element: SpanLink =>
           element.target match {
 
@@ -76,6 +81,21 @@ object ExperienceFocusView {
               commentNode(s"${link.getClass}")
 
           }
+
+        case element: BulletList =>
+          ul(element.content.map(_.toNode))
+
+        /** [[BulletListItem.content]] must have type [[Block]] (for nesting), but when its content is only a single [[Text]] do not emit a [[p]]. */
+        case BulletListItem(Seq(Paragraph(content @ Seq(_: Text), _)), _, _) =>
+          li(content.map(_.toNode))
+
+        case element: BulletListItem =>
+          li(element.content.map(_.toNode))
+
+        /** @todo Determine if this is correct. */
+        case element: SpanSequence =>
+          span(element.content.map(_.toNode))
+
         case element =>
           commentNode(s"${element.getClass}.")
       }
