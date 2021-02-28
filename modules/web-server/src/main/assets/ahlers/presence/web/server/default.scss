@@ -174,7 +174,15 @@ svg g g.experience-brief-glance-view label {
   font-size: 30px;
 }
 
-// Avoids having to meter the class name changes—Bootstrap's own scripts add a display style before adding the show attribute, which is cumbersome.
+.resume .modal {
+  pointer-events: none;
+}
+
+.resume .modal.show {
+  transition: opacity 250ms ease-out 750ms;
+}
+
+/// Avoids having to meter the class name changes in order to get transitions. Bootstrap's reference scripts set a `display: block` style before adding the show attribute, which is cumbersome in the reactive model.
 .modal:not(.show) {
   z-index: -1;
 }
