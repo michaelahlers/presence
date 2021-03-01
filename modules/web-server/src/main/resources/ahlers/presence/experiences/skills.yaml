@@ -283,7 +283,7 @@
 
 - key: "scala.js"
   brief:
-    name: "ScalaJs"
+    name: "Scala.js"
     logo: "/assets/ahlers/presence/web/experiences/scala.js-brief.svg"
   detail:
     kind: "Skill"
