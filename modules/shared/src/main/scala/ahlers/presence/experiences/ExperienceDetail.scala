@@ -14,12 +14,14 @@ object ExperienceDetail {
   case class Employment(
     logo: ExperienceLogo,
     name: ExperienceName,
+    summary: ExperienceSummary,
     commentary: ExperienceCommentary)
     extends ExperienceDetail
 
   case class Skill(
     logo: ExperienceLogo,
     name: ExperienceName,
+    summary: ExperienceSummary,
     commentary: ExperienceCommentary)
     extends ExperienceDetail
 

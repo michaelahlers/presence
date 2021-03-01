@@ -6,10 +6,12 @@
     kind: "Skill"
     name: "Akka"
     logo: "/assets/ahlers/presence/web/experiences/akka-detail.svg"
+    summary: |
+      Akka is a toolkit for building highly concurrent, distributed, and resilient message-driven applications for Java and Scala.
     commentary: |
       A more _elaborate_ commentary on [Akka](http://akka.io) which works with [Scala](/resume/scala).
 
-      Akka"s pretty good because:
+      Akka‘s pretty good because:
 
       - It does stuff.
       - And things!
@@ -32,6 +34,7 @@
     kind: "Skill"
     name: "Twitter Bootstrap"
     logo: "/assets/ahlers/presence/web/experiences/bootstrap-detail.svg"
+    summary: |
     commentary:
       "Placeholder commentary."
   adjacents:
@@ -49,6 +52,7 @@
     kind: "Skill"
     name: "Cascading Style Sheets"
     logo: "/assets/ahlers/presence/web/experiences/css3-detail.svg"
+    summary: |
     commentary:
       "Placeholder commentary."
   adjacents:
@@ -64,6 +68,7 @@
     kind: "Skill"
     name: "D3.js"
     logo: "/assets/ahlers/presence/web/experiences/d3-detail.svg"
+    summary: |
     commentary:
       "Placeholder commentary."
   adjacents:
@@ -79,6 +84,7 @@
     kind: "Skill"
     name: "DataGrip"
     logo: "/assets/ahlers/presence/web/experiences/datagrip-detail.svg"
+    summary: |
     commentary:
       "Placeholder commentary."
   adjacents:
@@ -95,6 +101,7 @@
     kind: "Skill"
     name: "Flyway"
     logo: "/assets/ahlers/presence/web/experiences/flyway-detail.svg"
+    summary: |
     commentary:
       "Placeholder commentary."
   adjacents:
@@ -110,6 +117,7 @@
     kind: "Skill"
     name: "Git"
     logo: "/assets/ahlers/presence/web/experiences/git-detail.svg"
+    summary: |
     commentary:
       "Placeholder commentary."
   adjacents:
@@ -123,6 +131,7 @@
     kind: "Skill"
     name: "GitHub"
     logo: "/assets/ahlers/presence/web/experiences/github-detail.svg"
+    summary: |
     commentary:
       "Placeholder commentary."
   adjacents:
@@ -137,6 +146,7 @@
     kind: "Skill"
     name: "IntelliJ IDEA"
     logo: "/assets/ahlers/presence/web/experiences/intellij-idea-detail.svg"
+    summary: |
     commentary:
       "Placeholder commentary."
   adjacents:
@@ -152,6 +162,7 @@
     kind: "Skill"
     name: "HTML"
     logo: "/assets/ahlers/presence/web/experiences/html5-detail.svg"
+    summary: |
     commentary:
       "Placeholder commentary."
   adjacents:
@@ -168,6 +179,7 @@
     kind: "Skill"
     name: "Java"
     logo: "/assets/ahlers/presence/web/experiences/java-detail.svg"
+    summary: |
     commentary:
       "Placeholder commentary."
   adjacents:
@@ -181,6 +193,7 @@
     kind: "Skill"
     name: "JavaScript"
     logo: "/assets/ahlers/presence/web/experiences/javascript-detail.svg"
+    summary: |
     commentary:
       "Placeholder commentary."
   adjacents:
@@ -198,6 +211,7 @@
     kind: "Skill"
     name: "jQuery"
     logo: "/assets/ahlers/presence/web/experiences/jquery-detail.svg"
+    summary: |
     commentary:
       "Placeholder commentary."
   adjacents:
@@ -216,6 +230,7 @@
     kind: "Skill"
     name: "Kafka"
     logo: "/assets/ahlers/presence/web/experiences/kafka-detail.svg"
+    summary: |
     commentary:
       "Placeholder commentary."
   adjacents:
@@ -230,6 +245,7 @@
     kind: "Skill"
     name: "SBT"
     logo: "/assets/ahlers/presence/web/experiences/sbt-detail.svg"
+    summary: |
     commentary:
       "Placeholder commentary."
   adjacents:
@@ -246,6 +262,7 @@
     kind: "Skill"
     name: "Scala"
     logo: "/assets/ahlers/presence/web/experiences/scala-detail.svg"
+    summary: |
     commentary:
       "Placeholder commentary."
   adjacents:
@@ -264,6 +281,7 @@
     kind: "Skill"
     name: "ScalaJs"
     logo: "/assets/ahlers/presence/web/experiences/scala.js-detail.svg"
+    summary: |
     commentary:
       "Placeholder commentary."
   adjacents:
@@ -280,6 +298,7 @@
     kind: "Skill"
     name: "Slick"
     logo: "/assets/ahlers/presence/web/experiences/slick-detail.svg"
+    summary: |
     commentary:
       "Placeholder commentary."
   adjacents:
@@ -295,6 +314,7 @@
     kind: "Skill"
     name: "Lagom"
     logo: "/assets/ahlers/presence/web/experiences/lagom-detail.svg"
+    summary: |
     commentary:
       "Placeholder commentary."
   adjacents:
@@ -313,6 +333,7 @@
     kind: "Skill"
     name: "Linux"
     logo: "/assets/ahlers/presence/web/experiences/linux-detail.svg"
+    summary: |
     commentary:
       "Placeholder commentary."
   adjacents:
@@ -328,6 +349,7 @@
     kind: "Skill"
     name: "MySQL"
     logo: "/assets/ahlers/presence/web/experiences/mysql-detail.svg"
+    summary: |
     commentary:
       "Placeholder commentary."
   adjacents:
@@ -344,6 +366,7 @@
     kind: "Skill"
     name: "MongoDB"
     logo: "/assets/ahlers/presence/web/experiences/mongodb-detail.svg"
+    summary: |
     commentary:
       "Placeholder commentary."
   adjacents:
@@ -358,6 +381,7 @@
     kind: "Skill"
     name: "PlayFramework"
     logo: "/assets/ahlers/presence/web/experiences/play-framework-detail.svg"
+    summary: |
     commentary:
       "Placeholder commentary."
   adjacents:
@@ -376,6 +400,7 @@
     kind: "Skill"
     name: "PostgreSQL"
     logo: "/assets/ahlers/presence/web/experiences/postgresql-detail.svg"
+    summary: |
     commentary:
       "Placeholder commentary."
   adjacents:

@@ -6,8 +6,8 @@
     kind: "Employment"
     name: "LiveSafe"
     logo: "/assets/ahlers/presence/web/experiences/livesafe-detail.svg"
-    commentary:
-      "Placeholder commentary."
+    summary: |
+    commentary: |
   adjacents:
     - key: "scala"
     - key: "akka"
@@ -33,6 +33,7 @@
     kind: "Employment"
     name: "Thomson Reuters Special Services"
     logo: "/assets/ahlers/presence/web/experiences/trss-detail.svg"
+    summary: |
     commentary:
       "Placeholder commentary."
   adjacents:
@@ -58,6 +59,7 @@
     kind: "Employment"
     name: "Verizon Business"
     logo: "/assets/ahlers/presence/web/experiences/verizon-detail.svg"
+    summary: |
     commentary:
       "Placeholder commentary."
   adjacents:
