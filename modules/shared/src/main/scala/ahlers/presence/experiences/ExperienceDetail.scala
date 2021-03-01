@@ -8,7 +8,7 @@ sealed trait ExperienceDetail {
   def logo: ExperienceLogo
   def name: ExperienceName
   def summary: ExperienceSummary
-  def commentary: ExperienceCommentary
+  def commentary: Option[ExperienceCommentary]
 }
 object ExperienceDetail {
 
@@ -16,14 +16,14 @@ object ExperienceDetail {
     logo: ExperienceLogo,
     name: ExperienceName,
     summary: ExperienceSummary,
-    commentary: ExperienceCommentary)
+    commentary: Option[ExperienceCommentary])
     extends ExperienceDetail
 
   case class Skill(
     logo: ExperienceLogo,
     name: ExperienceName,
     summary: ExperienceSummary,
-    commentary: ExperienceCommentary)
+    commentary: Option[ExperienceCommentary])
     extends ExperienceDetail
 
 }

@@ -137,11 +137,16 @@ object ExperienceFocusView {
               .map(transformer.parser
                 .parse(_)
                 .fold(error => p(s"""Couldn't render summary. ${error.message}"""), _.content.toNode))),
-        h4("Commentary"),
-        div(
-          child <--
-            $experience
-              .map(_.detail.commentary.toText)
+        child.maybe <--
+          $experience
+            .map(_.detail
+              .commentary
+              .map(_ => h4("Commentary"))),
+        child.maybe <--
+          $experience
+            .map(_.detail
+              .commentary
+              .map(_.toText)
               .map(transformer.parser
                 .parse(_)
                 .fold(error => p(s"""Couldn't render commentary. ${error.message}"""), _.content.toNode))),
