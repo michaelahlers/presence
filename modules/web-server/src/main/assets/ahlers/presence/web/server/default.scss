@@ -137,6 +137,10 @@ svg.experience-grid-view g g.experience-brief-focus-view.focused {
   opacity: 1;
 }
 
+svg.experience-grid-view g g.experience-brief-focus-view.adjacent {
+  opacity: 0.5;
+}
+
 svg.experience-grid-view g g.experience-brief-glance-view {
   pointer-events: none;
   opacity: 0;
@@ -161,7 +165,7 @@ svg.experience-grid-view g g.experience-brief-glance-view label {
 }
 
 .resume .modal.show {
-  transition: opacity 250ms ease-out 750ms;
+  transition: opacity 250ms ease-out 1000ms;
 }
 
 /// Avoids having to meter the class name changes in order to get transitions. Bootstrap's reference scripts set a `display: block` style before adding the show attribute, which is cumbersome in the reactive model.

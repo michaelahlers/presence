@@ -292,7 +292,8 @@ object ExperiencesGridView {
       $states.combineWith($focusedState).combineWith(phaseVar.signal).map {
         case (Nil, _, _) => Loading
         case (_, _, Loading) => Initializing
-        case (_, _, Initializing) => Revealing
+        case (_, None, Initializing) => Revealing
+        case (_, Some(_), Initializing) => Presenting
         //case (_, _, Revealing) => Presenting
         case (_, _, phase) => phase
       } --> phaseVar.writer

@@ -31,9 +31,19 @@ object ExperienceBriefFocusView {
               .exists(state.key.contains(_))
         }
 
+    val $isAdjacent: Signal[Boolean] =
+      $focusedExperience.combineWith($state)
+        .map {
+          case (None, _) => false
+          case (Some(focusedExperience), state) =>
+            focusedExperience.adjacents.map(_.key)
+              .exists(state.key.contains(_))
+        }
+
     g(
       className("experience-brief-focus-view"),
       className.toggle("focused") <-- $isFocused,
+      className.toggle("adjacent") <-- $isAdjacent,
       circle(
         cx(state.cx.toString),
         cy(state.cy.toString),
