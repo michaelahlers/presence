@@ -31,6 +31,7 @@ object ExperiencesGridView {
   sealed trait Phase
   object Phase {
     case object Loading extends Phase
+    case object Initializing extends Phase
     case object Revealing extends Phase
     case object Presenting extends Phase
   }
@@ -71,12 +72,14 @@ object ExperiencesGridView {
       phaseVar.signal.combineWith($focusedState)
       /** @todo Implement tap syntax. */
         .map { case (phase, focusedState) =>
-          dom.console.log("onPhaseZooming", "phase", phase.toString, "focusedState", focusedState.flatMap(_.key).map(_.toText).getOrElse("(none)"))
+          dom.console.debug("onPhaseZooming", "phase", phase.toString, "focusedState", focusedState.flatMap(_.key).map(_.toText).getOrElse("(none)"))
           (phase, focusedState)
         } --> {
 
-        /** When [[Loading]], set a wide view, regardless any state. */
         case (Loading, _) =>
+
+        /** When [[Initializing]], set a wide view, regardless any state. */
+        case (Initializing, _) =>
           zoomBehavior
             .transform(
               d3.select(thisNode.ref),
@@ -228,6 +231,7 @@ object ExperiencesGridView {
       // transform <-- centeringTransformVar.signal.map(_.toString()),
       g(
         className.toggle("loading") <-- $phase.map(Loading == _),
+        className.toggle("initializing") <-- $phase.map(Initializing == _),
         className.toggle("revealing") <-- $phase.map(Revealing == _),
         className.toggle("presenting") <-- $phase.map(Presenting == _),
         className.toggle("glancing") <-- $isGlancing,
@@ -285,10 +289,11 @@ object ExperiencesGridView {
        * @see [[Phase]]
        * @todo Formalize this quick-and-dirty transition logic.
        */
-      $states.combineWith($focusedState).withCurrentValueOf(phaseVar.signal).map {
+      $states.combineWith($focusedState).combineWith(phaseVar.signal).map {
         case (Nil, _, _) => Loading
-        case (_, _, Loading) => Revealing
-        case (_, _, Revealing) => Presenting
+        case (_, _, Loading) => Initializing
+        case (_, _, Initializing) => Revealing
+        //case (_, _, Revealing) => Presenting
         case (_, _, phase) => phase
       } --> phaseVar.writer
     )
