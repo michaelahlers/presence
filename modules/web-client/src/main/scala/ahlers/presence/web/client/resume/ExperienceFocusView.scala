@@ -112,7 +112,7 @@ object ExperienceFocusView {
     key: ExperienceKey,
     experience: Experience,
     $experience: Signal[Experience],
-    $focusedKey: Signal[Option[ExperienceKey]],
+    $focusedExperience: Signal[Option[Experience]],
     focusedKeyObserver: Observer[Option[ExperienceKey]],
     $experiences: Signal[Seq[Experience]]
   ): Div = {
@@ -181,8 +181,8 @@ object ExperienceFocusView {
           "Close"))
 
     val $isRaised: Signal[Boolean] =
-      $focusedKey.combineWith($experience.map(_.key))
-        .mapN(_.contains(_))
+      $focusedExperience.combineWith($experience.map(_.key))
+        .mapN(_.map(_.key).contains(_))
 
     div(
       className("modal", "fade", "d-block"),
