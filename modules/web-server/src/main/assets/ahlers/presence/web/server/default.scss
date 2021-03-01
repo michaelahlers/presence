@@ -67,7 +67,7 @@ svg.ahlers-consulting-logo g g g:nth-child(1) {
 // TODO: Investigate simplifying this.
 body.resume main,
 body.resume article,
-body.resume article svg {
+body.resume article svg.experience-grid-view {
   display: block;
   width: 100%;
   height: 100%;
@@ -77,15 +77,15 @@ body.resume footer {
   display: none;
 }
 
-svg g g.experience-brief-view {
+svg.experience-grid-view g g.experience-brief-view {
   opacity: 0;
 }
 
-svg g g.experience-brief-view.blank {
+svg.experience-grid-view g g.experience-brief-view.blank {
   pointer-events: none;
 }
 
-svg g g.experience-brief-view.content {
+svg.experience-grid-view g g.experience-brief-view.content {
   cursor: pointer;
 }
 
@@ -98,7 +98,7 @@ svg g g.experience-brief-view.content {
   }
 }
 
-svg g.revealing g.experience-brief-view.content {
+svg.experience-grid-view g.revealing g.experience-brief-view.content {
   //opacity: 1;
   //transition: opacity 250ms ease;
   //transition-delay: var(--revealing-transition-delay);
@@ -115,7 +115,7 @@ svg g.revealing g.experience-brief-view.content {
   }
 }
 
-svg g.revealing g.experience-brief-view.blank {
+svg.experience-grid-view g.revealing g.experience-brief-view.blank {
   //opacity: 0.5;
   //transition: opacity 500ms ease;
   //transition-delay: var(--revealing-transition-delay);
@@ -123,49 +123,49 @@ svg g.revealing g.experience-brief-view.blank {
   animation-fill-mode: forwards;
 }
 
-svg g.presenting g.experience-brief-view.content {
+svg.experience-grid-view g.presenting g.experience-brief-view.content {
   opacity: 1;
   transition: opacity 250ms ease;
 }
 
-svg g.presenting g.experience-brief-view.blank {
+svg.experience-grid-view g.presenting g.experience-brief-view.blank {
   opacity: 0.5;
   transition: opacity 250ms ease;
 }
 
-svg g.focusing g.experience-brief-view.content,
-svg g.glancing g.experience-brief-view.content {
+svg.experience-grid-view g.focusing g.experience-brief-view.content,
+svg.experience-grid-view g.glancing g.experience-brief-view.content {
   opacity: 0.5;
   transition: opacity 250ms ease;
 }
 
-svg g.focusing g.experience-brief-view.blank,
-svg g.glancing g.experience-brief-view.blank {
+svg.experience-grid-view g.focusing g.experience-brief-view.blank,
+svg.experience-grid-view g.glancing g.experience-brief-view.blank {
   opacity: 0.1;
   transition: opacity 750ms ease;
 }
 
-svg g g.experience-brief-focus-view {
+svg.experience-grid-view g g.experience-brief-focus-view {
   pointer-events: none;
   opacity: 0;
   transition: opacity 250ms ease;
 }
 
-svg g g.experience-brief-focus-view.focused {
+svg.experience-grid-view g g.experience-brief-focus-view.focused {
   opacity: 1;
 }
 
-svg g g.experience-brief-glance-view {
+svg.experience-grid-view g g.experience-brief-glance-view {
   pointer-events: none;
   opacity: 0;
   transition: opacity 250ms ease;
 }
 
-svg g g.experience-brief-glance-view.glanced {
+svg.experience-grid-view g g.experience-brief-glance-view.glanced {
   opacity: 1;
 }
 
-svg g g.experience-brief-glance-view label {
+svg.experience-grid-view g g.experience-brief-glance-view label {
   height: 100%;
   padding-left: 60px;
   padding-right: 20px;
