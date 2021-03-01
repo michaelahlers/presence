@@ -1,6 +1,7 @@
 package ahlers.presence.web.client.resume
 
 import ahlers.presence.experiences.{ Experience, ExperienceKey }
+import ahlers.presence.web.client.resume.ExperienceBriefState.Mode.Content
 import cats.syntax.apply._
 import cats.syntax.option._
 import com.raquo.airstream.core.Signal
@@ -235,6 +236,31 @@ object ExperiencesGridView {
         g(children <--
           $states
             .split(_.index)(ExperienceBriefView.render(_, _, _, focusedExperienceObserver, glancedExperienceKeysVar))),
+        //g(children <--
+        //  $states.map { states =>
+        //    val byKey = states.flatMap(state => state.key.map((_, state))).toMap
+        //
+        //    states
+        //      .flatMap {
+        //        case state @ ExperienceBriefState(_, Content(experience), _, _, _) =>
+        //          byKey
+        //            .view
+        //            .filterKeys(experience.adjacents.map(_.key).contains(_))
+        //            .values
+        //            .map((state, _))
+        //        case _ =>
+        //          Nil
+        //      }
+        //      .map { case (origin, target) =>
+        //        line(
+        //          x1(origin.cx.toString),
+        //          y1(origin.cy.toString),
+        //          x2(target.cx.toString),
+        //          y2(target.cy.toString),
+        //          stroke("#f8f8f8")
+        //        )
+        //      }
+        //  }),
         g(children <--
           $states
             .map(_.filter(_.mode.isContent))
