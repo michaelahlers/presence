@@ -270,7 +270,7 @@
     summary: |
       [Scala](https://scala-lang.org/) combines object-oriented and functional programming in one concise, high-level language. Scala's static types help avoid bugs in complex applications, and runtimes for multiple platforms let you build high-performance systems with easy access to huge ecosystems of libraries.
     commentary:
-      I ❤️ Scala. After 12 years of writing software with the [Java programming language](/experiences/java), the adoption of Scala—which began at [Verizon](/experiences/verizon) in 2012 and has continued ever since—reinvigorated my passion for programming. It's multiparadigm design and flexibility and are tremendous strengths, and I find myself every day making short work of difficult problems with this language and its ecosystem.
+      I ❤️ Scala. After 12 years of writing software with the [Java programming language](/experiences/java), adaopting Scala as my language of choice—first at [Verizon](/experiences/verizon) in 2012 and ongoing since—reinvigorated my passion for programming. It's multiparadigm design and flexibility and are tremendous strengths, and I find myself every day making short work of difficult problems with this language and its ecosystem.
 
       Dear [Mr. Odersky](https://en.wikipedia.org/wiki/Martin_Odersky), if you ever read this, _thank you_ for your contributions to our industry!
   adjacents:
