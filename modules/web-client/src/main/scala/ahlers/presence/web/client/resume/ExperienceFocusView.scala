@@ -96,6 +96,12 @@ object ExperienceFocusView {
         case element: SpanSequence =>
           span(element.content.map(_.toNode))
 
+        case element: Literal =>
+          code(element.content)
+
+        case element: QuotedBlock =>
+          blockQuote(element.content.map(_.toNode))
+
         case element =>
           commentNode(s"${element.getClass}.")
       }
@@ -125,6 +131,15 @@ object ExperienceFocusView {
     val bodyRender =
       div(
         className("modal-body"),
+        h4("Summary"),
+        div(
+          child <--
+            $experience
+              .map(_.detail.summary.toText)
+              .map(transformer.parser
+                .parse(_)
+                .fold(error => p(s"""Couldn't render summary. ${error.message}"""), _.content.toNode))),
+        h4("Commentary"),
         div(
           child <--
             $experience
