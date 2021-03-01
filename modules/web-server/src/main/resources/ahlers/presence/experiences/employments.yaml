@@ -7,7 +7,9 @@
     name: "LiveSafe"
     logo: "/assets/ahlers/presence/web/experiences/livesafe-detail.svg"
     summary: |
+      The trusted, experienced leader in safety communications, risk intelligence, and incident prevention. [LiveSafe](https://livesafemobile.com) is the leading mobile platform for safety and security risk reporting, and emergency communications.
     commentary: |
+      Working with a small team of incredible engineers, my experience at LiveSafe gave me countless valuable experiences. Initially, I joined on to help build upon a legacy platform. Over time, I'd help the team embrace best practices and refine internal patterns. Ultimately, we'd strike out to building a new platform with heavy use of [Lagom](/experiences/lagom). Visit my [LinkedIn profile](https://linkedin.com/in/michaelahlers/) to read more about my experience at Thomson Reuters Special Services.
   adjacents:
     - key: "scala"
     - key: "akka"
@@ -34,8 +36,9 @@
     name: "Thomson Reuters Special Services"
     logo: "/assets/ahlers/presence/web/experiences/trss-detail.svg"
     summary: |
-    commentary:
-      "Placeholder commentary."
+      [Thomson Reuters Special Services](https://trssllc.com) brings together the world's most creative minds to support our clients' critical missions and empower data for good.
+    commentary: |
+      Starting as a contractor on a tiny team (with only myself and one other developer), we built a threat analysis tool using [Scala](/experiences/scala), [Play Framework](/experiences/play-framework), [JavaScript](/experiences/javascript), [Bootstrap](/experiences/bootstrap), AngularJS, and a variety of technologies besides. Visit my [LinkedIn profile](https://linkedin.com/in/michaelahlers/) to read more about my experience at Thomson Reuters Special Services.
   adjacents:
     - key: "scala"
     - key: "akka"
@@ -60,7 +63,7 @@
     name: "Verizon Business"
     logo: "/assets/ahlers/presence/web/experiences/verizon-detail.svg"
     commentary: |
-      "Placeholder commentary."
+      My first professional use of [Scala](/experiences/scala) and [Play Framework](/experiences/play-framework) began working with a small team at their Ashburn, Virginia headquarters. Initially, I'd come on board to maintain a product built with Java EE, then—when an intitiative to build a new log management product began—I successfully petitioned the team to use Scala for the new offering, which was instrumental to successful offering. Visit my [LinkedIn profile](https://linkedin.com/in/michaelahlers/) to read more about my experience at Verizon Business.
   adjacents:
     - key: "scala"
     - key: "akka"
