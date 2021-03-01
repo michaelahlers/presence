@@ -28,7 +28,7 @@ object ExperienceBriefView {
       className("experience-brief-view"),
       className.toggle("blank") <-- $state.map(_.mode.isBlank),
       className.toggle("content") <-- $state.map(_.mode.isContent),
-      style <-- $state.map(_.index.toInt * 10).map("--revealing-transition-delay: %dms".format(_)),
+      style <-- $state.map(_.index.toInt * 10 + 10).map("--revealing-transition-delay: %dms".format(_)),
       child <-- $state.map(state =>
         state.mode match {
 
