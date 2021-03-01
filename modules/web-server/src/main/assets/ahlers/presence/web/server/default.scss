@@ -89,38 +89,20 @@ svg.experience-grid-view g g.experience-brief-view.content {
   cursor: pointer;
 }
 
-@keyframes reveal-content {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
 svg.experience-grid-view g.revealing g.experience-brief-view.content {
-  //opacity: 1;
-  //transition: opacity 250ms ease;
-  //transition-delay: var(--revealing-transition-delay);
-  animation: reveal-content 250ms ease var(--revealing-transition-delay);
-  animation-fill-mode: forwards;
-}
-
-@keyframes reveal-blank {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 0.5;
-  }
+  opacity: 1;
+  transition: opacity 500ms ease;
+  transition-delay: var(--revealing-transition-delay);
+  //animation: reveal-content 250ms ease var(--revealing-transition-delay);
+  //animation-fill-mode: forwards;
 }
 
 svg.experience-grid-view g.revealing g.experience-brief-view.blank {
-  //opacity: 0.5;
-  //transition: opacity 500ms ease;
-  //transition-delay: var(--revealing-transition-delay);
-  animation: reveal-blank 250ms ease var(--revealing-transition-delay);
-  animation-fill-mode: forwards;
+  opacity: 0.5;
+  transition: opacity 250ms ease;
+  transition-delay: var(--revealing-transition-delay);
+  //animation: reveal-blank 250ms ease var(--revealing-transition-delay);
+  //animation-fill-mode: forwards;
 }
 
 svg.experience-grid-view g.presenting g.experience-brief-view.content {
@@ -135,7 +117,7 @@ svg.experience-grid-view g.presenting g.experience-brief-view.blank {
 
 svg.experience-grid-view g.focusing g.experience-brief-view.content,
 svg.experience-grid-view g.glancing g.experience-brief-view.content {
-  opacity: 0.5;
+  opacity: 0.25;
   transition: opacity 250ms ease;
 }
 
@@ -153,6 +135,10 @@ svg.experience-grid-view g g.experience-brief-focus-view {
 
 svg.experience-grid-view g g.experience-brief-focus-view.focused {
   opacity: 1;
+}
+
+svg.experience-grid-view g g.experience-brief-focus-view.adjacent {
+  opacity: 0.5;
 }
 
 svg.experience-grid-view g g.experience-brief-glance-view {
@@ -179,7 +165,7 @@ svg.experience-grid-view g g.experience-brief-glance-view label {
 }
 
 .resume .modal.show {
-  transition: opacity 250ms ease-out 750ms;
+  transition: opacity 250ms ease-out 1000ms;
 }
 
 /// Avoids having to meter the class name changes in order to get transitions. Bootstrap's reference scripts set a `display: block` style before adding the show attribute, which is cumbersome in the reactive model.

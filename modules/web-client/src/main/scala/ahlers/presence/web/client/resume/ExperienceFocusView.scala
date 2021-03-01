@@ -65,9 +65,7 @@ object ExperienceFocusView {
                     href(link.url),
                     target("_blank"),
                     rel("noopener", "noreferrer"),
-                    span(element.content.map(_.toNode)),
-                    sup(i(className("fas", "fa-external-link-alt")))
-                  )
+                    span(element.content.map(_.toNode)))
 
                 case Success(Some(uiState)) =>
                   a(
@@ -96,6 +94,12 @@ object ExperienceFocusView {
         case element: SpanSequence =>
           span(element.content.map(_.toNode))
 
+        case element: Literal =>
+          code(element.content)
+
+        case element: QuotedBlock =>
+          blockQuote(element.content.map(_.toNode))
+
         case element =>
           commentNode(s"${element.getClass}.")
       }
@@ -106,7 +110,7 @@ object ExperienceFocusView {
     key: ExperienceKey,
     experience: Experience,
     $experience: Signal[Experience],
-    $focusedKey: Signal[Option[ExperienceKey]],
+    $focusedExperience: Signal[Option[Experience]],
     focusedKeyObserver: Observer[Option[ExperienceKey]],
     $experiences: Signal[Seq[Experience]]
   ): Div = {
@@ -125,10 +129,29 @@ object ExperienceFocusView {
     val bodyRender =
       div(
         className("modal-body"),
-        div(
-          child <--
-            $experience
-              .map(_.detail.commentary.toText)
+        child.maybe <--
+          $experience
+            .map(_.detail
+              .summary
+              .map(_ => h4("Summary"))),
+        child.maybe <--
+          $experience
+            .map(_.detail
+              .summary
+              .map(_.toText)
+              .map(transformer.parser
+                .parse(_)
+                .fold(error => p(s"""Couldn't render summary. ${error.message}"""), _.content.toNode))),
+        child.maybe <--
+          $experience
+            .map(_.detail
+              .commentary
+              .map(_ => h4("Commentary"))),
+        child.maybe <--
+          $experience
+            .map(_.detail
+              .commentary
+              .map(_.toText)
               .map(transformer.parser
                 .parse(_)
                 .fold(error => p(s"""Couldn't render commentary. ${error.message}"""), _.content.toNode))),
@@ -166,8 +189,8 @@ object ExperienceFocusView {
           "Close"))
 
     val $isRaised: Signal[Boolean] =
-      $focusedKey.combineWith($experience.map(_.key))
-        .mapN(_.contains(_))
+      $focusedExperience.combineWith($experience.map(_.key))
+        .mapN(_.map(_.key).contains(_))
 
     div(
       className("modal", "fade", "d-block"),
