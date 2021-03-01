@@ -103,44 +103,57 @@ object ExperienceFocusView {
   }
 
   def render(
-    experienceKey: ExperienceKey,
+    key: ExperienceKey,
     experience: Experience,
     $experience: Signal[Experience],
-    $focusedExperienceKey: Signal[Option[ExperienceKey]],
-    focusedExperienceObserver: Observer[Option[ExperienceKey]]
+    $focusedKey: Signal[Option[ExperienceKey]],
+    focusedKeyObserver: Observer[Option[ExperienceKey]],
+    $experiences: Signal[Seq[Experience]]
   ): Div = {
     val headerRender =
       div(
         className("modal-header"),
-        h1(
+        h3(
           className("modal-title"),
           child.text <-- $experience.map(_.brief.name.toText)),
         button(
           tpe("button"),
           className("btn-close"),
-          onClickClose --> focusedExperienceObserver)
+          onClickClose --> focusedKeyObserver)
       )
 
     val bodyRender =
       div(
         className("modal-body"),
-        div(child <--
-          $experience
-            .map(_.detail.commentary.toText)
-            .map(transformer.parser
-              .parse(_)
-              .fold(error => p(s"""Couldn't render commentary. ${error.message}"""), _.content.toNode))),
-        div(ul(children <--
-          $experience
-            .map(_.adjacents
-              .toList
-              .map { adjacent =>
-                val uiState = FocusedResumePage(adjacent.key)
-                li(a(
-                  href(UiState.router.relativeUrlForPage(uiState)),
-                  onClick.preventDefault.mapToStrict(uiState) --> (UiState.router.pushState(_)),
-                  adjacent.key.toText))
-              })))
+        div(
+          child <--
+            $experience
+              .map(_.detail.commentary.toText)
+              .map(transformer.parser
+                .parse(_)
+                .fold(error => p(s"""Couldn't render commentary. ${error.message}"""), _.content.toNode))),
+        h4("See also"),
+        p("Related experiences."),
+        div(
+          className("container-fluid"),
+          div(
+            className("row", "g-3"),
+            children <--
+              $experiences.combineWith($experience.map(_.adjacents.map(_.key)))
+                .mapN((experiences, keys) => experiences.filter(e => keys.contains(e.key)))
+                .map(_.map { adjacent =>
+                  val uiState = FocusedResumePage(adjacent.key)
+                  div(
+                    className( /*"col-xl-1",*/ /*"col-lg-",*/ "col-lg-1", /*"col-sm-",*/ "col-2"),
+                    a(
+                      href(UiState.router.relativeUrlForPage(uiState)),
+                      onClick.preventDefault.mapToStrict(uiState) --> (UiState.router.pushState(_)),
+                      img(src(adjacent.brief.logo.toText))
+                    )
+                  )
+                })
+          )
+        )
       )
 
     val footerRender =
@@ -149,11 +162,11 @@ object ExperienceFocusView {
         button(
           tpe("button"),
           className("btn", "btn-secondary"),
-          onClickClose --> focusedExperienceObserver,
+          onClickClose --> focusedKeyObserver,
           "Close"))
 
     val $isRaised: Signal[Boolean] =
-      $focusedExperienceKey.combineWith($experience.map(_.key))
+      $focusedKey.combineWith($experience.map(_.key))
         .mapN(_.contains(_))
 
     div(

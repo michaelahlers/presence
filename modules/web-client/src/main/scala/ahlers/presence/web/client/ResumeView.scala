@@ -60,7 +60,15 @@ object ResumeView {
       children <--
         $experiences
           .map(_.getOrElse(Nil))
-          .split(_.key)(ExperienceFocusView.render(_, _, _, $focusedExperienceKey, focusedExperienceKeyObserver))
+          .split(_.key)(ExperienceFocusView
+            .render(
+              _,
+              _,
+              _,
+              $focusedExperienceKey,
+              focusedExperienceKeyObserver,
+              $experiences
+                .map(_.getOrElse(Nil))))
     )
 
   }
