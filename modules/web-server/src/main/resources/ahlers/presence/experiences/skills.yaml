@@ -100,7 +100,7 @@
     commentary: |
       This has been an indispensible tool for nearly every project I've worked on.
   adjacents:
-    - key: "postgres"
+    - key: "postgresql"
     - key: "mysql"
     - key: "livesafe"
     #- key: "learning-objects"
