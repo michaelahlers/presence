@@ -21,7 +21,6 @@
           - Stuff, too.
   adjacents:
     - key: "scala"
-    - key: "akka"
     - key: "play-framework"
     - key: "sbt"
     - key: "trss"
