@@ -91,7 +91,7 @@ svg.experience-grid-view g g.experience-brief-view.content {
 
 svg.experience-grid-view g.revealing g.experience-brief-view.content {
   opacity: 1;
-  transition: opacity 250ms ease;
+  transition: opacity 500ms ease;
   transition-delay: var(--revealing-transition-delay);
   //animation: reveal-content 250ms ease var(--revealing-transition-delay);
   //animation-fill-mode: forwards;
