@@ -7,7 +7,7 @@ package ahlers.presence.experiences
 sealed trait ExperienceDetail {
   def logo: ExperienceLogo
   def name: ExperienceName
-  def summary: ExperienceSummary
+  def summary: Option[ExperienceSummary]
   def commentary: Option[ExperienceCommentary]
 }
 object ExperienceDetail {
@@ -15,14 +15,14 @@ object ExperienceDetail {
   case class Employment(
     logo: ExperienceLogo,
     name: ExperienceName,
-    summary: ExperienceSummary,
+    summary: Option[ExperienceSummary],
     commentary: Option[ExperienceCommentary])
     extends ExperienceDetail
 
   case class Skill(
     logo: ExperienceLogo,
     name: ExperienceName,
-    summary: ExperienceSummary,
+    summary: Option[ExperienceSummary],
     commentary: Option[ExperienceCommentary])
     extends ExperienceDetail
 

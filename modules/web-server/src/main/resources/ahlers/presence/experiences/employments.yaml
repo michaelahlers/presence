@@ -59,8 +59,7 @@
     kind: "Employment"
     name: "Verizon Business"
     logo: "/assets/ahlers/presence/web/experiences/verizon-detail.svg"
-    summary: |
-    commentary:
+    commentary: |
       "Placeholder commentary."
   adjacents:
     - key: "scala"

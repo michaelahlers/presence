@@ -129,11 +129,16 @@ object ExperienceFocusView {
     val bodyRender =
       div(
         className("modal-body"),
-        h4("Summary"),
-        div(
-          child <--
-            $experience
-              .map(_.detail.summary.toText)
+        child.maybe <--
+          $experience
+            .map(_.detail
+              .summary
+              .map(_ => h4("Summary"))),
+        child.maybe <--
+          $experience
+            .map(_.detail
+              .summary
+              .map(_.toText)
               .map(transformer.parser
                 .parse(_)
                 .fold(error => p(s"""Couldn't render summary. ${error.message}"""), _.content.toNode))),
