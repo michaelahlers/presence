@@ -174,7 +174,7 @@ object ExperiencesGridView {
 
   def render(
     $experiences: Signal[Option[Seq[Experience]]],
-    $focusedExperienceKey: Signal[Option[ExperienceKey]],
+    $focusedExperience: Signal[Option[Experience]],
     focusedExperienceObserver: Observer[Option[ExperienceKey]]
   ): ReactiveSvgElement[SVG] = {
     import svg._
@@ -192,9 +192,9 @@ object ExperiencesGridView {
         }
 
     val $focusedState: Signal[Option[ExperienceBriefState]] =
-      $states.combineWith($focusedExperienceKey)
+      $states.combineWith($focusedExperience)
         .mapN {
-          case (states, Some(focusedKey)) => states.find(_.key.contains(focusedKey))
+          case (states, Some(focusedExperience)) => states.find(_.key.contains(focusedExperience.key))
           case (_, _) => none
         }
 
@@ -211,13 +211,14 @@ object ExperiencesGridView {
         .toSignal(false)
 
     val $isFocusing: Signal[Boolean] =
-      $focusedExperienceKey.map(_.nonEmpty)
+      $focusedExperience.map(_.nonEmpty)
+    //$focusedState.map(_.nonEmpty)
 
     val zoomingTransformVar: Var[Transform] =
       Var(d3.zoomIdentity)
 
-    val centeringTransformVar: Var[Transform] =
-      Var(d3.zoomIdentity)
+    //val centeringTransformVar: Var[Transform] =
+    //  Var(d3.zoomIdentity)
 
     svg(
       className("experience-grid-view", "bg-dark"),
@@ -237,11 +238,11 @@ object ExperiencesGridView {
         g(children <--
           $states
             .map(_.filter(_.mode.isContent))
-            .split(_.index)(ExperienceBriefFocusView.render(_, _, _, $focusedExperienceKey))),
+            .split(_.index)(ExperienceBriefFocusView.render(_, _, _, $focusedExperience))),
         g(children <--
           $states
             .map(_.filter(_.mode.isContent))
-            .split(_.index)(ExperienceBriefGlanceView.render(_, _, _, $focusedExperienceKey, glancedExperienceKeysVar.signal))) /*,
+            .split(_.index)(ExperienceBriefGlanceView.render(_, _, _, $focusedExperience, glancedExperienceKeysVar.signal))) /*,
         circle(
           r("10"),
           cx("0"),

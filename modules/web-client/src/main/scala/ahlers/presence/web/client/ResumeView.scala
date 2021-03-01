@@ -35,11 +35,11 @@ object ResumeView {
           .flatMap(Future.fromTry(_))
           .map(_.records))
 
-    val $focusedExperienceKey: Signal[Option[ExperienceKey]] =
-      $resumePage
+    val $focusedExperience: Signal[Option[Experience]] =
+      $experiences.combineWith($resumePage)
         .map {
-          case UnfocusedResumePage => none
-          case FocusedResumePage(key) => key.some
+          case (None, _) | (_, UnfocusedResumePage) => none
+          case (Some(experience), FocusedResumePage(key)) => experience.find(_.key == key)
         }
 
     val focusedExperienceKeyBus: EventBus[Option[ExperienceKey]] = new EventBus()
@@ -56,7 +56,7 @@ object ResumeView {
 
     article(
       onFocusedExperience,
-      ExperiencesGridView.render($experiences, $focusedExperienceKey, focusedExperienceKeyObserver),
+      ExperiencesGridView.render($experiences, $focusedExperience, focusedExperienceKeyObserver) /*,
       children <--
         $experiences
           .map(_.getOrElse(Nil))
@@ -68,7 +68,7 @@ object ResumeView {
               $focusedExperienceKey,
               focusedExperienceKeyObserver,
               $experiences
-                .map(_.getOrElse(Nil))))
+                .map(_.getOrElse(Nil))))*/
     )
 
   }
