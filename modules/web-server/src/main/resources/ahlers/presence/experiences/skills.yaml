@@ -7,7 +7,9 @@
     name: "Akka"
     logo: "/assets/ahlers/presence/web/experiences/akka-detail.svg"
     summary: |
-      Akka is a toolkit for building highly concurrent, distributed, and resilient message-driven applications for Java and Scala.
+      From [`akka.io`](https://akka.io):
+
+      > Akka is a toolkit for building highly concurrent, distributed, and resilient message-driven applications for Java and Scala.
     commentary: |
       A more _elaborate_ commentary on [Akka](http://akka.io) which works with [Scala](/resume/scala).
 
