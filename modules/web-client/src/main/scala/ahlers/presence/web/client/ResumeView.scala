@@ -56,7 +56,11 @@ object ResumeView {
 
     article(
       onFocusedExperience,
-      ExperiencesGridView.render($experiences, $focusedExperience, focusedExperienceKeyObserver),
+      ExperiencesGridView
+        .render(
+          $experiences,
+          $focusedExperience,
+          focusedExperienceKeyObserver),
       children <--
         $experiences
           .map(_.getOrElse(Nil))
