@@ -390,11 +390,11 @@
 
 - key: "play-framework"
   brief:
-    name: "PlayFramework"
+    name: "Play Framework"
     logo: "/assets/ahlers/presence/web/experiences/play-framework-brief.svg"
   detail:
     kind: "Skill"
-    name: "PlayFramework"
+    name: "Play Framework"
     logo: "/assets/ahlers/presence/web/experiences/play-framework-detail.svg"
     summary: |
       [Play Framework](https://playframework.com) makes it easy to build web applications with [Java](/experiences/java) and [Scala](/experiences/scala).
