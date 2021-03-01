@@ -1,5 +1,7 @@
 resolvers += "JitPack".at("https://jitpack.io")
 
+libraryDependencies += "org.planet42" %%% "laika-core" % "0.17.0"
+
 libraryDependencies ++=
   "com.raquo" %%% "airstream" % "0.11.1" ::
     "com.raquo" %%% "laminar" % "0.12.1" ::
@@ -7,8 +9,8 @@ libraryDependencies ++=
     Nil
 
 libraryDependencies ++=
-  "com.github.fdietze.scala-js-d3v4" %%% "scala-js-d3v4" % "master-SNAPSHOT" ::
-    //"com.github.michaelahlers.scala-js-d3v4" %%% "scala-js-d3v4" % "master-SNAPSHOT" ::
+  //"com.github.fdietze.scala-js-d3v4" %%% "scala-js-d3v4" % "master-SNAPSHOT" ::
+  "com.github.michaelahlers.scala-js-d3v4" %%% "scala-js-d3v4" % "master-SNAPSHOT" ::
     "com.github.japgolly.scalacss" %%% "core" % "0.7.0" ::
     "com.github.julien-truffaut" %%% "monocle-core" % "2.1.0" ::
     "com.github.julien-truffaut" %%% "monocle-macro" % "2.1.0" ::

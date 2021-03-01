@@ -3,11 +3,9 @@ libraryDependencies ++=
     "com.softwaremill.macwire" %% "util" % "2.3.7" % Provided ::
     Nil
 
-libraryDependencies +=
-  "com.github.pathikrit" %% "better-files" % "3.9.1"
+libraryDependencies += "com.github.pathikrit" %% "better-files" % "3.9.1"
 
-libraryDependencies +=
-  "com.vmunier" %% "scalajs-scripts" % "1.1.4"
+libraryDependencies += "com.vmunier" %% "scalajs-scripts" % "1.1.4"
 
 libraryDependencies ++=
   "io.circe" %% "circe-yaml" % "0.13.1" ::

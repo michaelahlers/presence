@@ -24,10 +24,19 @@ object GetExperiencesResponse {
   implicit private val codecExperienceKey: Codec[ExperienceKey] =
     deriveUnwrappedCodec
 
-  implicit private val encoderExperienceKey: Encoder[ExperienceLogo] =
+  implicit private val codecExperienceAdjacent: Codec[ExperienceAdjacent] =
+    deriveConfiguredCodec
+
+  implicit private val codecExperienceSummary: Codec[ExperienceSummary] =
+    deriveUnwrappedCodec
+
+  implicit private val codecExperienceCommentary: Codec[ExperienceCommentary] =
+    deriveUnwrappedCodec
+
+  implicit private val encoderExperienceLogo: Encoder[ExperienceLogo] =
     Encoder[String].contramap(_.toText)
 
-  implicit private val decoderExperienceKey: Decoder[ExperienceLogo] =
+  implicit private val decoderExperienceLogo: Decoder[ExperienceLogo] =
     Decoder[String].emapTry(ExperienceLogo.parseTry(_))
 
   implicit private val codecExperienceBrief: Codec[ExperienceBrief] =

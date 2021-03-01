@@ -25,9 +25,17 @@ object WebClientApplication extends App with LazyLogging {
     .mapToStrict(body(
       className("d-flex", "flex-column", "h-100"),
       className.toggle("modal-open") <-- UiState.$modals.map(_.nonEmpty),
+      className <--
+        UiState.router.$currentPage
+          .map {
+            case UiState.Landing => "landing"
+            case _: UiState.ResumePage => "resume"
+            case UiState.Contact => "contact"
+          },
       HeaderView(),
       MainView(),
-      FooterView()))
+      FooterView()
+    ))
     .foreach(render(dom.document.head.parentElement, _))(unsafeWindowOwner)
 
 }

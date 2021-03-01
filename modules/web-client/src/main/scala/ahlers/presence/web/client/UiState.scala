@@ -28,13 +28,13 @@ object UiState extends LazyLogging {
 
   val landingRoute = Route.static(Landing, root / endOfSegments)
 
-  val resumeRoute = Route.static(UnfocusedResumePage, root / "resume" / endOfSegments)
+  val resumeRoute = Route.static(UnfocusedResumePage, root / "experiences" / endOfSegments)
 
   val resumeFocusRoute: Route[FocusedResumePage, String] =
     Route(
       encode = _.experienceId.toText,
       decode = fromText => FocusedResumePage(ExperienceKey(fromText)),
-      root / "resume" / segment[String] / endOfSegments)
+      root / "experiences" / segment[String] / endOfSegments)
 
   val contactRoute = Route.static(Contact, root / "contact" / endOfSegments)
 

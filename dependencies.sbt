@@ -1,9 +1,6 @@
 ThisBuild / scalaVersion := "2.13.5"
 
 ThisBuild / libraryDependencies ++=
-  Nil
-
-ThisBuild / libraryDependencies ++=
   "com.softwaremill.diffx" %% "diffx-scalatest" % "0.4.2" % Test ::
     "com.github.alexarchambault" %% "scalacheck-shapeless_1.14" % "1.2.5" % Test ::
     "org.scalacheck" %% "scalacheck" % "1.15.3" % Test ::

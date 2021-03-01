@@ -1,6 +1,6 @@
 package ahlers.presence.web.client.resume
 
-import ahlers.presence.experiences.{ ExperienceKey, ExperienceName }
+import ahlers.presence.experiences.{ Experience, ExperienceKey, ExperienceName }
 import ahlers.presence.web.client.resume.ExperienceBriefState.Mode._
 import com.raquo.domtypes.generic.Modifier
 import com.raquo.laminar.api.L._
@@ -17,7 +17,7 @@ object ExperienceBriefGlanceView {
     index: ExperienceBriefIndex,
     state: ExperienceBriefState,
     $state: Signal[ExperienceBriefState],
-    $focusedExperienceKey: Signal[Option[ExperienceKey]],
+    $focusedExperience: Signal[Option[Experience]],
     $glancedExperienceKeys: Signal[Set[ExperienceKey]],
     modifiers: Modifier[ReactiveSvgElement[G]]*
   ): ReactiveSvgElement[G] = {
@@ -32,13 +32,13 @@ object ExperienceBriefGlanceView {
     import svg._
 
     val $isGlanced: Signal[Boolean] =
-      $focusedExperienceKey
+      $focusedExperience
         .combineWith($glancedExperienceKeys)
         .combineWith($state)
         .map {
 
-          case (focusedExperienceKey, glancedExperienceKeys, ExperienceBriefState(_, Content(experience), _, _, _)) =>
-            !focusedExperienceKey.contains(experience.key) &&
+          case (focusedExperience, glancedExperienceKeys, ExperienceBriefState(_, Content(experience), _, _, _)) =>
+            !focusedExperience.map(_.key).contains(experience.key) &&
               glancedExperienceKeys.contains(experience.key)
 
           case _ =>
@@ -53,7 +53,7 @@ object ExperienceBriefGlanceView {
         $state.map(state =>
           state.mode match {
 
-            case Root | Blank => ???
+            case Blank => ???
 
             case Content(experience) =>
               Seq(
