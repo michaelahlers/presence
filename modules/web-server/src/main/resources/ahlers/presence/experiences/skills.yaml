@@ -292,7 +292,7 @@
     summary: |
       [Scala.js](https://scala-js.org) lets build robust front-end web applications with all the power, expressiveness, and typesafety of [Scala](/experiences/scala).
     commentary: |
-      I'm still learning it, but I love it. My background is replete with full-stack experience, but my focus has shifted to the backend. Scala.js let's me use my favoraite programming language to build for the Web again, including [Presence](https://github.com/michaelahlers/presence), the site you're using now.
+      My background is replete with full-stack experience, but my focus has shifted to the backend. Scala.js lets me use my favoraite programming language to build for the Web again, including [Presence](https://github.com/michaelahlers/presence), the site you're using now.
   adjacents:
     - key: "akka"
     - key: "javascript"
