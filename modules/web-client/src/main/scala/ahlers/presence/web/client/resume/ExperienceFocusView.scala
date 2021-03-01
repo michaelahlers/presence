@@ -65,9 +65,7 @@ object ExperienceFocusView {
                     href(link.url),
                     target("_blank"),
                     rel("noopener", "noreferrer"),
-                    span(element.content.map(_.toNode)),
-                    sup(i(className("fas", "fa-external-link-alt")))
-                  )
+                    span(element.content.map(_.toNode)))
 
                 case Success(Some(uiState)) =>
                   a(
