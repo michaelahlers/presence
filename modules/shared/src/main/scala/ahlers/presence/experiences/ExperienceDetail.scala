@@ -7,6 +7,7 @@ package ahlers.presence.experiences
 sealed trait ExperienceDetail {
   def logo: ExperienceLogo
   def name: ExperienceName
+  def summary: ExperienceSummary
   def commentary: ExperienceCommentary
 }
 object ExperienceDetail {
