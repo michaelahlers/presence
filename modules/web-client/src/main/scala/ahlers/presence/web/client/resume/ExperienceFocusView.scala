@@ -9,8 +9,10 @@ import io.lemonlabs.uri.Url
 import laika.api.Transformer
 import laika.format.{ AST, Markdown }
 import laika.markdown.github.GitHubFlavor
+import org.scalajs.dom
 
 import scala.annotation.tailrec
+import scala.util.{ Failure, Success, Try }
 
 /**
  * @since February 20, 2021
@@ -56,21 +58,18 @@ object ExperienceFocusView {
         case element: SpanLink =>
           element.target match {
 
-            case link: ExternalTarget if Url.parse(link.url).hostOption.nonEmpty =>
-              a(
-                href(link.url),
-                target("_blank"),
-                element.content.map(_.toNode))
-
             case link: ExternalTarget =>
-              UiState.router.pageForRelativeUrl(link.url) match {
-                case None =>
+              Try(UiState.router.pageForRelativeUrl(link.url)) match {
+                case Failure(_) | Success(None) =>
                   a(
                     href(link.url),
                     target("_blank"),
-                    element.content.map(_.toNode))
+                    rel("noopener", "noreferrer"),
+                    span(element.content.map(_.toNode)),
+                    sup(i(className("fas", "fa-external-link-alt")))
+                  )
 
-                case Some(uiState) =>
+                case Success(Some(uiState)) =>
                   a(
                     href(link.url),
                     onClick.preventDefault.mapToStrict(uiState) --> (UiState.router.pushState(_)),
@@ -162,13 +161,14 @@ object ExperienceFocusView {
       className.toggle("show") <-- $isRaised,
       tabIndex(-1),
       div(
-        className("modal-dialog", "modal-dialog-centered", "modal-dialog-scrollable"),
+        className("modal-dialog", "modal-lg", "modal-dialog-centered", "modal-dialog-scrollable"),
         div(
           className("modal-content"),
           headerRender,
           bodyRender,
           footerRender
-        ))
+        )
+      )
     )
   }
 
