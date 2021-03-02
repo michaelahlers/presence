@@ -52,7 +52,7 @@ object LandingPageView {
               onClick.preventDefault.mapToStrict(UnfocusedResumePage) --> (UiState.router.pushState(_)),
               "browsing through the Experience section"
             ),
-            ". There you'll find an interactive overview of a few of the technologies with which I've worked and the companies who've employed me. For a more thorough professional history, visit my ",
+            ". There you'll find an interactive overview of technologies with which I've worked and the companies who've employed me. For a more thorough professional history, visit my ",
             a(
               href("https://linkedin.com/in/michaelahlers"),
               target("_blank"),
