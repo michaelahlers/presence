@@ -65,7 +65,7 @@ object LandingPageView {
             "This site is a full-fledged web application I call Presence, written entirely in ",
             a(
               href(UiState.router.relativeUrlForPage(FocusedResumePage(ExperienceKey("scala")))),
-              onClick.preventDefault.mapToStrict(UnfocusedResumePage) --> (UiState.router.pushState(_)),
+              onClick.preventDefault.mapToStrict(FocusedResumePage(ExperienceKey("scala"))) --> (UiState.router.pushState(_)),
               "Scala"
             ),
             "—web browser client included. It serves as both an visual presentation of my professional experience and as a sample project. The full source code and notes are available on ",
