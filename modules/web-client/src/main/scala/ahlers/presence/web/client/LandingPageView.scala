@@ -35,7 +35,7 @@ object LandingPageView {
           h1(className("display-6", "text-center", "text-muted", "text-lowercase", "fw-lighter"), "Michael Ahlers Consulting"))
       ),
       div(
-        className("row", "d-flex", "justify-content-center", "mt-3 mb-3"),
+        className("row", "d-flex", "justify-content-center", "mt-3"),
         div(
           className("col-xl-7", "col-lg-8", "col-md-9", "col-sm-10", "col-12"),
           p(
@@ -43,7 +43,13 @@ object LandingPageView {
             "Michael Ahlers is a software engineer—with over ",
             child.text <-- experiencePeriod.map(_.getYears()),
             " years of professional experience—who views the practice through an engineering lens, applying tenacious attention to detail. When not working, Michael enjoys competitive bike racing and recreational flying as a certified sport pilot."
-          ),
+          )
+        )
+      ),
+      div(
+        className("row", "d-flex", "justify-content-center", "mt-3", "mb-3"),
+        div(
+          className("col-xl-6", "col-lg-7", "col-md-8", "col-sm-9", "col-12"),
           p(
             //className("lead"),
             "Learn more about my professional background by ",
