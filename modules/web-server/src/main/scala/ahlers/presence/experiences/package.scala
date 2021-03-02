@@ -23,6 +23,12 @@ package object experiences {
   implicit private val codecExperienceKey: Codec[ExperienceKey] =
     deriveUnwrappedCodec
 
+  implicit private val codecExperienceAdjacent: Codec[ExperienceAdjacent] =
+    deriveConfiguredCodec
+
+  implicit private val codecExperienceSummary: Codec[ExperienceSummary] =
+    deriveUnwrappedCodec
+
   implicit private val codecExperienceCommentary: Codec[ExperienceCommentary] =
     deriveUnwrappedCodec
 

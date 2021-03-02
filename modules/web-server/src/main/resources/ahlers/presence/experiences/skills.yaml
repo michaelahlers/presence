@@ -6,15 +6,18 @@
     kind: "Skill"
     name: "Akka"
     logo: "/assets/ahlers/presence/web/experiences/akka-detail.svg"
+    summary: |
+      [Akka](https://akka.io) is a toolkit for building highly concurrent, distributed, and resilient message-driven applications for Java and Scala.
     commentary: |
-      A more _elaborate_ commentary on [Akka](http://akka.io) which works with [Scala](/resume/scala).
-
-      Akka's pretty good because:
-
-      - It does stuff.
-      - And things!
-          - Lots of things.
-          - Stuff, too.
+      My introduction to Akka's Actor framework came at [Verizon Business](/experiences/verizon). Since then, I've worked with Akka [Persistence](https://doc.akka.io/docs/akka/current/typed/index-persistence.html) (in the context of [Lagom](/experiences/lagom)), [Streams](https://doc.akka.io/docs/akka/current/stream/index.html), and various modules from [Alpakka](https://doc.akka.io/docs/alpakka/current/index.html) for AWS S3, [Slick](/experiences/slick).
+  adjacents:
+    - key: "scala"
+    - key: "play-framework"
+    - key: "sbt"
+    - key: "trss"
+    - key: "verizon"
+    - key: "livesafe"
+    - key: "lagom"
 
 - key: "bootstrap"
   brief:
@@ -24,8 +27,16 @@
     kind: "Skill"
     name: "Twitter Bootstrap"
     logo: "/assets/ahlers/presence/web/experiences/bootstrap-detail.svg"
-    commentary:
-      "Placeholder commentary."
+    summary: |
+      Quickly design and customize responsive mobile-first sites with [Bootstrap](https://getbootstrap.com), the world’s most popular front-end open source toolkit, featuring Sass variables and mixins, responsive grid system, extensive prebuilt components, and powerful JavaScript plugins.
+    commentary: |
+      Bootstrap has been my go-to [CSS](/experiences/css) toolkit for a variety of projects where I was a full-stack developer, and is used heavily for [Presence](https://github.com/michaelahlers/presence), the site you're using now.
+  adjacents:
+    - key: "css"
+    - key: "javascript"
+    - key: "html"
+    - key: "trss"
+    - key: "verizon"
 
 - key: "css"
   brief:
@@ -35,8 +46,12 @@
     kind: "Skill"
     name: "Cascading Style Sheets"
     logo: "/assets/ahlers/presence/web/experiences/css3-detail.svg"
-    commentary:
-      "Placeholder commentary."
+    summary: |
+      [Cascanding Style Sheets](https://w3.org/Style/CSS/Overview.en.html) is a simple mechanism for adding style (_e.g._, fonts, colors, spacing) to Web documents.
+  adjacents:
+    - key: "bootstrap"
+    - key: "trss"
+    - key: "verizon"
 
 - key: "d3"
   brief:
@@ -46,8 +61,15 @@
     kind: "Skill"
     name: "D3.js"
     logo: "/assets/ahlers/presence/web/experiences/d3-detail.svg"
-    commentary:
-      "Placeholder commentary."
+    summary: |
+      [D3.js](https://d3js.org) is a JavaScript library for manipulating documents based on data.
+    commentary: |
+      I've dabbled with D3.js on a handful of projects, primarily at [Verizon](/experiences/verizon) on a log visualization tool and also on [Presence](https://github.com/michaelahlers/presence), the site you're using now.
+  adjacents:
+    - key: "javascript"
+    - key: "css"
+    - key: "html"
+    - key: "verizon"
 
 - key: "datagrip"
   brief:
@@ -57,8 +79,13 @@
     kind: "Skill"
     name: "DataGrip"
     logo: "/assets/ahlers/presence/web/experiences/datagrip-detail.svg"
-    commentary:
-      "Placeholder commentary."
+    summary: |
+      [DataGrip](https://jetbrains.com/datagrip/), [JetBrain's](https://jetbrains.com) database IDE that is tailored to suit the specific needs of professional SQL developers.
+  adjacents:
+    - key: "postgres"
+    - key: "mysql"
+    - key: "livesafe"
+    # - key: "cassandra"
 
 - key: "flyway"
   brief:
@@ -68,8 +95,15 @@
     kind: "Skill"
     name: "Flyway"
     logo: "/assets/ahlers/presence/web/experiences/flyway-detail.svg"
-    commentary:
-      "Placeholder commentary."
+    summary: |
+      [Flyway](https://flywaydb.org) provides robust version control for database schemas.
+    commentary: |
+      This has been an indispensible tool for nearly every project I've worked on.
+  adjacents:
+    - key: "postgresql"
+    - key: "mysql"
+    - key: "livesafe"
+    #- key: "learning-objects"
 
 - key: "git"
   brief:
@@ -79,8 +113,13 @@
     kind: "Skill"
     name: "Git"
     logo: "/assets/ahlers/presence/web/experiences/git-detail.svg"
-    commentary:
-      "Placeholder commentary."
+    summary: |
+      [Git](https://git-scm.com) is a [free and open source](https://git-scm.com/about/free-and-open-source) distributed version control system designed to handle everything from small to very large projects with speed and efficiency.
+    commentary: |
+      Throughout my career, I've used nearly every popular SCM, CSV, Subversion, Mercurial, and now—finally—Git.
+  adjacents:
+    - key: "livesafe"
+    - key: "github"
 
 - key: "github"
   brief:
@@ -90,8 +129,13 @@
     kind: "Skill"
     name: "GitHub"
     logo: "/assets/ahlers/presence/web/experiences/github-detail.svg"
-    commentary:
-      "Placeholder commentary."
+    summary: |
+      Millions of developers and companies build, ship, and maintain their software on [GitHub](https://github.com/about)—the largest and most advanced development platform in the world.
+    commentary: |
+      The _de facto_ Git repository hosting service, it's been an indispensible tool at [LiveSafe](/experiences/livesafe) and on all of my personal projects.
+  adjacents:
+    - key: "livesafe"
+    - key: "git"
 
 - key: "intellij-idea"
   brief:
@@ -101,8 +145,14 @@
     kind: "Skill"
     name: "IntelliJ IDEA"
     logo: "/assets/ahlers/presence/web/experiences/intellij-idea-detail.svg"
-    commentary:
-      "Placeholder commentary."
+    summary: |
+      [IntelliJ IDEA](https://jetbrains.com/idea/) is the industry standard IDE for JVM-based languages.
+    commentary: |
+      Early in my career, I worked with NetBeans and Eclipse, and eventually arrived on this powerful tool.
+  adjacents:
+    - key: "livesafe"
+    - key: "scala"
+    - key: "trss"
 
 - key: "html"
   brief:
@@ -112,8 +162,12 @@
     kind: "Skill"
     name: "HTML"
     logo: "/assets/ahlers/presence/web/experiences/html5-detail.svg"
-    commentary:
-      "Placeholder commentary."
+    summary: |
+  adjacents:
+    - key: "verizon"
+    - key: "trss"
+    - key: "css"
+    - key: "javascript"
 
 - key: "java"
   brief:
@@ -123,8 +177,16 @@
     kind: "Skill"
     name: "Java"
     logo: "/assets/ahlers/presence/web/experiences/java-detail.svg"
+    summary: |
+      [Java](http://go.java) is at the heart of our digital lifestyle. It's the platform for launching careers, exploring human-to-digital interfaces, architecting the world's best applications, and unlocking innovation everywhere—from garages to global organizations.
     commentary:
-      "Placeholder commentary."
+      My career began with the Java language, platform, and ecosystem. While my focus today is primarily on [Scala](/experiences/scala), Java remains an integral part of my work.
+  adjacents:
+    - key: "verizon"
+    - key: "scala"
+    - key: "akka"
+    - key: "lagom"
+    - key: "play-framework"
 
 - key: "javascript"
   brief:
@@ -134,8 +196,16 @@
     kind: "Skill"
     name: "JavaScript"
     logo: "/assets/ahlers/presence/web/experiences/javascript-detail.svg"
-    commentary:
-      "Placeholder commentary."
+    summary: |
+      The _lingua franca_ of the Web, arguably more software is built with JavaScript than any other programming language in the world.
+    commentary: |
+      While my background is steeped in it—as I've gained grown as a software engineer—I've moved away from working with JavaScript and its ecosystem.
+  adjacents:
+    - key: "trss"
+    - key: "verizon"
+    - key: "html"
+    - key: "css"
+    - key: "jquery"
 
 - key: "jquery"
   brief:
@@ -145,8 +215,15 @@
     kind: "Skill"
     name: "jQuery"
     logo: "/assets/ahlers/presence/web/experiences/jquery-detail.svg"
-    commentary:
-      "Placeholder commentary."
+    summary: |
+      [jQuery](https://jquery.com) is a fast, small, and feature-rich JavaScript library.
+  adjacents:
+    - key: "trss"
+    - key: "verizon"
+    - key: "css"
+    - key: "javascript"
+    - key: "html"
+    - key: "bootstrap"
 
 - key: "kafka"
   brief:
@@ -156,8 +233,13 @@
     kind: "Skill"
     name: "Kafka"
     logo: "/assets/ahlers/presence/web/experiences/kafka-detail.svg"
-    commentary:
-      "Placeholder commentary."
+    summary: |
+      [Apache Kafka](https://kafka.apache.org) is an open-source distributed event streaming platform used by thousands of companies for high-performance data pipelines, streaming analytics, data integration, and mission-critical applications.
+    commentary: |
+      My direct experience with Kafka began at [LiveSafe](/experiences/livesafe) and primarily as a message broker for [Lagom](/experiences/lagom).
+  adjacents:
+    - key: "livesafe"
+    - key: "lagom"
 
 - key: "sbt"
   brief:
@@ -167,8 +249,15 @@
     kind: "Skill"
     name: "SBT"
     logo: "/assets/ahlers/presence/web/experiences/sbt-detail.svg"
+    summary: |
+      Define your tasks in Scala. Run them in parallel with [sbt](https://scala-sbt.org).
     commentary:
-      "Placeholder commentary."
+      My built tool of choice for Scala projects. Since it's come of maturity, I've found it robust, performant, and flexible.
+  adjacents:
+    - key: "livesafe"
+    - key: "trss"
+    - key: "verizon"
+    - key: "scala"
 
 - key: "scala"
   brief:
@@ -178,19 +267,37 @@
     kind: "Skill"
     name: "Scala"
     logo: "/assets/ahlers/presence/web/experiences/scala-detail.svg"
+    summary: |
+      [Scala](https://scala-lang.org/) combines object-oriented and functional programming in one concise, high-level language. Scala's static types help avoid bugs in complex applications, and runtimes for multiple platforms let you build high-performance systems with easy access to huge ecosystems of libraries.
     commentary:
-      "Placeholder commentary."
+      I ❤️ Scala. After 12 years of writing software with the [Java programming language](/experiences/java), adaopting Scala as my language of choice—first at [Verizon](/experiences/verizon) in 2012 and ongoing since—reinvigorated my passion for programming. It's multiparadigm design and flexibility and are tremendous strengths, and I find myself every day making short work of difficult problems with this language and its ecosystem.
+
+      Dear [Mr. Odersky](https://en.wikipedia.org/wiki/Martin_Odersky), if you ever read this, _thank you_ for your contributions to our industry!
+  adjacents:
+    - key: "akka"
+    - key: "play-framework"
+    - key: "sbt"
+    - key: "trss"
+    - key: "verizon"
+    - key: "livesafe"
 
 - key: "scala.js"
   brief:
-    name: "ScalaJs"
+    name: "Scala.js"
     logo: "/assets/ahlers/presence/web/experiences/scala.js-brief.svg"
   detail:
     kind: "Skill"
-    name: "ScalaJs"
+    name: "Scala.js"
     logo: "/assets/ahlers/presence/web/experiences/scala.js-detail.svg"
-    commentary:
-      "Placeholder commentary."
+    summary: |
+      [Scala.js](https://scala-js.org) lets build robust front-end web applications with all the power, expressiveness, and typesafety of [Scala](/experiences/scala).
+    commentary: |
+      My background is replete with full-stack experience, but my focus has shifted to the backend. Scala.js lets me use my favoraite programming language to build for the Web again, including [Presence](https://github.com/michaelahlers/presence), the site you're using now.
+  adjacents:
+    - key: "akka"
+    - key: "javascript"
+    - key: "scala"
+    - key: "sbt"
 
 - key: "slick"
   brief:
@@ -200,8 +307,17 @@
     kind: "Skill"
     name: "Slick"
     logo: "/assets/ahlers/presence/web/experiences/slick-detail.svg"
-    commentary:
-      "Placeholder commentary."
+    summary: |
+      [Slick](http://scala-slick.org) is a modern database query and access library for [Scala](/experiences/scala). It allows you to work with stored data almost as if you were using Scala collections while at the same time giving you full control over when a database access happens and which data is transferred.
+    commentary: |
+      While it has its rough spots, I've come to find Slick an enjoyable and productive tool. It's effectively an essential part of [Lightbend's technology stack](https://lightbend.com), and is used extensively by applications built with [Lagom](/experiences/lagom) and often with [Play Framework](/experiences/play-framework).
+  adjacents:
+    - key: "scala"
+    - key: "postgresql"
+    - key: "mysql"
+    - key: "lagom"
+    - key: "play-framework"
+    - key: "livesafe"
 
 - key: "lagom"
   brief:
@@ -211,8 +327,17 @@
     kind: "Skill"
     name: "Lagom"
     logo: "/assets/ahlers/presence/web/experiences/lagom-detail.svg"
-    commentary:
-      "Placeholder commentary."
+    summary: |
+      The opinionated microservices framework. [Lagom](https://lagomframework.com) helps you decompose your legacy monolith and build, test, and deploy entire systems of Reactive microservices.
+    commentary: |
+      It is, indeed, Just Enough. I've found Lagom a pleasure to use. Its features remove lots of boilerplate from the work of service interaction (either directly or by messages) and event sourcing (which, being built on [Akka Persistence](/experiences/akka), makes employing CQRS a breeze.
+  adjacents:
+    - key: "scala"
+    - key: "akka"
+    - key: "play-framework"
+    - key: "slick"
+    - key: "kafka"
+    # - key: "cassandra"
 
 - key: "linux"
   brief:
@@ -222,8 +347,14 @@
     kind: "Skill"
     name: "Linux"
     logo: "/assets/ahlers/presence/web/experiences/linux-detail.svg"
-    commentary:
-      "Placeholder commentary."
+    summary: |
+      [Linux](https://en.wikipedia.org/wiki/Linux) is, colloquially, a family of open-source Unix-like operating systems based on the [Linux kernel](https://en.wikipedia.org/wiki/Linux_kernel).
+    commentary: |
+      I first started using Linux, specifically the Slackware distribution, when I was 14. As part of my career, I've had exposure to most mainstream distributions. In modern life, operating system specifics matters less for most applications, but noted here among my experiences as it's lent useful perspective and understanding.
+  adjacents:
+    - key: "livesafe"
+    - key: "trss"
+    - key: "verizon"
 
 - key: "mysql"
   brief:
@@ -233,8 +364,15 @@
     kind: "Skill"
     name: "MySQL"
     logo: "/assets/ahlers/presence/web/experiences/mysql-detail.svg"
-    commentary:
-      "Placeholder commentary."
+    summary: |
+      [MySQL](https://mysql.com) is the world's most popular open source database.
+    commentary: |
+      My preference is for other databases, but it's important to have familiarity with this one.
+  adjacents:
+    - key: "livesafe"
+    - key: "slick"
+    - key: "flyway"
+    - key: "datagrip"
 
 - key: "mongodb"
   brief:
@@ -244,19 +382,31 @@
     kind: "Skill"
     name: "MongoDB"
     logo: "/assets/ahlers/presence/web/experiences/mongodb-detail.svg"
-    commentary:
-      "Placeholder commentary."
+    summary: |
+      [MongoDB](https://mongodb.com) is a general purpose, document-based, distributed database built for modern application developers and for the cloud era.
+  adjacents:
+    - key: "trss"
+    - key: "verizon"
 
 - key: "play-framework"
   brief:
-    name: "PlayFramework"
+    name: "Play Framework"
     logo: "/assets/ahlers/presence/web/experiences/play-framework-brief.svg"
   detail:
     kind: "Skill"
-    name: "PlayFramework"
+    name: "Play Framework"
     logo: "/assets/ahlers/presence/web/experiences/play-framework-detail.svg"
-    commentary:
-      "Placeholder commentary."
+    summary: |
+      [Play Framework](https://playframework.com) makes it easy to build web applications with [Java](/experiences/java) and [Scala](/experiences/scala).
+    commentary: |
+      Like many developers, I believe, my first exposure to [Scala](/experiences/scala) was in the context of building web applications and services with Play Framework. [Verizon](/experiences/verizon), it also went hand-in-hand with my first exposure to building services needing to meet requirements for high volumes of traffic.
+  adjacents:
+    - key: "livesafe"
+    - key: "trss"
+    - key: "verizon"
+    - key: "scala"
+    - key: "lagom"
+    - key: "akka"
 
 - key: "postgresql"
   brief:
@@ -266,5 +416,10 @@
     kind: "Skill"
     name: "PostgreSQL"
     logo: "/assets/ahlers/presence/web/experiences/postgresql-detail.svg"
-    commentary:
-      "Placeholder commentary."
+    summary: |
+      [PostgreSQL](https://postgresql.org) is a powerful, open source object-relational database system with over 30 years of active development that has earned it a strong reputation for reliability, feature robustness, and performance.
+  adjacents:
+    - key: "livesafe"
+    - key: "slick"
+    - key: "flyway"
+    - key: "datagrip"

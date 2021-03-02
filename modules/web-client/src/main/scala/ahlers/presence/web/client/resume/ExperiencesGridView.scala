@@ -1,6 +1,7 @@
 package ahlers.presence.web.client.resume
 
 import ahlers.presence.experiences.{ Experience, ExperienceKey }
+import ahlers.presence.web.client.resume.ExperienceBriefState.Mode.Content
 import cats.syntax.apply._
 import cats.syntax.option._
 import com.raquo.airstream.core.Signal
@@ -30,6 +31,7 @@ object ExperiencesGridView {
   sealed trait Phase
   object Phase {
     case object Loading extends Phase
+    case object Initializing extends Phase
     case object Revealing extends Phase
     case object Presenting extends Phase
   }
@@ -70,12 +72,14 @@ object ExperiencesGridView {
       phaseVar.signal.combineWith($focusedState)
       /** @todo Implement tap syntax. */
         .map { case (phase, focusedState) =>
-          dom.console.log("onPhaseZooming", "phase", phase.toString, "focusedState", focusedState.flatMap(_.key).map(_.toText).getOrElse("(none)"))
+          dom.console.debug("onPhaseZooming", "phase", phase.toString, "focusedState", focusedState.flatMap(_.key).map(_.toText).getOrElse("(none)"))
           (phase, focusedState)
         } --> {
 
-        /** When [[Loading]], set a wide view, regardless any state. */
         case (Loading, _) =>
+
+        /** When [[Initializing]], set a wide view, regardless any state. */
+        case (Initializing, _) =>
           zoomBehavior
             .transform(
               d3.select(thisNode.ref),
@@ -174,7 +178,7 @@ object ExperiencesGridView {
 
   def render(
     $experiences: Signal[Option[Seq[Experience]]],
-    $focusedExperienceKey: Signal[Option[ExperienceKey]],
+    $focusedExperience: Signal[Option[Experience]],
     focusedExperienceObserver: Observer[Option[ExperienceKey]]
   ): ReactiveSvgElement[SVG] = {
     import svg._
@@ -192,9 +196,9 @@ object ExperiencesGridView {
         }
 
     val $focusedState: Signal[Option[ExperienceBriefState]] =
-      $states.combineWith($focusedExperienceKey)
+      $states.combineWith($focusedExperience)
         .mapN {
-          case (states, Some(focusedKey)) => states.find(_.key.contains(focusedKey))
+          case (states, Some(focusedExperience)) => states.find(_.key.contains(focusedExperience.key))
           case (_, _) => none
         }
 
@@ -211,13 +215,14 @@ object ExperiencesGridView {
         .toSignal(false)
 
     val $isFocusing: Signal[Boolean] =
-      $focusedExperienceKey.map(_.nonEmpty)
+      $focusedExperience.map(_.nonEmpty)
+    //$focusedState.map(_.nonEmpty)
 
     val zoomingTransformVar: Var[Transform] =
       Var(d3.zoomIdentity)
 
-    val centeringTransformVar: Var[Transform] =
-      Var(d3.zoomIdentity)
+    //val centeringTransformVar: Var[Transform] =
+    //  Var(d3.zoomIdentity)
 
     svg(
       className("experience-grid-view", "bg-dark"),
@@ -226,6 +231,7 @@ object ExperiencesGridView {
       // transform <-- centeringTransformVar.signal.map(_.toString()),
       g(
         className.toggle("loading") <-- $phase.map(Loading == _),
+        className.toggle("initializing") <-- $phase.map(Initializing == _),
         className.toggle("revealing") <-- $phase.map(Revealing == _),
         className.toggle("presenting") <-- $phase.map(Presenting == _),
         className.toggle("glancing") <-- $isGlancing,
@@ -234,14 +240,39 @@ object ExperiencesGridView {
         g(children <--
           $states
             .split(_.index)(ExperienceBriefView.render(_, _, _, focusedExperienceObserver, glancedExperienceKeysVar))),
+        //g(children <--
+        //  $states.map { states =>
+        //    val byKey = states.flatMap(state => state.key.map((_, state))).toMap
+        //
+        //    states
+        //      .flatMap {
+        //        case state @ ExperienceBriefState(_, Content(experience), _, _, _) =>
+        //          byKey
+        //            .view
+        //            .filterKeys(experience.adjacents.map(_.key).contains(_))
+        //            .values
+        //            .map((state, _))
+        //        case _ =>
+        //          Nil
+        //      }
+        //      .map { case (origin, target) =>
+        //        line(
+        //          x1(origin.cx.toString),
+        //          y1(origin.cy.toString),
+        //          x2(target.cx.toString),
+        //          y2(target.cy.toString),
+        //          stroke("#f8f8f8")
+        //        )
+        //      }
+        //  }),
         g(children <--
           $states
             .map(_.filter(_.mode.isContent))
-            .split(_.index)(ExperienceBriefFocusView.render(_, _, _, $focusedExperienceKey))),
+            .split(_.index)(ExperienceBriefFocusView.render(_, _, _, $focusedExperience))),
         g(children <--
           $states
             .map(_.filter(_.mode.isContent))
-            .split(_.index)(ExperienceBriefGlanceView.render(_, _, _, $focusedExperienceKey, glancedExperienceKeysVar.signal))) /*,
+            .split(_.index)(ExperienceBriefGlanceView.render(_, _, _, $focusedExperience, glancedExperienceKeysVar.signal))) /*,
         circle(
           r("10"),
           cx("0"),
@@ -258,10 +289,12 @@ object ExperiencesGridView {
        * @see [[Phase]]
        * @todo Formalize this quick-and-dirty transition logic.
        */
-      $states.combineWith($focusedState).withCurrentValueOf(phaseVar.signal).map {
+      $states.combineWith($focusedState).combineWith(phaseVar.signal).map {
         case (Nil, _, _) => Loading
-        case (_, _, Loading) => Revealing
-        case (_, _, Revealing) => Presenting
+        case (_, _, Loading) => Initializing
+        case (_, None, Initializing) => Revealing
+        case (_, Some(_), Initializing) => Presenting
+        //case (_, _, Revealing) => Presenting
         case (_, _, phase) => phase
       } --> phaseVar.writer
     )
