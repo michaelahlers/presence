@@ -1,6 +1,6 @@
 resolvers += "JitPack".at("https://jitpack.io")
 
-libraryDependencies += "org.planet42" %%% "laika-core" % "0.17.0"
+libraryDependencies += "org.planet42" %%% "laika-core" % "0.17.1"
 
 libraryDependencies ++=
   "com.raquo" %%% "airstream" % "0.11.1" ::
