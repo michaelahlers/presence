@@ -22,7 +22,7 @@ libraryDependencies ++=
     "io.lemonlabs" %%% "scala-uri" % "3.0.0" ::
     "io.scalaland" %%% "chimney" % "0.6.1" ::
     "org.querki" %%% "jquery-facade" % "2.0" ::
-    "org.scala-js" %%% "scalajs-dom" % "1.1.0" ::
+    "org.scala-js" %%% "scalajs-dom" % "1.2.0" ::
     Nil
 
 libraryDependencies ++=
