@@ -5,7 +5,7 @@ libraryDependencies += "org.planet42" %%% "laika-core" % "0.17.0"
 libraryDependencies ++=
   "com.raquo" %%% "airstream" % "0.11.1" ::
     "com.raquo" %%% "laminar" % "0.12.1" ::
-    "com.raquo" %%% "waypoint" % "0.3.0" ::
+    "com.raquo" %%% "waypoint" % "0.5.0" ::
     Nil
 
 libraryDependencies ++=
