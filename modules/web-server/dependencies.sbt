@@ -27,6 +27,6 @@ libraryDependencies ++=
 libraryDependencies ++=
   "biz.enef" %% "slogging" % "0.6.2" ::
     "biz.enef" %% "slogging-slf4j" % "0.6.2" ::
-    "ch.qos.logback" % "logback-classic" % "1.2.3" ::
+    "ch.qos.logback" % "logback-classic" % "1.2.10" ::
     "org.slf4j" % "slf4j-api" % "1.7.30" ::
     Nil
