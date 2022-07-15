@@ -20,7 +20,7 @@ libraryDependencies ++=
     //"io.circe" %%% "circe-shapes" % "0.14.0-M3" ::
     "io.github.cquiroz" %%% "scala-java-time" % "2.2.0" ::
     "io.lemonlabs" %%% "scala-uri" % "3.0.0" ::
-    "io.scalaland" %%% "chimney" % "0.6.1" ::
+    "io.scalaland" %%% "chimney" % "0.6.2" ::
     "org.querki" %%% "jquery-facade" % "2.0" ::
     "org.scala-js" %%% "scalajs-dom" % "1.1.0" ::
     Nil
