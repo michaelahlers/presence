@@ -1,7 +1,7 @@
 resolvers += Resolver.bintrayRepo("oyvindberg", "converter")
 
-addSbtPlugin("ch.epfl.scala" % "sbt-scalajs-bundler" % "0.20.0")
-addSbtPlugin("ch.epfl.scala" % "sbt-web-scalajs-bundler" % "0.20.0")
+addSbtPlugin("ch.epfl.scala" % "sbt-scalajs-bundler" % "0.21.0")
+addSbtPlugin("ch.epfl.scala" % "sbt-web-scalajs-bundler" % "0.21.0")
 addSbtPlugin("com.codecommit" % "sbt-github-actions" % "0.10.1")
 addSbtPlugin("com.eed3si9n" % "sbt-buildinfo" % "0.10.0")
 addSbtPlugin("com.heroku" % "sbt-heroku" % "2.1.4")
