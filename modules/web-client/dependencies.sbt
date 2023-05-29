@@ -12,8 +12,8 @@ libraryDependencies ++=
   //"com.github.fdietze.scala-js-d3v4" %%% "scala-js-d3v4" % "master-SNAPSHOT" ::
   "com.github.michaelahlers.scala-js-d3v4" %%% "scala-js-d3v4" % "master-SNAPSHOT" ::
     "com.github.japgolly.scalacss" %%% "core" % "0.7.0" ::
-    "com.github.julien-truffaut" %%% "monocle-core" % "2.1.0" ::
-    "com.github.julien-truffaut" %%% "monocle-macro" % "2.1.0" ::
+    "dev.optics" %%% "monocle-core" % "3.2.0" ::
+    "dev.optics" %%% "monocle-macro" % "3.2.0" ::
     //"io.circe" %%% "circe-core" % "0.14.0-M3" ::
     //"io.circe" %%% "circe-generic" % "0.14.0-M3" ::
     //"io.circe" %%% "circe-parser" % "0.14.0-M3" ::
