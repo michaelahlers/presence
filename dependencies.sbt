@@ -1,4 +1,4 @@
-ThisBuild / scalaVersion := "2.13.5"
+ThisBuild / scalaVersion := "2.13.11"
 
 ThisBuild / libraryDependencies ++=
   "com.softwaremill.diffx" %% "diffx-scalatest" % "0.4.3" % Test ::
